@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+    <link rel="stylesheet" href="/css/swiper.min.css" />
+    <link rel="stylesheet" th:href="@{/css/common.css}"/>
+    <link rel="stylesheet" th:href="@{/css/swiper-custom.css}"/>
+    <style>
+        .bookmark {
+
+        }
+        .title {
+            height: 60px;
+            font-size: 1.2rem;
+            text-align: center;
+            line-height: 60px;
+            vertical-align: middle;
+        }
+        .bookmark-container img {
+            width: 32px;
+            height: 32px;
+        }
+        @media screen and (max-width: 900px) {
+            .title {
+                height: 50px;
+                line-height: 50px;
+            }
+        }
+    </style>
+    <script type="text/javascript" src="http://cdn.repository.webfont.com/wwwroot/js/wf/youziku.api.min.js"></script>
+    <script type="text/javascript">
+        $webfont.load(".t-box>.name,.t-box>.desc,.logo,.title", "30a0a55211df494ca2cf3c4a032a664a", "ruibo");
+        $webfont.draw();
+    </script>
+</head>
+<body>
+<div class="header">
+    <span class="logo">Anya</span>
+    <ul class="header-menu">
+        <li th:if="${user != null}" class="header-item">
+            <button class="menu-button"><span>Menu</span></button>
+        </li>
+        <li th:if="${user == null}" class="header-item dropdown-content">
+            <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>
+            <div class="dropdown hidden">
+                <ul class="dropdown-menu">
+                    <li id="login" class="dropdown-item">登录</li>
+                    <li  class="dropdown-item">注册</li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="sidebar">
+    <div class="sidebar-inner">
+        <div class="test" style="text-align: center;">
+            测试书签
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="swiper-content">
+        <div class="swiper-container">
+            <div class="swiper-parallax" data-swiper-parallax="-25%" th:style="'background-image:url(' + @{/images/banner02.jpg} + ');'"></div>
+            <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <div class="t-box" data-swiper-parallax-x="-40" data-swiper-parallax-opacity="0">
+                        <p class="name">程序员</p>
+                    </div>
+                    <div class="t-box" data-swiper-parallax-x="-80" data-swiper-parallax-opacity="0">
+                        <span class="desc">没有两个程序员会遇见一模一样的情况</span>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="t-box" data-swiper-parallax-x="-40" data-swiper-parallax-opacity="0">
+                        <p class="name">3D绘画师</p>
+                    </div>
+                    <div class="t-box" data-swiper-parallax-x="-80" data-swiper-parallax-opacity="0">
+                        <span class="desc">有软件绘制世界</span>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="t-box" data-swiper-parallax-x="-40" data-swiper-parallax-opacity="0">
+                        <p class="name">游戏爱好者</p>
+                    </div>
+                    <div class="t-box" data-swiper-parallax-x="-80" data-swiper-parallax-opacity="0">
+                        <span class="desc">爱研究游戏</span>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+        <div class="swiper-button-prev" th:style="'background-image:url(' + @{/images/lastIco.png} + ');'"></div>
+        <div class="swiper-button-next" th:style="'background-image:url(' + @{/images/nextIco.png} + ');'"></div>
+    </div>
+    <div class="swiper-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="swiper-mask"></div></div>
+    <div class="bookmark">
+        <div class="title">书签</div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
+<script src="/js/swiper.min.js"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/index.js}"></script>
+</body>
+</html>

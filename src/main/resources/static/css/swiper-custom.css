@@ -1,0 +1,97 @@
+.swiper-content {
+    position: relative;
+    height: 360px;
+    width: 900px;
+    margin: 0 auto;
+    overflow: visible;
+}
+
+.swiper-container {
+    height: 100%;
+    width: 100%;
+}
+
+.swiper-slide {
+    text-align: center;
+    color: #fff;
+}
+
+.swiper-parallax {
+    position: absolute;
+    top: 0;
+    left: -7%;
+    height: 100%;
+    width: 152%;
+    background: no-repeat center;
+    background-size: cover;
+}
+
+.swiper-container-horizontal>.swiper-scrollbar {
+    height: 1px;
+}
+
+.swiper-button-prev {
+    left: -100px;
+    width: 46px;
+    height: 131px;
+    margin-top: -65.5px;
+    background-size: 46px 131px;
+    outline: none;
+}
+
+.swiper-button-next {
+    right: -100px;
+    width: 46px;
+    height: 131px;
+    margin-top: -65.5px;
+    background-size: 46px 131px;
+    outline: none;
+}
+
+.swiper-back {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    height: 360px;
+    background: no-repeat center;
+    background-size: cover;
+}
+
+.swiper-back .swiper-mask {
+    height: 100%;
+    background: #fff;
+    opacity: 0.95;
+}
+
+.t-box {
+    text-align: center;
+}
+
+.t-box .name {
+    font-size: .9rem;
+}
+
+.t-box .desc {
+    display: inline-block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: .7rem;
+    border: 1px dashed #fff;
+}
+
+@media screen and (max-width: 900px) {
+    .swiper-content {
+        width: 100%;
+        height: 200px;
+    }
+    .swiper-back {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1130px) {
+    .swiper-content {
+        overflow: hidden;
+    }
+}
