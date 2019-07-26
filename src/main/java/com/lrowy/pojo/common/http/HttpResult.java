@@ -1,13 +1,19 @@
 package com.lrowy.pojo.common.http;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 public class HttpResult {
     private int code;
-    private String body;
     private String charset;
+    private HttpEntity entity;
 
-    public HttpResult(int code, String body, String charset) {
+    public HttpResult(int code, HttpEntity entity, String charset) {
         this.code = code;
-        this.body = body;
+        this.entity = entity;
         this.charset = charset;
     }
 
@@ -19,19 +25,27 @@ public class HttpResult {
         this.code = code;
     }
 
-    public String getBody() {
-        return body;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
-    }
-
     public String getCharset() {
         return charset;
     }
 
     public void setCharset(String charset) {
         this.charset = charset;
+    }
+
+    public HttpEntity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(HttpEntity entity) {
+        this.entity = entity;
+    }
+
+    public String getEntityString() throws Exception {
+        return EntityUtils.toString(entity);
+    }
+
+    public InputStream getEntityContent() throws IOException {
+        return entity.getContent();
     }
 }

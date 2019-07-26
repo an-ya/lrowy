@@ -6,31 +6,10 @@
     <meta name="renderer" content="webkit">
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-    <link rel="stylesheet" href="/css/swiper.min.css" />
+    <link rel="stylesheet" href="/css/swiper.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/swiper-custom.css}"/>
-    <style>
-        .bookmark {
-
-        }
-        .title {
-            height: 60px;
-            font-size: 1.2rem;
-            text-align: center;
-            line-height: 60px;
-            vertical-align: middle;
-        }
-        .bookmark-container img {
-            width: 32px;
-            height: 32px;
-        }
-        @media screen and (max-width: 900px) {
-            .title {
-                height: 50px;
-                line-height: 50px;
-            }
-        }
-    </style>
     <script type="text/javascript" src="http://cdn.repository.webfont.com/wwwroot/js/wf/youziku.api.min.js"></script>
     <script type="text/javascript">
         $webfont.load(".t-box>.name,.t-box>.desc,.logo,.title", "30a0a55211df494ca2cf3c4a032a664a", "ruibo");
@@ -100,6 +79,13 @@
     <div class="swiper-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="swiper-mask"></div></div>
     <div class="bookmark">
         <div class="title">书签</div>
+        <div class="bookmark-content">
+            <div th:each="b : ${bookmark}" class="favicon-content">
+                <div class="favicon-wrapper" th:style="'background-image:url(' + ${b.faviconUrl} + ');'"></div>
+                <img th:src="${b.faviconUrl}"/>
+                <span>title</span>
+            </div>
+        </div>
     </div>
 </div>
 <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>

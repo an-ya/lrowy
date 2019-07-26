@@ -3,7 +3,7 @@ package com.lrowy.controller;
 import com.lrowy.pojo.Bookmark;
 import com.lrowy.pojo.User;
 import com.lrowy.pojo.common.response.BaseResponse;
-import com.lrowy.service.UrlService;
+import com.lrowy.service.FaviconService;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +18,10 @@ import java.util.List;
 @Controller
 public class MainController extends BaseController {
     @Resource
-    private UrlService urlService;
+    private FaviconService fs;
 
     @RequestMapping("/")
-    public String Index() {
+    public String i() {
         return "forward:/index";
     }
 
@@ -30,14 +30,13 @@ public class MainController extends BaseController {
         User user = isLogin() ? getUser() : null;
         model.addAttribute("user", user);
 
-//        List<Bookmark> bm = new ArrayList<>();
-//        bm.add(new Bookmark("https://blog.csdn.net/SongYuxinIT/article/details/77470087"));
-//        bm.add(new Bookmark("https://www.sojson.com/blog/69.html"));
-//
-//        for (Bookmark b:bm) {
-//            b.setFaviconUrl(urlService.getFaviconUrl(b.getUrl()));
-//        }
-//        model.addAttribute("bookmark", bm);
+        List<Bookmark> bm = new ArrayList<>();
+        bm.add(new Bookmark("https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter"));
+
+        for (Bookmark b:bm) {
+            b.setFaviconUrl(fs.getFaviconUrl(b.getUrl()));
+        }
+        model.addAttribute("bookmark", bm);
         return "/index";
     }
 
@@ -75,11 +74,9 @@ public class MainController extends BaseController {
         BaseResponse<List<Bookmark>> br = new BaseResponse<>();
         List<Bookmark> bm = new ArrayList<>();
         bm.add(new Bookmark("https://blog.csdn.net/SongYuxinIT/article/details/77470087"));
-        bm.add(new Bookmark("https://www.sojson.com/blog/69.html"));
-        bm.add(new Bookmark("https://www.jianshu.com/p/0c02301e866d"));
 
         for (Bookmark b:bm) {
-            b.setFaviconUrl(urlService.getFaviconUrl(b.getUrl()));
+            b.setFaviconUrl(fs.getFaviconUrl(b.getUrl()));
         }
         br.setResult(bm);
         return br;

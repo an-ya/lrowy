@@ -2,9 +2,8 @@ document.addEventListener('DOMContentLoaded', function () { FastClick.attach(doc
 
 let uA = navigator.userAgent,
     isMobile = uA.match(/AppleWebKit.*Mobile.*/),
-    tap = isMobile ? 'touchstart' : 'mousedown';
-
-let menuButtonDom = '<li class="header-item"><button class="menu-button"><span>Menu</span></button></li>';
+    tap = isMobile ? 'touchstart' : 'mousedown',
+    menuButtonDom = '<li class="header-item"><button class="menu-button"><span>Menu</span></button></li>';
 
 init();
 

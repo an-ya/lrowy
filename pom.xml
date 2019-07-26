@@ -18,6 +18,10 @@
     <properties>
         <java.version>1.8</java.version>
 
+        <!-- 高斯模糊过滤器 -->
+        <jhlabs-filter.version>2.0.235-1</jhlabs-filter.version>
+        <!-- commons-io版本号 -->
+        <commons-io.version>2.6</commons-io.version>
         <!-- 压缩图片插件thumbnailator版本号 -->
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <!-- jjwt token认证版本号 -->
@@ -62,6 +66,16 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.jhlabs</groupId>
+            <artifactId>filters</artifactId>
+            <version>${jhlabs-filter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
         <!-- 压缩图片插件thumbnailator -->
         <dependency>
             <groupId>net.coobird</groupId>

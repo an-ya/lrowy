@@ -1,6 +1,6 @@
 package com.lrowy;
 
-import com.lrowy.service.UrlService;
+import com.lrowy.service.FaviconService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 @SpringBootTest
 public class LrowyApplicationTests {
     @Resource
-    private UrlService urlService;
+    private FaviconService fs;
 
     @Test
     public void contextLoads() {
@@ -21,6 +21,6 @@ public class LrowyApplicationTests {
 
     @Test
     public void testHttpClient() {
-        System.out.println(urlService.getFaviconUrl("https://blog.csdn.net/liuchuanhong1/article/details/68194036"));
+        System.out.println(fs.getFaviconUrl("https://blog.csdn.net/liuchuanhong1/article/details/68194036"));
     }
 }
