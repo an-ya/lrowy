@@ -19,16 +19,16 @@ $(document).ready(function () {
             prevEl: '.swiper-button-prev',
         }
     });
-});
 
-$('.test').click(function () {
-    $.ajax({
-        url: '/bookmark/init',
-        type: 'post',
-        success: function (data) {
-            if (data.code === '000') {
-                console.log(data.result);
+    $('.test').click(function () {
+        $.ajax({
+            url: '/bookmark/init',
+            type: 'post',
+            success: function (data) {
+                if (data.code === '000') {
+                    console.log(data.result);
+                }
             }
-        }
+        });
     });
 });

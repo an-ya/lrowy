@@ -11,7 +11,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +45,7 @@ public class HttpAPIService {
 
         // 发起请求
         CloseableHttpResponse response = this.httpClient.execute(httpGet);
-        return new HttpResult(response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity()), "UTF-8");
+        return new HttpResult(response.getStatusLine().getStatusCode(),response.getEntity(), "UTF-8");
     }
 
     /**
@@ -99,7 +98,7 @@ public class HttpAPIService {
 
         // 发起请求
         CloseableHttpResponse response = this.httpClient.execute(httpPost);
-        return new HttpResult(response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity()), "UTF-8");
+        return new HttpResult(response.getStatusLine().getStatusCode(), response.getEntity(), "UTF-8");
     }
 
     /**
