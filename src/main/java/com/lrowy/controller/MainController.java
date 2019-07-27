@@ -1,23 +1,26 @@
 package com.lrowy.controller;
 
+import com.lrowy.dao.BookmarkDao;
 import com.lrowy.pojo.Bookmark;
 import com.lrowy.pojo.User;
 import com.lrowy.pojo.common.response.BaseResponse;
 import com.lrowy.service.FaviconService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class MainController extends BaseController {
-    @Resource
+    @Autowired
+    BookmarkDao bookmarkDao;
+    @Autowired
     private FaviconService fs;
 
     @RequestMapping("/")
@@ -30,12 +33,12 @@ public class MainController extends BaseController {
         User user = isLogin() ? getUser() : null;
         model.addAttribute("user", user);
 
-        List<Bookmark> bm = new ArrayList<>();
-        bm.add(new Bookmark("https://developer.mozilla.org/zh-CN/docs/Web/CSS/filter"));
+        List<Bookmark> bm = bookmarkDao.findBookmark();
+//        bm.add(fs.getFaviconUrl(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214")));
+//        bm.add(fs.getFaviconUrl(new Bookmark("https://www.jianshu.com/u/107bd58d5bbb")));
+//        bm.add(fs.getFaviconUrl(new Bookmark("https://blog.52itstyle.vip")));
+//        bm.add(fs.getFaviconUrl(new Bookmark("https://imgchr.com/")));
 
-        for (Bookmark b:bm) {
-            b.setFaviconUrl(fs.getFaviconUrl(b.getUrl()));
-        }
         model.addAttribute("bookmark", bm);
         return "/index";
     }
@@ -68,17 +71,12 @@ public class MainController extends BaseController {
         return br;
     }
 
-    @RequestMapping(value = "/bookmark/init", method = RequestMethod.POST)
+    @RequestMapping(value = "/bookmark/add", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<List<Bookmark>> bookmarkInit() {
-        BaseResponse<List<Bookmark>> br = new BaseResponse<>();
-        List<Bookmark> bm = new ArrayList<>();
-        bm.add(new Bookmark("https://blog.csdn.net/SongYuxinIT/article/details/77470087"));
-
-        for (Bookmark b:bm) {
-            b.setFaviconUrl(fs.getFaviconUrl(b.getUrl()));
-        }
-        br.setResult(bm);
-        return br;
+    public BaseResponse<String> bookmarkAdd(String url) {
+        Bookmark b = fs.getFaviconUrl(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214"));
+        System.out.println(b);
+        bookmarkDao.save(b);
+        return new BaseResponse<>();
     }
 }

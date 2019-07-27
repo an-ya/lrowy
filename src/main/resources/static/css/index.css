@@ -29,7 +29,6 @@
 
 .favicon-content .favicon-wrapper {
     position: absolute;
-    filter: blur(20px);
     top: 0;
     left: 0;
     width: 100%;
@@ -38,6 +37,7 @@
     background-size: cover;
     -webkit-transition: opacity .3s ease-in-out;
     transition: opacity .3s ease-in-out;
+    opacity: .6;
     z-index: -10;
 }
 
