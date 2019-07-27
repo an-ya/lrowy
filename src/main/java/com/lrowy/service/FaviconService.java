@@ -1,10 +1,13 @@
 package com.lrowy.service;
 
 import com.jhlabs.image.GaussianFilter;
+import com.lrowy.pojo.Bookmark;
 import com.lrowy.pojo.common.http.HttpResult;
 
-import javax.imageio.ImageIO;
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+
+import net.sf.image4j.codec.ico.ICODecoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -29,10 +33,10 @@ public class FaviconService {
     @Resource
     private HttpAPIService httpAPIService;
 
-    public String getFaviconUrl(String urlString) {
+    public Bookmark getFaviconUrl(Bookmark bookmark) {
         HttpResult hr;
         try {
-            URL url = new URL(urlString);
+            URL url = new URL(bookmark.getUrl());
             StringBuilder BaseUrl = new StringBuilder();
             BaseUrl.append(url.getProtocol());
             BaseUrl.append("://");
@@ -68,33 +72,55 @@ public class FaviconService {
                     }
                 }
                 hr = httpAPIService.doGet(faviconUrl.toString());
+                String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
+                System.out.println(faviconUrl);
                 InputStream inputStream  = hr.getEntityContent();
-                BufferedImage image = ImageIO.read(inputStream);
+                BufferedImage image;
+                if (suffix.equals("ico")) {
+                    List<BufferedImage> images = ICODecoder.read(inputStream);
+                    int index = 0;
+                    int maxSize = 0;
+                    for ( int i = 0; i < images.size(); i++) {
+                        if (images.get(i).getWidth() >= maxSize) {
+                            index = i;
+                            maxSize = images.get(i).getWidth();
+                        }
+                    }
+                    image = images.get(index);
+                } else {
+                    image = ImageIO.read(inputStream);
+                }
                 String directory = "favicon/";
-                String iconName = UUID.randomUUID().toString().replace("-", "") + "-favicon.png";
-                String blurIconName = UUID.randomUUID().toString().replace("-", "") + "-favicon-blur.png";
+                String uuid = UUID.randomUUID().toString().replace("-", "");
+                String iconName = uuid + "-favicon.png";
+                String blurIconName = uuid + "-favicon-blur.png";
                 File folder = new File(uploadPath + directory);
                 if (!folder.exists()) {
                     folder.mkdirs();
                 }
                 ImageIO.write(image, "png", new File(uploadPath + directory + iconName));
 
-                BufferedImage ScaleImage = new BufferedImage(120, 120, BufferedImage.TYPE_INT_RGB);
+                BufferedImage ScaleImage = new BufferedImage(180, 180, BufferedImage.TYPE_INT_RGB);
                 Graphics g = ScaleImage.getGraphics();
-                g.drawImage(image, 0, 0, 120, 120, null);
+                g.setColor(Color.WHITE);
+                g.fillRect(0,0,180,180);
+                g.drawImage(image, 40, 40, 100, 100, null);
 
                 BufferedImage blurImage = new BufferedImage(ScaleImage.getWidth(), ScaleImage.getHeight(), BufferedImage.TYPE_INT_RGB);
                 GaussianFilter gaussianFilter = new GaussianFilter();
                 gaussianFilter.setRadius(40);
                 gaussianFilter.filter(ScaleImage, blurImage);
-                ImageIO.write(blurImage, "png", new File(uploadPath + directory + blurIconName));
-                return "/upload/" + directory + iconName;
+
+                ImageIO.write(blurImage.getSubimage(40, 40, 100, 100), "png", new File(uploadPath + directory + blurIconName));
+                bookmark.setFaviconUrl("/upload/" + directory + iconName);
+                bookmark.setFaviconOriginalUrl(faviconUrl.toString());
+                bookmark.setFaviconBlurUrl("/upload/" + directory + blurIconName);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        return "";
+        return bookmark;
     }
 }

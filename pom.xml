@@ -18,6 +18,9 @@
     <properties>
         <java.version>1.8</java.version>
 
+        <spring-boot-mybatis.version>2.1.0</spring-boot-mybatis.version>
+
+        <image4j.version>0.7</image4j.version>
         <!-- 高斯模糊过滤器 -->
         <jhlabs-filter.version>2.0.235-1</jhlabs-filter.version>
         <!-- commons-io版本号 -->
@@ -65,6 +68,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${spring-boot-mybatis.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>com.jhlabs</groupId>
@@ -75,6 +89,11 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${commons-io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jclarion</groupId>
+            <artifactId>image4j</artifactId>
+            <version>${image4j.version}</version>
         </dependency>
         <!-- 压缩图片插件thumbnailator -->
         <dependency>

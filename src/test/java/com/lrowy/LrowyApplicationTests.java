@@ -1,5 +1,6 @@
 package com.lrowy;
 
+import com.lrowy.pojo.Bookmark;
 import com.lrowy.service.FaviconService;
 
 import org.junit.Test;
@@ -21,6 +22,6 @@ public class LrowyApplicationTests {
 
     @Test
     public void testHttpClient() {
-        System.out.println(fs.getFaviconUrl("https://blog.csdn.net/liuchuanhong1/article/details/68194036"));
+        System.out.println(fs.getFaviconUrl(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214")));
     }
 }

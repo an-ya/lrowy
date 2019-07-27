@@ -81,7 +81,7 @@
         <div class="title">书签</div>
         <div class="bookmark-content">
             <div th:each="b : ${bookmark}" class="favicon-content">
-                <div class="favicon-wrapper" th:style="'background-image:url(' + ${b.faviconUrl} + ');'"></div>
+                <div class="favicon-wrapper" th:style="'background-image:url(' + ${b.faviconBlurUrl} + ');'"></div>
                 <img th:src="${b.faviconUrl}"/>
                 <span>title</span>
             </div>

@@ -7,11 +7,12 @@ public class Bookmark {
     private String desc;
     private String title;
     private String faviconUrl;
+    private String faviconBlurUrl;
     private String faviconOriginalUrl;
     private String keyword;
     private String state;
     private String url;
-    private String BaseUrl;
+    private String baseUrl;
     private int visits;
     private int delFlag;
     private int hiddenFlag;
@@ -19,10 +20,18 @@ public class Bookmark {
     private int faviconFlag;
     private Date createDate;
 
+    public Bookmark() { }
+
     public Bookmark(String url) {
         this.url = url;
         this.createDate = new Date();
         this.accessible = 1;
+    }
+
+    public Bookmark(Bookmark bookmark) {
+        this.faviconUrl = bookmark.getFaviconUrl();
+        this.faviconBlurUrl = bookmark.getFaviconBlurUrl();
+        this.faviconOriginalUrl = bookmark.getFaviconOriginalUrl();
     }
 
     public int getBookmark_id() {
@@ -61,6 +70,14 @@ public class Bookmark {
         return faviconOriginalUrl;
     }
 
+    public String getFaviconBlurUrl() {
+        return faviconBlurUrl;
+    }
+
+    public void setFaviconBlurUrl(String faviconBlurUrl) {
+        this.faviconBlurUrl = faviconBlurUrl;
+    }
+
     public void setFaviconOriginalUrl(String faviconOriginalUrl) {
         this.faviconOriginalUrl = faviconOriginalUrl;
     }
@@ -90,11 +107,11 @@ public class Bookmark {
     }
 
     public String getBaseUrl() {
-        return BaseUrl;
+        return baseUrl;
     }
 
     public void setBaseUrl(String baseUrl) {
-        BaseUrl = baseUrl;
+        this.baseUrl = baseUrl;
     }
 
     public int getVisits() {
