@@ -75,7 +75,6 @@ public class MainController extends BaseController {
     @ResponseBody
     public BaseResponse<String> bookmarkAdd(String url) {
         Bookmark b = fs.getFaviconUrl(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214"));
-        System.out.println(b);
         bookmarkDao.save(b);
         return new BaseResponse<>();
     }

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Bookmark {
     private int bookmark_id;
-    private String desc;
+    private String description;
     private String title;
     private String faviconUrl;
     private String faviconBlurUrl;
@@ -16,7 +16,7 @@ public class Bookmark {
     private int visits;
     private int delFlag;
     private int hiddenFlag;
-    private int accessible;
+    private int isAccessible;
     private int faviconFlag;
     private Date createDate;
 
@@ -25,7 +25,7 @@ public class Bookmark {
     public Bookmark(String url) {
         this.url = url;
         this.createDate = new Date();
-        this.accessible = 1;
+        this.isAccessible = 1;
     }
 
     public Bookmark(Bookmark bookmark) {
@@ -43,11 +43,11 @@ public class Bookmark {
     }
 
     public String getDesc() {
-        return desc;
+        return description;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDesc(String description) {
+        this.description = description;
     }
 
     public String getTitle() {
@@ -139,11 +139,11 @@ public class Bookmark {
     }
 
     public int getAccessible() {
-        return accessible;
+        return isAccessible;
     }
 
-    public void setAccessible(int accessible) {
-        this.accessible = accessible;
+    public void setAccessible(int isAccessible) {
+        this.isAccessible = isAccessible;
     }
 
     public int getFaviconFlag() {
