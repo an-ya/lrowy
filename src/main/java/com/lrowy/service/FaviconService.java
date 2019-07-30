@@ -45,6 +45,7 @@ public class FaviconService {
                 BaseUrl.append(":");
                 BaseUrl.append(url.getPort());
             }
+            bookmark.setBaseUrl(BaseUrl.toString());
 
             StringBuilder faviconUrl = new StringBuilder();
             try {
@@ -53,6 +54,9 @@ public class FaviconService {
                 Elements head = document.head().children();
                 String rel;
                 for (Element e : head) {
+                    if (e.tagName().equals("title") && e.text().length() > 0) {
+                        bookmark.setTitle(e.text());
+                    }
                     rel = e.attr("rel");
                     if (e.tagName().equals("link") && (rel.equalsIgnoreCase("shortcut icon") || rel.equalsIgnoreCase("icon"))) {
                         String href = e.attr("href");
@@ -73,7 +77,6 @@ public class FaviconService {
                 }
                 hr = httpAPIService.doGet(faviconUrl.toString());
                 String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
-                System.out.println(faviconUrl);
                 InputStream inputStream  = hr.getEntityContent();
                 BufferedImage image;
                 if (suffix.equals("ico")) {
