@@ -2,6 +2,7 @@ package com.lrowy.service;
 
 import com.lrowy.pojo.common.http.HttpResult;
 
+import com.lrowy.utils.UrlUtil;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -40,8 +41,9 @@ public class HttpAPIService {
         // 装载配置信息
         httpGet.setConfig(config);
 
-        // 设置User-Agent
+        // 设置Header
         httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.87 Safari/537.36");
+        httpGet.setHeader("Referer", UrlUtil.getBaseUrl(url)); // 解决根据referer反爬虫
 
         // 发起请求
         CloseableHttpResponse response = this.httpClient.execute(httpGet);
