@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -34,11 +33,6 @@ public class MainController extends BaseController {
         model.addAttribute("user", user);
 
         List<Bookmark> bm = bookmarkDao.findBookmark();
-//        bm.add(fs.getFaviconUrl(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214")));
-//        bm.add(fs.getFaviconUrl(new Bookmark("https://www.jianshu.com/u/107bd58d5bbb")));
-//        bm.add(fs.getFaviconUrl(new Bookmark("https://blog.52itstyle.vip")));
-//        bm.add(fs.getFaviconUrl(new Bookmark("https://imgchr.com/")));
-
         model.addAttribute("bookmark", bm);
         return "/index";
     }
@@ -74,7 +68,7 @@ public class MainController extends BaseController {
     @RequestMapping(value = "/bookmark/add", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<String> bookmarkAdd(String url) {
-        Bookmark b = fs.getFaviconUrl(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214"));
+        Bookmark b = fs.getFaviconUrl(new Bookmark(url));
         bookmarkDao.save(b);
         return new BaseResponse<>();
     }

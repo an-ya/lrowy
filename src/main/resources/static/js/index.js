@@ -25,7 +25,7 @@ $(document).ready(function () {
             url: '/bookmark/add',
             type: 'post',
             data: {
-                url: 'https://blog.csdn.net/qq_37385726/article/details/82020214'
+                url: 'https://www.swiper.com.cn/'
             },
             success: function (data) {
                 if (data.code === '000') {

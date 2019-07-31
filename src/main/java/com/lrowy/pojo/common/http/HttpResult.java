@@ -42,7 +42,7 @@ public class HttpResult {
     }
 
     public String getEntityString() throws Exception {
-        return EntityUtils.toString(entity);
+        return EntityUtils.toString(entity, charset);
     }
 
     public InputStream getEntityContent() throws IOException {
