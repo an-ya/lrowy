@@ -34,4 +34,6 @@ $(document).ready(function () {
             }
         });
     });
+
+    notice.open({duration: 3, content: '<h2>title1</h2>'});
 });
