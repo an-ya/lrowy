@@ -1,0 +1,73 @@
+.shortcut-container {
+    margin: 0 auto;
+    width: 900px;
+    height: 120px;
+}
+
+.shortcut {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    width: 120px;
+    overflow: hidden;
+}
+
+.shortcut .favicon-blur {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: no-repeat center;
+    background-size: cover;
+    opacity: .6;
+    z-index: -10;
+}
+
+.shortcut .favicon-png {
+    width: 32px;
+    height: 32px;
+    opacity: 0;
+    -webkit-transition: .3s;
+    transition: .3s;
+    -webkit-transform: translateX(10px) scale(1.2);
+    transform: translateX(10px) scale(1.2);
+}
+
+.shortcut.show .favicon-png {
+    opacity: 1;
+    -webkit-transform: translateX(0) scale(1);
+    transform: translateX(0) scale(1);
+}
+
+.shortcut span {
+    margin: 6px 12px 0 12px;
+    color: #fff;
+    font-size: .75rem;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+@media screen and (max-width: 900px) {
+    .shortcut-container {
+        width: 100%;
+        height: 90px;
+    }
+
+    .shortcut {
+        width: 90px;
+        height: 90px;
+    }
+
+    .shortcut .favicon-png {
+        width: 24px;
+        height: 24px;
+    }
+}
