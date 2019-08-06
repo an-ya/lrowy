@@ -10,7 +10,8 @@
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}"/>
-    <link rel="stylesheet" th:href="@{/css/swiper-custom.css}"/>
+    <link rel="stylesheet" th:href="@{/css/banner.css}"/>
+    <link rel="stylesheet" th:href="@{/css/shortcut.css}"/>
     <script type="text/javascript" src="http://cdn.repository.webfont.com/wwwroot/js/wf/youziku.api.min.js"></script>
     <script type="text/javascript">
         $webfont.load(".t-box>.name,.t-box>.desc,.logo,.title", "30a0a55211df494ca2cf3c4a032a664a", "ruibo");
@@ -43,8 +44,8 @@
     </div>
 </div>
 <div class="main">
-    <div class="swiper-content">
-        <div class="swiper-container">
+    <div class="banner-content">
+        <div class="banner-container swiper-container">
             <div class="swiper-parallax" data-swiper-parallax="-25%" th:style="'background-image:url(' + @{/images/banner02.jpg} + ');'"></div>
             <div class="swiper-wrapper">
                 <div class="swiper-slide">
@@ -77,14 +78,16 @@
         <div class="swiper-button-prev" th:style="'background-image:url(' + @{/images/lastIco.png} + ');'"></div>
         <div class="swiper-button-next" th:style="'background-image:url(' + @{/images/nextIco.png} + ');'"></div>
     </div>
-    <div class="swiper-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="swiper-mask"></div></div>
+    <div class="banner-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="banner-mask"></div></div>
     <div class="bookmark">
         <div class="title">书签</div>
-        <div class="bookmark-content">
-            <div th:each="b : ${bookmark}" class="favicon-content">
-                <div class="favicon-wrapper" th:style="'background-image:url(' + ${b.faviconBlurUrl} + ');'"></div>
-                <img th:src="${b.faviconUrl}"/>
-                <span>title</span>
+        <div class="shortcut-container swiper-container">
+            <div class="swiper-wrapper">
+                <div th:each="b : ${bookmark}" class="swiper-slide shortcut">
+                    <div class="favicon-blur" th:style="'background-image:url(' + ${b.faviconBlurUrl} + ');'"></div>
+                    <img class="favicon-png" th:src="${b.faviconUrl}"/>
+                    <span th:text="${b.title}"></span>
+                </div>
             </div>
         </div>
     </div>
