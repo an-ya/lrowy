@@ -51,6 +51,9 @@ public class FaviconService {
                 }
             }
 
+            if (faviconUrl.equals("")) {
+                faviconUrl = BaseUrl + "/favicon.ico";
+            }
             hr = httpAPIService.doGet(faviconUrl);
             InputStream inputStream  = hr.getEntityContent();
             String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);

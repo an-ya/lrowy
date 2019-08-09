@@ -7,16 +7,35 @@ import net.sf.image4j.codec.ico.ICODecoder;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
 
 public class ImageUtil {
+    private static ByteArrayOutputStream byteArrayOutputStream = null;
+
+    private static void InputStreamCacher(InputStream inputStream) {
+        byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len;
+        try {
+            while ((len = inputStream.read(buffer)) > -1 ) {
+                byteArrayOutputStream.write(buffer, 0, len);
+            }
+            byteArrayOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static InputStream getInputStream() {
+        return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+    }
+
     public static BufferedImage readImageStream(String type, InputStream inputStream) throws IOException {
-        BufferedImage image;
-        if (type.equals(".ico")) {
+        if (type.equals("ico")) {
+            InputStreamCacher(inputStream);
             try {
-                List<BufferedImage> images = ICODecoder.read(inputStream);
+                List<BufferedImage> images = ICODecoder.read(getInputStream());
                 int index = 0;
                 int maxSize = 0;
                 for ( int i = 0; i < images.size(); i++) {
@@ -26,11 +45,11 @@ public class ImageUtil {
                     }
                 }
                 return images.get(index);
-            } catch (Exception e) {
-                // 防止图片类型与文件尾缀描述不符的情况
-                return ImageIO.read(inputStream);
+            } catch (EOFException e) {
+                // 防止出现文件类型不是ico的情况
+                return ImageIO.read(getInputStream());
             }
-        } else if (type.equals(".bmp")) {
+        } else if (type.equals("bmp")) {
             return BMPDecoder.read(inputStream);
         } else {
             return ImageIO.read(inputStream);

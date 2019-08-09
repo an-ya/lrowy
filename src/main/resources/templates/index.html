@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <link rel="stylesheet" href="/css/swiper.min.css"/>
+    <link rel="stylesheet" href="layui-v2.5.4/css/layui.css">
     <link rel="stylesheet" th:href="@{/css/index.css}"/>
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}"/>
@@ -84,7 +85,7 @@
         <div class="shortcut-container swiper-container">
             <div class="swiper-wrapper">
                 <div th:each="b : ${bookmark}" class="swiper-slide shortcut">
-                    <div class="favicon-blur" th:style="'background-image:url(' + ${b.faviconBlurUrl} + ');'"></div>
+<!--                    <div class="favicon-blur" th:style="'background-image:url(' + ${b.faviconBlurUrl} + ');'"></div>-->
                     <img class="favicon-png" th:src="${b.faviconUrl}"/>
                     <span th:text="${b.title}"></span>
                 </div>
@@ -95,6 +96,7 @@
 <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="/js/swiper.min.js"></script>
+<script src="/layui-v2.5.4/layui.js"></script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/index.js}"></script>
