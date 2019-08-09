@@ -60,20 +60,45 @@ $(document).ready(function () {
         }
     });
 
-    $('.test').click(function () {
-        $.ajax({
-            url: '/bookmark/add',
-            type: 'post',
-            data: {
-                url: 'https://www.swiper.com.cn/'
-            },
-            success: function (data) {
-                if (data.code === '000') {
-                    console.log(data.result);
+    layui.use('layer', function(){
+        var layer = layui.layer;
+
+        $('.test').click(function () {
+            $.ajax({
+                url: '/bookmark/add',
+                type: 'post',
+                data: {
+                    url: 'https://cn.vuejs.org/'
+                },
+                success: function (data) {
+                    if (data.code === '000') {
+                        console.log(data.result);
+                    }
                 }
-            }
+            });
+            // $.ajax({
+            //     url: '/bookmark/add',
+            //     type: 'post',
+            //     data: {
+            //         url: 'https://www.swiper.com.cn/'
+            //     },
+            //     success: function (data) {
+            //         if (data.code === '000') {
+            //             console.log(data.result);
+            //         }
+            //     }
+            // });
+            // layer.open({
+            //     type: 2,
+            //     title: '<div><img style="width: 20px;height: 20px;display: inline-block;" src="images/ball.png">很多时候，我们想最大化看，比如像这个页面。</div>',
+            //     shadeClose: true,
+            //     shade: false,
+            //     maxmin: true, //开启最大化最小化按钮
+            //     area: ['800px', '600px'],
+            //     content: 'http://localhost:8080/'
+            // });
         });
     });
 
-    notice.open({duration: 5, content: '<div class="notice-title">Welcome!</div>'});
+    // notice.open({duration: 5, content: '<div class="notice-title">Welcome!</div>'});
 });
