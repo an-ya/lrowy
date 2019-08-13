@@ -1,0 +1,103 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.header {
+    box-shadow: none;
+    background-color: #3367d6;
+}
+
+.main {
+    width: 900px;
+    margin: 0 auto;
+    background-color: #fff;
+}
+
+.logo {
+    color: #fff;
+}
+
+.login-button i {
+    color: #fff;
+}
+
+.bookmark-list {
+
+}
+.bookmark-list .item {
+    box-sizing: border-box;
+    display: flex;
+    height: 50px;
+}
+.bookmark-list .item .t {
+    line-height: 48px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.bookmark-list .item .icon {
+    width: 48px;
+    height: 48px;
+}
+.bookmark-list .item .icon img {
+    width: 16px;
+    height: 16px;
+    margin: 16px;
+}
+
+.bookmark-category-container {
+    height: 30px;
+    margin: 20px 20px;
+}
+
+.bookmark-category-item {
+    width: 140px;
+    height: 100%;
+    font-size: 20px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.bookmark-category-item::before {
+    content: '\e600';
+    position: absolute;
+    left: 10%;
+    top: 2px;
+    font-family: "iconfont", sans-serif;
+    font-weight: bold;
+    opacity: 0;
+    transition: .3s;
+}
+
+.bookmark-category-item::after {
+    content: '\e60d';
+    position: absolute;
+    right: 10%;
+    top: 2px;
+    font-family: "iconfont", sans-serif;
+    font-weight: bold;
+    opacity: 0;
+    transition: .3s;
+}
+
+.bookmark-category-item-active::before {
+    left: 15%;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.bookmark-category-item-active::after {
+    right: 15%;
+    opacity: 1;
+    transform: scale(1);
+}
+
+@media screen and (max-width: 900px) {
+    .main {
+        width: 100%;
+    }
+
+    .bookmark-category-item {
+        font-size: 16px;
+    }
+}

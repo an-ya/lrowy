@@ -1,15 +1,15 @@
-package com.lrowy.pojo;
+package com.lrowy.pojo.bookmark;
 
 import java.util.Date;
 
 public class Bookmark {
-    private int bookmark_id;
+    private int bookmarkId;
+    private int bookmarkCategoryId;
     private String description;
     private String title;
     private String faviconUrl;
     private String faviconBlurUrl;
     private String faviconOriginalUrl;
-    private String keyword;
     private String state;
     private String url;
     private String baseUrl;
@@ -17,7 +17,7 @@ public class Bookmark {
     private int delFlag;
     private int hiddenFlag;
     private int isAccessible;
-    private int faviconFlag;
+    private int shortcutFlag;
     private Date createDate;
 
     public Bookmark() { }
@@ -34,12 +34,20 @@ public class Bookmark {
         this.faviconOriginalUrl = bookmark.getFaviconOriginalUrl();
     }
 
-    public int getBookmark_id() {
-        return bookmark_id;
+    public int getBookmarkId() {
+        return bookmarkId;
     }
 
-    public void setBookmark_id(int bookmark_id) {
-        this.bookmark_id = bookmark_id;
+    public void setBookmarkId(int bookmarkId) {
+        this.bookmarkId = bookmarkId;
+    }
+
+    public int getBookmarkCategoryId() {
+        return bookmarkCategoryId;
+    }
+
+    public void setBookmarkCategoryId(int bookmarkCategoryId) {
+        this.bookmarkCategoryId = bookmarkCategoryId;
     }
 
     public String getDesc() {
@@ -80,14 +88,6 @@ public class Bookmark {
 
     public void setFaviconOriginalUrl(String faviconOriginalUrl) {
         this.faviconOriginalUrl = faviconOriginalUrl;
-    }
-
-    public String getKeyword() {
-        return keyword;
-    }
-
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
     }
 
     public String getState() {
@@ -146,12 +146,12 @@ public class Bookmark {
         this.isAccessible = isAccessible;
     }
 
-    public int getFaviconFlag() {
-        return faviconFlag;
+    public int getShortcutFlag() {
+        return shortcutFlag;
     }
 
-    public void setFaviconFlag(int faviconFlag) {
-        this.faviconFlag = faviconFlag;
+    public void setShortcutFlag(int shortcutFlag) {
+        this.shortcutFlag = shortcutFlag;
     }
 
     public Date getCreateDate() {

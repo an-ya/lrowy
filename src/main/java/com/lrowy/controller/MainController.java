@@ -1,7 +1,7 @@
 package com.lrowy.controller;
 
 import com.lrowy.dao.BookmarkDao;
-import com.lrowy.pojo.Bookmark;
+import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.pojo.User;
 import com.lrowy.pojo.common.response.BaseResponse;
 import com.lrowy.service.FaviconService;
@@ -32,7 +32,7 @@ public class MainController extends BaseController {
         User user = isLogin() ? getUser() : null;
         model.addAttribute("user", user);
 
-        List<Bookmark> bm = bookmarkDao.findBookmark();
+        List<Bookmark> bm = bookmarkDao.findShortcut();
         model.addAttribute("bookmark", bm);
         return "/index";
     }

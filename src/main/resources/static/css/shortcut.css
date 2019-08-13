@@ -1,7 +1,6 @@
 .shortcut-container {
-    margin: 0 auto;
-    width: 900px;
-    height: 120px;
+    height: 140px;
+    margin: 20px 20px;
 }
 
 .shortcut {
@@ -10,9 +9,19 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 120px;
-    width: 120px;
+    height: 140px;
+    width: 140px;
     overflow: hidden;
+    opacity: 1;
+    -webkit-transform: scale(.8);
+    transform: scale(.8);
+    -webkit-transition: .3s;
+    transition: .3s;
+}
+
+.shortcut.swiper-slide-active {
+    -webkit-transform: scale(1);
+    transform: scale(1);
 }
 
 .shortcut .favicon-blur {
@@ -28,25 +37,13 @@
 }
 
 .shortcut .favicon-png {
-    width: 32px;
-    height: 32px;
-    opacity: 0;
-    -webkit-transition: .3s;
-    transition: .3s;
-    -webkit-transform: translateX(10px) scale(1.2);
-    transform: translateX(10px) scale(1.2);
-}
-
-.shortcut.show .favicon-png {
-    opacity: 1;
-    -webkit-transform: translateX(0) scale(1);
-    transform: translateX(0) scale(1);
+    width: 36px;
+    height: 36px;
 }
 
 .shortcut span {
     margin: 6px 12px 0 12px;
     color: #fff;
-    font-size: .75rem;
     text-shadow: rgba(0, 0, 0, .3) 1px 1px 4px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -57,17 +54,21 @@
 
 @media screen and (max-width: 900px) {
     .shortcut-container {
-        width: 100%;
-        height: 90px;
+        height: 80px;
     }
 
     .shortcut {
-        width: 90px;
-        height: 90px;
+        width: 80px;
+        height: 80px;
     }
 
     .shortcut .favicon-png {
         width: 24px;
         height: 24px;
+    }
+
+    .shortcut span {
+        margin: 6px 6px 0 6px;
+        font-size: 13px;
     }
 }
