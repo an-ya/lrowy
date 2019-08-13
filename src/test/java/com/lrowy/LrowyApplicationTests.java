@@ -1,6 +1,6 @@
 package com.lrowy;
 
-import com.lrowy.pojo.Bookmark;
+import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.service.FaviconService;
 
 import org.junit.Test;

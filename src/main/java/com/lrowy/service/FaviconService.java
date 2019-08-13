@@ -1,6 +1,6 @@
 package com.lrowy.service;
 
-import com.lrowy.pojo.Bookmark;
+import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.pojo.common.http.HttpResult;
 import com.lrowy.utils.ImageUtil;
 import com.lrowy.utils.UrlUtil;
