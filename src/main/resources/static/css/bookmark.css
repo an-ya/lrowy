@@ -92,6 +92,15 @@ body {
     transform: scale(1);
 }
 
+.bookmark-form {
+    display: none;
+    padding: 20px;
+}
+
+.layui-layer {
+    box-shadow: none!important;
+}
+
 @media screen and (max-width: 900px) {
     .main {
         width: 100%;
