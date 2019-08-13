@@ -55,3 +55,25 @@ $.ajax({
         }
     }
 });
+
+layui.use(['layer', 'form'], function(){
+    var layer = layui.layer
+        ,form = layui.form;
+
+    $('.test').click(function () {
+        layer.open({
+            type: 1,
+            title: '书签',
+            closeBtn: 0,
+            shadeClose: true,
+            area: ['600px', '420px'],
+            content: $('.bookmark-form')
+        });
+    });
+
+    //监听提交
+    form.on('submit', function(data){
+        layer.msg(JSON.stringify(data.field));
+        return false;
+    });
+});
