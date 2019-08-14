@@ -81,7 +81,7 @@
             <div class="swiper-wrapper">
                 <div th:each="b : ${bookmark}" class="swiper-slide shortcut">
 <!--                    <div class="favicon-blur" th:style="'background-image:url(' + ${b.faviconBlurUrl} + ');'"></div>-->
-                    <img class="favicon-png" th:src="${b.faviconUrl}"/>
+                    <img class="favicon-png" th:src="${b.favicon.faviconUrl}"/>
                     <span th:text="${b.title}"></span>
                 </div>
             </div>

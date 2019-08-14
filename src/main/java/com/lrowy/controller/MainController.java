@@ -64,12 +64,4 @@ public class MainController extends BaseController {
         br.setResult(user);
         return br;
     }
-
-    @RequestMapping(value = "/bookmark/add", method = RequestMethod.POST)
-    @ResponseBody
-    public BaseResponse<String> bookmarkAdd(String url) {
-        Bookmark b = fs.getFaviconUrl(new Bookmark(url));
-        bookmarkDao.save(b);
-        return new BaseResponse<>();
-    }
 }

@@ -7,9 +7,6 @@ public class Bookmark {
     private int bookmarkCategoryId;
     private String description;
     private String title;
-    private String faviconUrl;
-    private String faviconBlurUrl;
-    private String faviconOriginalUrl;
     private String state;
     private String url;
     private String baseUrl;
@@ -19,6 +16,7 @@ public class Bookmark {
     private int isAccessible;
     private int shortcutFlag;
     private Date createDate;
+    private Favicon favicon;
 
     public Bookmark() { }
 
@@ -26,12 +24,6 @@ public class Bookmark {
         this.url = url;
         this.createDate = new Date();
         this.isAccessible = 1;
-    }
-
-    public Bookmark(Bookmark bookmark) {
-        this.faviconUrl = bookmark.getFaviconUrl();
-        this.faviconBlurUrl = bookmark.getFaviconBlurUrl();
-        this.faviconOriginalUrl = bookmark.getFaviconOriginalUrl();
     }
 
     public int getBookmarkId() {
@@ -50,11 +42,11 @@ public class Bookmark {
         this.bookmarkCategoryId = bookmarkCategoryId;
     }
 
-    public String getDesc() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDesc(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -64,30 +56,6 @@ public class Bookmark {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getFaviconUrl() {
-        return faviconUrl;
-    }
-
-    public void setFaviconUrl(String faviconUrl) {
-        this.faviconUrl = faviconUrl;
-    }
-
-    public String getFaviconOriginalUrl() {
-        return faviconOriginalUrl;
-    }
-
-    public String getFaviconBlurUrl() {
-        return faviconBlurUrl;
-    }
-
-    public void setFaviconBlurUrl(String faviconBlurUrl) {
-        this.faviconBlurUrl = faviconBlurUrl;
-    }
-
-    public void setFaviconOriginalUrl(String faviconOriginalUrl) {
-        this.faviconOriginalUrl = faviconOriginalUrl;
     }
 
     public String getState() {
@@ -138,11 +106,11 @@ public class Bookmark {
         this.hiddenFlag = hiddenFlag;
     }
 
-    public int getAccessible() {
+    public int getIsAccessible() {
         return isAccessible;
     }
 
-    public void setAccessible(int isAccessible) {
+    public void setIsAccessible(int isAccessible) {
         this.isAccessible = isAccessible;
     }
 
@@ -160,5 +128,13 @@ public class Bookmark {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Favicon getFavicon() {
+        return favicon;
+    }
+
+    public void setFavicon(Favicon favicon) {
+        this.favicon = favicon;
     }
 }
