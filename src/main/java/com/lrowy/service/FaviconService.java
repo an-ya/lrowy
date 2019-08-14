@@ -1,6 +1,8 @@
 package com.lrowy.service;
 
+import com.lrowy.dao.BookmarkDao;
 import com.lrowy.pojo.bookmark.Bookmark;
+import com.lrowy.pojo.bookmark.Favicon;
 import com.lrowy.pojo.common.http.HttpResult;
 import com.lrowy.utils.ImageUtil;
 import com.lrowy.utils.UrlUtil;
@@ -8,6 +10,7 @@ import com.lrowy.utils.UrlUtil;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
@@ -18,6 +21,7 @@ import org.jsoup.select.Elements;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -25,6 +29,8 @@ public class FaviconService {
     @Value("${web.upload-path}")
     private String uploadPath;
 
+    @Autowired
+    BookmarkDao bookmarkDao;
     @Resource
     private HttpAPIService httpAPIService;
 
@@ -32,10 +38,11 @@ public class FaviconService {
         HttpResult hr;
 
         try {
-            String BaseUrl = UrlUtil.getBaseUrl(bookmark.getUrl());
+            String url = bookmark.getUrl();
             String faviconUrl = "";
+            String BaseUrl = UrlUtil.getBaseUrl(url);
 
-            hr = httpAPIService.doGet(BaseUrl);
+            hr = httpAPIService.doGet(url);
             Document document = Jsoup.parse(hr.getEntityString(), hr.getCharset());
             Elements head = document.head().children();
             String rel;
@@ -65,16 +72,24 @@ public class FaviconService {
             String blurIconName = uuid + "-favicon-blur.png";
             File folder = new File(uploadPath + directory);
             if (!folder.exists()) {
-                folder.mkdirs();
+                if (!folder.mkdirs()) return bookmark;
             }
 
             ImageIO.write(image, "png", new File(uploadPath + directory + iconName));
             ImageIO.write(ImageUtil.customGaussianBlur(image), "png", new File(uploadPath + directory + blurIconName));
 
             bookmark.setBaseUrl(BaseUrl);
-            bookmark.setFaviconOriginalUrl(faviconUrl);
-            bookmark.setFaviconUrl("/upload/" + directory + iconName);
-            bookmark.setFaviconBlurUrl("/upload/" + directory + blurIconName);
+            bookmark.setCreateDate(new Date());
+            bookmarkDao.saveBookmark(bookmark);
+            Favicon favicon = new Favicon();
+            favicon.setDomain(UrlUtil.getDomainName(url));
+            favicon.setTopDomain(UrlUtil.getTopDomainName(url));
+            favicon.setFaviconOriginalUrl(faviconUrl);
+            favicon.setFaviconUrl("/upload/" + directory + iconName);
+            favicon.setFaviconBlurUrl("/upload/" + directory + blurIconName);
+            bookmarkDao.saveFavicon(favicon);
+            bookmark.setFavicon(favicon);
+            bookmarkDao.saveBookmarkFavicon(bookmark);
         } catch (Exception e) {
             e.printStackTrace();
         }

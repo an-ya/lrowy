@@ -21,6 +21,18 @@ body {
     color: #fff;
 }
 
+.menu-button span {
+    background: #fff;
+}
+
+.menu-button:before {
+    background: #fff;
+}
+
+.menu-button:after {
+    background: #fff;
+}
+
 .bookmark-list {
 
 }

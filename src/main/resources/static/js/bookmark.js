@@ -56,11 +56,12 @@ $.ajax({
     }
 });
 
-layui.use(['layer', 'form'], function(){
+layui.use(['layer', 'form', 'laydate'], function(){
     var layer = layui.layer
-        ,form = layui.form;
+        ,form = layui.form
+        ,laydate = layui.laydate;
 
-    $('.test').click(function () {
+    $('.addBookmark').click(function () {
         layer.open({
             type: 1,
             title: '书签',
@@ -71,9 +72,24 @@ layui.use(['layer', 'form'], function(){
         });
     });
 
+    laydate.render({
+        elem: '#createDate'
+        ,type: 'datetime'
+    });
+
     //监听提交
     form.on('submit', function(data){
         layer.msg(JSON.stringify(data.field));
+        $.ajax({
+            url: '/bookmark/add',
+            type: 'post',
+            data: data.field,
+            success: function (data) {
+                if (data.code === '000') {
+                    console.log(data)
+                }
+            }
+        });
         return false;
     });
 });
