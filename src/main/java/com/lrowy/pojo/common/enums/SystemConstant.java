@@ -2,12 +2,9 @@ package com.lrowy.pojo.common.enums;
 
 public enum SystemConstant {
     SYSTEM_SUCCESS("000", "处理成功"),
-    SYSTEM_ERROR("001", "系统异常"),
-    DATA_INTEGRITY_VIOLATION_ERROR("002", "数据幂等异常"),
-    BUSINESS_STORE_COMMAND_ERROR("003", "数据库存储失败"),
-    DUPLICATE_INVOKE_ERROR("004", "重复调用"),
-    SLA_ACCESS_DENIED("005", "请求被限流，拒绝访问"),
-    NETWORK_ERROR("101", "网络异常"),
+    SYSTEM_ERROR("001", "未定义错误"),
+    HTTPCLIENT_ERROR("002", "HttpClient请求错误"),
+    MKDIR_ERROR("101", "文件夹创建失败"),
     JWT_SECERT("@#$%^&*()OPG#$%^&*(HG", "token秘钥"),
     JWT_ERRCODE_EXPIRE("201", "token失效"),
     JWT_ERRCODE_FAIL("202", "token验证失败");

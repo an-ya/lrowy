@@ -11,6 +11,7 @@ CREATE TABLE bookmark (
   hiddenFlag tinyint(1) NOT NULL,
   isAccessible tinyint(1) NOT NULL,
   shortcutFlag tinyint(1) NOT NULL,
+  extraNetFlag tinyint(1) NOT NULL,
   createDate datetime NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 CREATE TABLE bookmark_category (

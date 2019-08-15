@@ -15,6 +15,7 @@ public class Bookmark {
     private int hiddenFlag;
     private int isAccessible;
     private int shortcutFlag;
+    private int extraNetFlag;
     private Date createDate;
     private Favicon favicon;
 
@@ -120,6 +121,14 @@ public class Bookmark {
 
     public void setShortcutFlag(int shortcutFlag) {
         this.shortcutFlag = shortcutFlag;
+    }
+
+    public int getExtraNetFlag() {
+        return extraNetFlag;
+    }
+
+    public void setExtraNetFlag(int extraNetFlag) {
+        this.extraNetFlag = extraNetFlag;
     }
 
     public Date getCreateDate() {

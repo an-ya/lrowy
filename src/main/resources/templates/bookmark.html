@@ -153,17 +153,18 @@
             <input type="checkbox" name="hiddenFlag" title="隐藏" lay-skin="primary" value="1"/>
             <input type="checkbox" name="isAccessible" title="可访问" lay-skin="primary" value="1" checked/>
             <input type="checkbox" name="shortcutFlag" title="为快捷方式" lay-skin="primary" value="1"/>
+            <input type="checkbox" name="extraNetFlag" title="为外网" lay-skin="primary" value="1"/>
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">创建日期</label>
         <div class="layui-input-block">
-            <input type="text" id="createDate" name="createDate" value="" readonly class="layui-input"/>
+            <input type="text" id="createDate" name="createDate" value="" class="layui-input"/>
         </div>
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit>立即提交</button>
+            <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>

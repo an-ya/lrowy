@@ -7,7 +7,7 @@ import com.lrowy.pojo.User;
 import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.pojo.bookmark.BookmarkResult;
 import com.lrowy.pojo.common.response.BaseResponse;
-import com.lrowy.service.FaviconService;
+import com.lrowy.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -21,11 +21,11 @@ import java.util.Date;
 @Controller
 public class BookmarkController extends BaseController {
     @Autowired
-    private FaviconService fs;
+    private BookmarkService bookmarkService;
     @Autowired
-    BookmarkDao bookmarkDao;
+    private BookmarkDao bookmarkDao;
     @Autowired
-    BookmarkCategoryDao bookmarkCategoryDao;
+    private BookmarkCategoryDao bookmarkCategoryDao;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -58,8 +58,12 @@ public class BookmarkController extends BaseController {
     @RequestMapping(value = "/bookmark/add", method = RequestMethod.POST)
     @ResponseBody
     public BaseResponse<Bookmark> add(@ModelAttribute Bookmark bookmark) {
-        BaseResponse<Bookmark> br = new BaseResponse<>();
-        br.setResult(fs.getFaviconUrl(bookmark));
-        return br;
+        return bookmarkService.init(bookmark);
+    }
+
+    @RequestMapping(value = "/bookmark/update", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Bookmark> update(@ModelAttribute Bookmark bookmark) {
+        return bookmarkService.update(bookmark);
     }
 }
