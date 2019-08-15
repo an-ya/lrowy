@@ -23,9 +23,10 @@ import java.util.Map;
 public class HttpAPIService {
     @Autowired
     private CloseableHttpClient httpClient;
-
     @Autowired
-    private RequestConfig config;
+    private RequestConfig intraNetConfig;
+    @Autowired
+    private RequestConfig extraNetConfig;
 
     /**
      * 不带参数的get请求，如果状态码为200，则返回body，如果不为200，则返回null
@@ -34,12 +35,16 @@ public class HttpAPIService {
      * @return
      * @throws Exception
      */
-    public HttpResult doGet(String url) throws Exception {
+    public HttpResult doGet(String url, boolean extraNetFlag) throws Exception {
         // 声明 http get 请求
         HttpGet httpGet = new HttpGet(url);
 
         // 装载配置信息
-        httpGet.setConfig(config);
+        if (extraNetFlag) {
+            httpGet.setConfig(extraNetConfig);
+        } else {
+            httpGet.setConfig(intraNetConfig);
+        }
 
         // 设置Header
         httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.87 Safari/537.36");
@@ -57,7 +62,7 @@ public class HttpAPIService {
      * @return
      * @throws Exception
      */
-    public HttpResult doGet(String url, Map<String, Object> map) throws Exception {
+    public HttpResult doGet(String url, Map<String, Object> map, boolean extraNetFlag) throws Exception {
         URIBuilder uriBuilder = new URIBuilder(url);
 
         if (map != null) {
@@ -68,7 +73,7 @@ public class HttpAPIService {
         }
 
         // 调用不带参数的get请求
-        return this.doGet(uriBuilder.build().toString());
+        return this.doGet(uriBuilder.build().toString(), extraNetFlag);
     }
 
     /**
@@ -83,7 +88,7 @@ public class HttpAPIService {
         // 声明httpPost请求
         HttpPost httpPost = new HttpPost(url);
         // 加入配置信息
-        httpPost.setConfig(config);
+        httpPost.setConfig(intraNetConfig);
 
         // 判断map是否为空，不为空则进行遍历，封装from表单对象
         if (map != null) {

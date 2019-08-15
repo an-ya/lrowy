@@ -1,5 +1,6 @@
 package com.lrowy.pojo.common.response;
 
+import com.lrowy.pojo.common.enums.SystemConstant;
 import java.io.Serializable;
 
 public class BaseResponse<T> implements Serializable {
@@ -47,5 +48,10 @@ public class BaseResponse<T> implements Serializable {
 
     public void setResult(T result) {
         this.result = result;
+    }
+
+    public void setInfo(SystemConstant systemConstant) {
+        this.code = systemConstant.getCode();
+        this.msg = systemConstant.getDescription();
     }
 }

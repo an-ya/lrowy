@@ -4,7 +4,6 @@ import com.lrowy.dao.BookmarkDao;
 import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.pojo.User;
 import com.lrowy.pojo.common.response.BaseResponse;
-import com.lrowy.service.FaviconService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,6 @@ import java.util.List;
 public class MainController extends BaseController {
     @Autowired
     BookmarkDao bookmarkDao;
-    @Autowired
-    private FaviconService fs;
 
     @RequestMapping("/")
     public String i() {

@@ -1,5 +1,6 @@
 package com.lrowy.config;
 
+import org.apache.http.HttpHost;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -87,12 +88,24 @@ public class HttpClient {
     }
 
     /**
-     * 使用builder构建一个RequestConfig对象
+     * 内网配置
      * @param builder
      * @return
      */
-    @Bean
-    public RequestConfig getRequestConfig(@Qualifier("builder") RequestConfig.Builder builder){
+    @Bean(name = "intraNetConfig")
+    public RequestConfig getIntraNetConfig(@Qualifier("builder") RequestConfig.Builder builder){
+        return builder.build();
+    }
+
+    /**
+     * 外网配置
+     * @param builder
+     * @return
+     */
+    @Bean(name = "extraNetConfig")
+    public RequestConfig getExtraNetConfig(@Qualifier("builder") RequestConfig.Builder builder){
+        HttpHost h = new HttpHost("127.0.0.1", 60119);
+        builder.setProxy(h);
         return builder.build();
     }
 }

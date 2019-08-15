@@ -56,10 +56,38 @@ $.ajax({
     }
 });
 
-layui.use(['layer', 'form', 'laydate'], function(){
+layui.use(['layer', 'form', 'laydate'], function (){
     var layer = layui.layer
         ,form = layui.form
         ,laydate = layui.laydate;
+
+    function setForm ($form, result, parent) {
+        var value;
+        for (i in result) {
+            if (result.hasOwnProperty(i)) {
+                value = result[i];
+                if (typeof value == 'object' && value.constructor === Object) {
+                    setForm($form, value, i);
+                } else {
+                    if (parent.length > 0) {
+                        $form.find('[name="' + parent + '.' + i + '"]').val(value);
+                    } else {
+                        var ele = $form.find('[name="' + i + '"]');
+                        if (ele.prop('type') === 'text') {
+                            ele.val(value);
+                        }
+                        if (ele.prop('type') === 'checkbox') {
+                            if (value === 1) {
+                                ele.prop('checked', true);
+                            } else {
+                                ele.prop('checked', false);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     $('.addBookmark').click(function () {
         layer.open({
@@ -78,7 +106,7 @@ layui.use(['layer', 'form', 'laydate'], function(){
     });
 
     //监听提交
-    form.on('submit', function(data){
+    form.on('submit', function (data){
         layer.msg(JSON.stringify(data.field));
         $.ajax({
             url: '/bookmark/add',
@@ -86,7 +114,8 @@ layui.use(['layer', 'form', 'laydate'], function(){
             data: data.field,
             success: function (data) {
                 if (data.code === '000') {
-                    console.log(data)
+                    setForm($('.bookmark-form'), data.result, '');
+                    form.render();
                 }
             }
         });
