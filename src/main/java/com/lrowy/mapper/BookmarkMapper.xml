@@ -35,24 +35,28 @@
     <select id="findShortcut" resultMap="bookmark">
         SELECT *
         FROM bookmark
-        JOIN bookmark_favicon ON bookmark.bookmarkId = bookmark_favicon.bookmarkId
-        JOIN favicon ON favicon.faviconId = bookmark_favicon.faviconId
-        WHERE shortcutFlag = 1
+        JOIN bookmark_favicon ON bookmark.bookmarkId=bookmark_favicon.bookmarkId
+        JOIN favicon ON favicon.faviconId=bookmark_favicon.faviconId
+        WHERE shortcutFlag=1
         ORDER BY bookmark.bookmarkCategoryId;
     </select>
 
     <select id="findBookmark" resultMap="bookmark">
         SELECT *
         FROM bookmark
-        JOIN bookmark_favicon ON bookmark.bookmarkId = bookmark_favicon.bookmarkId
-        JOIN favicon ON favicon.faviconId = bookmark_favicon.faviconId
-        WHERE shortcutFlag = 0
+        JOIN bookmark_favicon ON bookmark.bookmarkId=bookmark_favicon.bookmarkId
+        JOIN favicon ON favicon.faviconId=bookmark_favicon.faviconId
+        WHERE shortcutFlag=0
         ORDER BY bookmark.bookmarkCategoryId;
     </select>
 
     <update id="updateBookmark" parameterType="com.lrowy.pojo.bookmark.Bookmark">
         UPDATE bookmark SET bookmarkCategoryId=#{bookmarkCategoryId},description=#{description},title=#{title},state=#{state},url=#{url},baseUrl=#{baseUrl},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},isAccessible=#{isAccessible},shortcutFlag=#{shortcutFlag},extraNetFlag=#{extraNetFlag},createDate=#{createDate} where bookmarkId=#{bookmarkId}
     </update>
+
+    <delete id="deleteBookmark" parameterType="java.lang.Integer">
+        DELETE FROM bookmark WHERE bookmarkId=#{bookmarkId};
+    </delete>
 
     <insert id="saveFavicon" parameterType="com.lrowy.pojo.bookmark.Favicon">
         <selectKey keyProperty="faviconId" order="AFTER" resultType="java.lang.Integer">
@@ -65,7 +69,32 @@
         SELECT * FROM favicon WHERE domain=#{domain} LIMIT 1;
     </select>
 
+    <select id="findFaviconByBookmarkId" parameterType="java.lang.Integer" resultType="com.lrowy.pojo.bookmark.Favicon">
+        SELECT favicon.faviconId,favicon.domain,favicon.topDomain,faviconUrl,favicon.faviconBlurUrl,favicon.faviconOriginalUrl
+        FROM bookmark_favicon,favicon
+        WHERE bookmark_favicon.bookmarkId=#{bookmarkId} AND bookmark_favicon.faviconId=favicon.faviconId LIMIT 1;
+    </select>
+
+    <delete id="deleteFavicon" parameterType="java.lang.Integer">
+        DELETE FROM favicon WHERE faviconId=#{faviconId} AND 0=(SELECT COUNT(*) FROM bookmark_favicon WHERE faviconId=#{faviconId});
+    </delete>
+
     <insert id="saveBookmarkFavicon" parameterType="com.lrowy.pojo.bookmark.Bookmark">
         INSERT INTO bookmark_favicon (bookmarkId,faviconId) VALUE (#{bookmarkId},#{favicon.faviconId});
     </insert>
+
+    <delete id="deleteBookmarkFavicon" parameterType="java.lang.Integer">
+        DELETE FROM bookmark_favicon WHERE bookmarkId=#{bookmarkId};
+    </delete>
+
+    <insert id="save" parameterType="com.lrowy.pojo.bookmark.BookmarkCategory">
+        <selectKey keyProperty="bookmarkCategoryId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO bookmark_category (bookmarkCategoryId,name) VALUE (#{bookmarkCategoryId},#{name});
+    </insert>
+
+    <select id="findBookmarkCategory" resultType="com.lrowy.pojo.bookmark.BookmarkCategory">
+        SELECT * FROM bookmark_category;
+    </select>
 </mapper>

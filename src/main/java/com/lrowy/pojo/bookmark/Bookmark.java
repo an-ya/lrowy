@@ -19,7 +19,9 @@ public class Bookmark {
     private Date createDate;
     private Favicon favicon;
 
-    public Bookmark() { }
+    public Bookmark() {
+
+    }
 
     public Bookmark(String url) {
         this.url = url;

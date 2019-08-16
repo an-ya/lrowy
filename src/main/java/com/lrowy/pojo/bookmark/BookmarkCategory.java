@@ -4,6 +4,10 @@ public class BookmarkCategory {
     private int bookmarkCategoryId;
     private String name;
 
+    public BookmarkCategory() {
+
+    }
+
     public int getBookmarkCategoryId() {
         return bookmarkCategoryId;
     }

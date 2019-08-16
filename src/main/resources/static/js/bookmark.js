@@ -25,10 +25,10 @@ var c = new Swiper('.bookmark-category-container', {
 });
 
 function selectCate (index) {
-    if (!data.shortcutList) return;
-    var target = data.shortcutList[index].bookmarkCategoryId;
-    for (var i = 0; i < data.bookmarkCategoryList.length; i++) {
-        if (data.bookmarkCategoryList[i].bookmarkCategoryId === target) {
+    if (!data.shortcuts) return;
+    var target = data.shortcuts[index].bookmarkCategoryId;
+    for (var i = 0; i < data.bookmarkCategories.length; i++) {
+        if (data.bookmarkCategories[i].bookmarkCategoryId === target) {
             $('.bookmark-category-item-active').removeClass('bookmark-category-item-active');
             c.slides[i].classList.add('bookmark-category-item-active');
         }
@@ -36,10 +36,10 @@ function selectCate (index) {
 }
 
 function selectBook (index) {
-    if (!data.bookmarkCategoryList) return;
-    var target = data.bookmarkCategoryList[index].bookmarkCategoryId;
-    for (var i = 0; i < data.shortcutList.length; i++) {
-        if (data.shortcutList[i].bookmarkCategoryId === target) {
+    if (!data.bookmarkCategories) return;
+    var target = data.bookmarkCategories[index].bookmarkCategoryId;
+    for (var i = 0; i < data.shortcuts.length; i++) {
+        if (data.shortcuts[i].bookmarkCategoryId === target) {
             s.slideTo(i);
             break;
         }
@@ -60,6 +60,8 @@ layui.use(['layer', 'form', 'laydate'], function (){
     var layer = layui.layer
         ,form = layui.form
         ,laydate = layui.laydate;
+
+    var l;
 
     function setForm ($form, result, parent) {
         var value;
@@ -90,13 +92,28 @@ layui.use(['layer', 'form', 'laydate'], function (){
     }
 
     $('.addBookmark').click(function () {
-        layer.open({
+        l = layer.open({
             type: 1,
             title: '书签',
             closeBtn: 0,
             shadeClose: true,
             area: ['600px', '420px'],
             content: $('.bookmark-form')
+        });
+    });
+
+    $('.deleteBookmark').click(function () {
+        $.ajax({
+            url: '/bookmark/delete',
+            type: 'post',
+            data: {
+                bookmarkId: 4
+            },
+            success: function (data) {
+                if (data.code === '000') {
+                    console.log(data);
+                }
+            }
         });
     });
 
@@ -107,15 +124,18 @@ layui.use(['layer', 'form', 'laydate'], function (){
 
     //监听提交
     form.on('submit', function (data){
-        layer.msg(JSON.stringify(data.field));
         $.ajax({
             url: '/bookmark/add',
             type: 'post',
             data: data.field,
             success: function (data) {
                 if (data.code === '000') {
+                    notice.open({duration: 5, content: '<div class="notice-title">成功添加书签</div>'});
                     setForm($('.bookmark-form'), data.result, '');
                     form.render();
+                    layer.close(l);
+                } else {
+                    notice.open({duration: 5, content: '<div class="notice-title">添加失败，请在控制台查看详情</div>'});
                 }
             }
         });

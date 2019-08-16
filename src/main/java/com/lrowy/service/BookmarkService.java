@@ -23,6 +23,7 @@ import org.jsoup.select.Elements;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
+import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -36,75 +37,80 @@ public class BookmarkService {
     @Resource
     private HttpAPIService httpAPIService;
 
+    private boolean deleteFaviconFile(String path) {
+        String filename = uploadPath + path.substring(path.lastIndexOf("/upload/") + 8);
+        File file = new File(filename);
+        if (file.exists()) return file.delete();
+        return false;
+    }
+
     public BaseResponse<Bookmark> init(Bookmark bookmark) {
         HttpResult hr;
         BaseResponse<Bookmark> br = new BaseResponse<>();
 
         try {
-            String url = bookmark.getUrl();
             String faviconUrl = "";
+            String url = bookmark.getUrl();
             String BaseUrl = UrlUtil.getBaseUrl(url);
             boolean extraNetFlag = bookmark.getExtraNetFlag() == 1;
+            Favicon favicon = bookmarkDao.findFaviconByDomain(UrlUtil.getDomainName(url));
 
             hr = httpAPIService.doGet(url, extraNetFlag);
             if (hr.getCode() != 200) {
                 br.setCode(SystemConstant.HTTPCLIENT_ERROR.getCode());
                 br.setMsg(SystemConstant.HTTPCLIENT_ERROR.getDescription() + ",错误代码:" + hr.getCode() + ",发生错误的url:" + url);
-            }
-            Document document = Jsoup.parse(hr.getEntityString(), hr.getCharset());
-            Elements head = document.head().children();
-            String rel;
-            for (Element e : head) {
-                if (e.tagName().equals("title") && e.text().length() > 0) {
-                    bookmark.setTitle(e.text());
-                }
-            }
-
-            List<Favicon> fs = bookmarkDao.findFaviconByDomain(UrlUtil.getDomainName(url));
-            Favicon favicon = new Favicon();
-            if (fs.size() == 0) {
+            } else {
+                Document document = Jsoup.parse(hr.getEntityString(), hr.getCharset());
+                Elements head = document.head().children();
+                String rel;
                 for (Element e : head) {
-                    rel = e.attr("rel");
-                    if (e.tagName().equals("link") && (rel.equalsIgnoreCase("shortcut icon") || rel.equalsIgnoreCase("icon"))) {
-                        String href = e.attr("href");
-                        faviconUrl = UrlUtil.getRescFullPath(BaseUrl, href);
-                        break;
+                    if (e.tagName().equals("title") && e.text().length() > 0) {
+                        bookmark.setTitle(e.text());
                     }
                 }
-
-                if (faviconUrl.equals("")) {
-                    faviconUrl = BaseUrl + "/favicon.ico";
-                }
-                hr = httpAPIService.doGet(faviconUrl, extraNetFlag);
-                if (hr.getCode() == 200) {
-                    InputStream inputStream  = hr.getEntityContent();
-                    String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
-                    BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
-
-                    String directory = "favicon/";
-                    String uuid = UUID.randomUUID().toString().replace("-", "");
-                    String iconName = uuid + "-favicon.png";
-                    String blurIconName = uuid + "-favicon-blur.png";
-                    File folder = new File(uploadPath + directory);
-                    if (!folder.exists()) {
-                        if (!folder.mkdirs()) {
-                            br.setInfo(SystemConstant.MKDIR_ERROR);
-                            return br;
+                if (favicon == null) {
+                    favicon = new Favicon();
+                    for (Element e : head) {
+                        rel = e.attr("rel");
+                        if (e.tagName().equals("link") && (rel.equalsIgnoreCase("shortcut icon") || rel.equalsIgnoreCase("icon"))) {
+                            String href = e.attr("href");
+                            faviconUrl = UrlUtil.getRescFullPath(BaseUrl, href);
+                            break;
                         }
                     }
 
-                    ImageIO.write(image, "png", new File(uploadPath + directory + iconName));
-                    ImageIO.write(ImageUtil.customGaussianBlur(image), "png", new File(uploadPath + directory + blurIconName));
-                    favicon.setFaviconOriginalUrl(faviconUrl);
-                    favicon.setFaviconUrl("/upload/" + directory + iconName);
-                    favicon.setFaviconBlurUrl("/upload/" + directory + blurIconName);
-                }
+                    if (faviconUrl.equals("")) {
+                        faviconUrl = BaseUrl + "/favicon.ico";
+                    }
+                    hr = httpAPIService.doGet(faviconUrl, extraNetFlag);
+                    if (hr.getCode() == 200) {
+                        InputStream inputStream  = hr.getEntityContent();
+                        String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
+                        BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
 
-                favicon.setDomain(UrlUtil.getDomainName(url));
-                favicon.setTopDomain(UrlUtil.getTopDomainName(url));
-                bookmarkDao.saveFavicon(favicon);
-            } else {
-                favicon = fs.get(0);
+                        String directory = "favicon/";
+                        String uuid = UUID.randomUUID().toString().replace("-", "");
+                        String iconName = uuid + "-favicon.png";
+                        String blurIconName = uuid + "-favicon-blur.png";
+                        File folder = new File(uploadPath + directory);
+                        if (!folder.exists()) {
+                            if (!folder.mkdirs()) {
+                                br.setInfo(SystemConstant.MKDIR_ERROR);
+                                return br;
+                            }
+                        }
+
+                        ImageIO.write(image, "png", new File(uploadPath + directory + iconName));
+                        ImageIO.write(ImageUtil.customGaussianBlur(image), "png", new File(uploadPath + directory + blurIconName));
+                        favicon.setFaviconOriginalUrl(faviconUrl);
+                        favicon.setFaviconUrl("/upload/" + directory + iconName);
+                        favicon.setFaviconBlurUrl("/upload/" + directory + blurIconName);
+                    }
+
+                    favicon.setDomain(UrlUtil.getDomainName(url));
+                    favicon.setTopDomain(UrlUtil.getTopDomainName(url));
+                    bookmarkDao.saveFavicon(favicon);
+                }
             }
 
             bookmark.setBaseUrl(BaseUrl);
@@ -113,6 +119,9 @@ public class BookmarkService {
             bookmark.setFavicon(favicon);
             bookmarkDao.saveBookmarkFavicon(bookmark);
             br.setResult(bookmark);
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            br.setInfo(SystemConstant.NETWORK_ERROR);
         } catch (Exception e) {
             e.printStackTrace();
             br.setCode(SystemConstant.SYSTEM_ERROR.getCode());
@@ -126,6 +135,21 @@ public class BookmarkService {
         BaseResponse<Bookmark> br = new BaseResponse<>();
         bookmarkDao.updateBookmark(bookmark);
         br.setResult(bookmark);
+        return br;
+    }
+
+    public BaseResponse<String> delete(int bookmarkId) {
+        BaseResponse<String> br = new BaseResponse<>();
+        Favicon favicon = bookmarkDao.findFaviconByBookmarkId(bookmarkId);
+        if (favicon == null) {
+            br.setInfo(SystemConstant.PARAMS_ERROR);
+            return br;
+        }
+        bookmarkDao.deleteBookmark(bookmarkId);
+        bookmarkDao.deleteBookmarkFavicon(bookmarkId);
+        if (bookmarkDao.deleteFavicon(favicon.getFaviconId()) > 0) {
+            if (!deleteFaviconFile(favicon.getFaviconUrl()) || !deleteFaviconFile(favicon.getFaviconBlurUrl())) br.setInfo(SystemConstant.DELETEFILE_ERROR);
+        }
         return br;
     }
 }
