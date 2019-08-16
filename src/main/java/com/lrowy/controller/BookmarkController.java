@@ -1,7 +1,5 @@
 package com.lrowy.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.lrowy.dao.BookmarkCategoryDao;
 import com.lrowy.dao.BookmarkDao;
 import com.lrowy.pojo.User;
 import com.lrowy.pojo.bookmark.Bookmark;
@@ -24,8 +22,6 @@ public class BookmarkController extends BaseController {
     private BookmarkService bookmarkService;
     @Autowired
     private BookmarkDao bookmarkDao;
-    @Autowired
-    private BookmarkCategoryDao bookmarkCategoryDao;
 
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
@@ -38,8 +34,9 @@ public class BookmarkController extends BaseController {
         model.addAttribute("user", user);
 
         BookmarkResult br = new BookmarkResult();
-        br.setShortcutList(bookmarkDao.findShortcut());
-        br.setBookmarkCategoryList(bookmarkCategoryDao.findBookmarkCategory());
+        br.setShortcuts(bookmarkDao.findShortcut());
+        br.setBookmarks(bookmarkDao.findBookmark());
+        br.setBookmarkCategories(bookmarkDao.findBookmarkCategory());
         model.addAttribute("bookmarkResult", br);
         return "/bookmark";
     }
@@ -49,8 +46,9 @@ public class BookmarkController extends BaseController {
     public BaseResponse<BookmarkResult> init() {
         BaseResponse<BookmarkResult> res = new BaseResponse<>();
         BookmarkResult br = new BookmarkResult();
-        br.setShortcutList(bookmarkDao.findShortcut());
-        br.setBookmarkCategoryList(bookmarkCategoryDao.findBookmarkCategory());
+        br.setShortcuts(bookmarkDao.findShortcut());
+        br.setBookmarks(bookmarkDao.findBookmark());
+        br.setBookmarkCategories(bookmarkDao.findBookmarkCategory());
         res.setResult(br);
         return res;
     }
@@ -65,5 +63,11 @@ public class BookmarkController extends BaseController {
     @ResponseBody
     public BaseResponse<Bookmark> update(@ModelAttribute Bookmark bookmark) {
         return bookmarkService.update(bookmark);
+    }
+
+    @RequestMapping(value = "/bookmark/delete", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<String> delete(int bookmarkId) {
+        return bookmarkService.delete(bookmarkId);
     }
 }

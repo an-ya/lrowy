@@ -8,6 +8,10 @@ public class Favicon {
     private String faviconBlurUrl;
     private String faviconOriginalUrl;
 
+    public Favicon() {
+
+    }
+
     public int getFaviconId() {
         return faviconId;
     }

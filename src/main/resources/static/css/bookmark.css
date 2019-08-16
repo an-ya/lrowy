@@ -36,25 +36,42 @@ body {
 .bookmark-list {
 
 }
+
 .bookmark-list .item {
-    box-sizing: border-box;
     display: flex;
+    align-items: center;
     height: 50px;
+    padding: 0 16px;
 }
-.bookmark-list .item .t {
+
+.bookmark-list .item img {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-right: 16px;
+}
+
+.bookmark-list .item span {
+    flex-grow: 1;
     line-height: 48px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.bookmark-list .item .icon {
-    width: 48px;
-    height: 48px;
+
+.bookmark-list .item .dropdown-content {
+    flex-shrink: 0;
+    width: 32px;
+    height: 100%;
 }
-.bookmark-list .item .icon img {
-    width: 16px;
-    height: 16px;
-    margin: 16px;
+
+.bookmark-list .item .dropdown-content .dropdown-trigger {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    cursor: pointer;
 }
 
 .bookmark-category-container {

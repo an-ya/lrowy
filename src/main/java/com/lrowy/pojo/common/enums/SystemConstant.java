@@ -4,7 +4,10 @@ public enum SystemConstant {
     SYSTEM_SUCCESS("000", "处理成功"),
     SYSTEM_ERROR("001", "未定义错误"),
     HTTPCLIENT_ERROR("002", "HttpClient请求错误"),
+    NETWORK_ERROR("003", "服务器网络异常"),
+    PARAMS_ERROR("004", "请求参数有误"),
     MKDIR_ERROR("101", "文件夹创建失败"),
+    DELETEFILE_ERROR("102", "删除文件失败"),
     JWT_SECERT("@#$%^&*()OPG#$%^&*(HG", "token秘钥"),
     JWT_ERRCODE_EXPIRE("201", "token失效"),
     JWT_ERRCODE_FAIL("202", "token验证失败");

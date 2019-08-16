@@ -3,22 +3,35 @@ package com.lrowy.pojo.bookmark;
 import java.util.List;
 
 public class BookmarkResult {
-    private List<Bookmark> ShortcutList;
-    private List<BookmarkCategory> bookmarkCategoryList;
+    private List<Bookmark> shortcuts;
+    private List<Bookmark> bookmarks;
+    private List<BookmarkCategory> bookmarkCategories;
 
-    public List<Bookmark> getShortcutList() {
-        return ShortcutList;
+    public BookmarkResult() {
+
     }
 
-    public void setShortcutList(List<Bookmark> shortcutList) {
-        ShortcutList = shortcutList;
+    public List<Bookmark> getShortcuts() {
+        return shortcuts;
     }
 
-    public List<BookmarkCategory> getBookmarkCategoryList() {
-        return bookmarkCategoryList;
+    public void setShortcuts(List<Bookmark> shortcuts) {
+        this.shortcuts = shortcuts;
     }
 
-    public void setBookmarkCategoryList(List<BookmarkCategory> bookmarkCategoryList) {
-        this.bookmarkCategoryList = bookmarkCategoryList;
+    public List<Bookmark> getBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(List<Bookmark> bookmarks) {
+        this.bookmarks = bookmarks;
+    }
+
+    public List<BookmarkCategory> getBookmarkCategories() {
+        return bookmarkCategories;
+    }
+
+    public void setBookmarkCategories(List<BookmarkCategory> bookmarkCategories) {
+        this.bookmarkCategories = bookmarkCategories;
     }
 }

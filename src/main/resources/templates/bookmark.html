@@ -37,12 +37,15 @@
         <div class="addBookmark" style="text-align: center;">
             添加书签
         </div>
+        <div class="deleteBookmark" style="text-align: center;">
+            删除书签
+        </div>
     </div>
 </div>
 <div class="main">
     <div class="shortcut-container swiper-container">
         <div class="swiper-wrapper">
-            <div th:each="s : ${bookmarkResult.shortcutList}" class="swiper-slide shortcut">
+            <div th:each="s : ${bookmarkResult.shortcuts}" class="swiper-slide shortcut">
                 <div class="favicon-blur" th:style="'background-image:url(' + ${s.favicon.faviconBlurUrl} + ');'"></div>
                 <img class="favicon-png" th:src="${s.favicon.faviconUrl}">
                 <span class="google-front" th:text="${s.title}"></span>
@@ -51,27 +54,21 @@
     </div>
     <div class="bookmark-category-container swiper-container">
         <div class="swiper-wrapper">
-            <div th:each="b,i : ${bookmarkResult.bookmarkCategoryList}" th:class="'swiper-slide bookmark-category-item google-front' + ${i.index == 0 ? ' bookmark-category-item-active' : ''}" th:text="${b.name}"></div>
+            <div th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:class="'swiper-slide bookmark-category-item google-front' + ${i.index == 0 ? ' bookmark-category-item-active' : ''}" th:text="${b.name}"></div>
         </div>
     </div>
     <div class="bookmark-list">
-        <div class="item">
-            <div class="icon">
-                <img class="favicon-png" src="/upload/favicon/767db549cde942ffb49470c82d9d3e3f-favicon.png">
+        <div th:each="b : ${bookmarkResult.bookmarks}"  class="item">
+            <img th:src="${b.favicon.faviconUrl}">
+            <span th:text="${b.title}"></span>
+            <div class="dropdown-content">
+                <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>
+                <div class="dropdown hidden">
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">删除</li>
+                    </ul>
+                </div>
             </div>
-            <div class="t">tring与char*互转、ANSI 和 UNICODE 编码及_T和L宏定义的介绍</div>
-        </div>
-        <div class="item">
-            <div class="icon">
-                <img class="favicon-png" src="/upload/favicon/002904c733e44e6787482eb1c4d006bd-favicon.png">
-            </div>
-            <div class="t">IntelliJ IDEA 下载安装以及破解</div>
-        </div>
-        <div class="item">
-            <div class="icon">
-                <img class="favicon-png" src="/upload/favicon/97715ae69bfe46188a825b201e40d129-favicon.png">
-            </div>
-            <div class="t">Spring Boot(四)：Thymeleaf 使用详解 - 纯洁的微笑 - 博客园</div>
         </div>
     </div>
 </div>
@@ -142,7 +139,7 @@
         <div class="layui-input-block">
             <select name="bookmarkCategoryId" lay-verify="required">
                 <option value=""></option>
-                <option th:each="b,i : ${bookmarkResult.bookmarkCategoryList}" th:value="${b.bookmarkCategoryId}" th:text="${b.name}"></option>
+                <option th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:value="${b.bookmarkCategoryId}" th:text="${b.name}"></option>
             </select>
         </div>
     </div>
@@ -173,6 +170,7 @@
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="/js/swiper.min.js"></script>
 <script src="/layui-v2.5.4/layui.js"></script>
+<script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/bookmark.js}"></script>
 </body>
