@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);
 
-let uA = navigator.userAgent,
-    isMobile = uA.match(/AppleWebKit.*Mobile.*/),
-    tap = isMobile ? 'touchstart' : 'mousedown',
-    menuButtonDom = '<li class="header-item"><button class="menu-button"><span>Menu</span></button></li>';
+var menuButtonDom = '<li class="header-item"><button class="menu-button"><span>Menu</span></button></li>';
 
 init();
 
@@ -13,10 +10,10 @@ function init() {
         type: 'post',
         success: function (data) {
             if (data.code === '000') {
+                setDropdown();
                 if (data.result) {
                     setMenuButton();
                 } else {
-                    setDropdown();
                     setCLick();
                 }
             }
@@ -25,10 +22,10 @@ function init() {
 }
 
 function setMenuButton () {
-    let menuButton = document.querySelector('.menu-button');
-    let sidebar = document.querySelector('.sidebar');
+    var menuButton = document.querySelector('.menu-button');
+    var sidebar = document.querySelector('.sidebar');
     document.body.addEventListener('click', function (e) {
-        let target = e.target;
+        var target = e.target;
         if (!(menuButton.contains(target) || menuButton === target) && !sidebar.contains(target)) {
             sidebar.classList.remove('sidebar-open');
             menuButton.classList.remove('menu-button-open');
@@ -39,7 +36,7 @@ function setMenuButton () {
         menuButton.classList.toggle('menu-button-open');
     });
 
-    let start = {}, end = {};
+    var start = {}, end = {};
     document.body.addEventListener('touchstart', function (e) {
         start.x = e.changedTouches[0].clientX;
         start.y = e.changedTouches[0].clientY;
@@ -49,8 +46,8 @@ function setMenuButton () {
         end.y = e.changedTouches[0].clientY;
         end.x = e.changedTouches[0].clientX;
 
-        let xDiff = end.x - start.x;
-        let yDiff = end.y - start.y;
+        var xDiff = end.x - start.x;
+        var yDiff = end.y - start.y;
 
         if (Math.abs(xDiff) > Math.abs(yDiff)) {
             if (xDiff > 0 && start.x <= 80) {
@@ -65,21 +62,21 @@ function setMenuButton () {
 }
 
 function setDropdown () {
-    let dropdownTrigger = document.getElementsByClassName('dropdown-trigger');
-    let Target = new Array(dropdownTrigger.length);
-    for (let i = 0; i < dropdownTrigger.length; i++) {
+    var dropdownTrigger = document.getElementsByClassName('dropdown-trigger');
+    var Target = new Array(dropdownTrigger.length);
+    for (var i = 0; i < dropdownTrigger.length; i++) {
         Target[i] = false;
         dropdownTrigger[i].addEventListener('click', function () {
             if (!Target[i]) {
                 this.focus();
-                let dropdown = this.nextElementSibling;
+                var dropdown = this.nextElementSibling;
                 dropdown.classList.toggle('hidden');
             }
             Target[i] = false;
         });
         dropdownTrigger[i].addEventListener('blur', function () {
             Target[i] = true;
-            let dropdown = this.nextElementSibling;
+            var dropdown = this.nextElementSibling;
             dropdown.classList.add('hidden');
             setTimeout(function () {
                 Target[i] = false;
@@ -89,7 +86,7 @@ function setDropdown () {
 }
 
 function setCLick () {
-    document.querySelector('#login').addEventListener(tap, function () {
+    document.querySelector('#login').addEventListener('click', function () {
         $.ajax({
             url: '/login',
             type: 'post',

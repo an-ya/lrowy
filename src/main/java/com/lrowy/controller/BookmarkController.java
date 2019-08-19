@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -67,7 +68,13 @@ public class BookmarkController extends BaseController {
 
     @RequestMapping(value = "/bookmark/delete", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<String> delete(int bookmarkId) {
+    public BaseResponse<String> delete(Integer bookmarkId) {
         return bookmarkService.delete(bookmarkId);
+    }
+
+    @RequestMapping(value = "/bookmark/testUploadFavicon", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Bookmark> testUploadFavicon(Integer bookmarkId, MultipartFile file) {
+        return bookmarkService.uploadFavicon(bookmarkId, file);
     }
 }

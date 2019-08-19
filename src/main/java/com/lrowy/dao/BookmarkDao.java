@@ -10,6 +10,7 @@ public interface BookmarkDao {
     public int saveBookmark(Bookmark bookmark);
     public List<Bookmark> findBookmark();
     public List<Bookmark> findShortcut();
+    public Bookmark findBookmarkByBookmarkId(int bookmarkId);
     public int updateBookmark(Bookmark bookmark);
     public int deleteBookmark(int bookmarkId);
     public int saveFavicon(Favicon favicon);
