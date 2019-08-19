@@ -46,22 +46,71 @@ function selectBook (index) {
     }
 }
 
-$.ajax({
-    url: '/bookmark/init',
-    type: 'post',
-    success: function (data) {
-        if (data.code === '000') {
-            window.data = data.result;
+function findBookById(id) {
+    var bookmarkId = parseInt(id);
+    if (data.bookmarks) {
+        for (var i = 0; i < data.bookmarks.length; i++) {
+            if (data.bookmarks[i].bookmarkId === bookmarkId) {
+                return data.bookmarks[i];
+            }
         }
     }
-});
+    if (data.shortcuts) {
+        for (i = 0; i < data.shortcuts.length; i++) {
+            if (data.shortcuts[i].bookmarkId === bookmarkId) {
+                return data.shortcuts[i];
+            }
+        }
+    }
+}
+
+function deleteBook(id, $parent) {
+    $.ajax({
+        url: '/bookmark/delete',
+        type: 'post',
+        data: {
+            bookmarkId: id
+        },
+        success: function (data) {
+            if (data.code === '000') {
+                $parent.addClass('hidden');
+                setTimeout(function () {
+                    $parent.remove();
+                }, 300);
+                notice.open({duration: 5, content: '<div class="notice-title">成功删除书签</div>'});
+            } else {
+                notice.open({duration: 5, content: '<div class="notice-title">删除失败，请在控制台查看详情</div>'});
+            }
+        }
+    });
+}
+
+function openBlank(id) {
+    var bookmarkId = parseInt(id);
+    if (!data.bookmarks) return;
+    for (var i = 0; i < data.bookmarks.length; i++) {
+        if (data.bookmarks[i].bookmarkId === bookmarkId) {
+            window.open(data.bookmarks[i].url);
+            break;
+        }
+    }
+}
+
+function openSelf(id) {
+    var bookmarkId = parseInt(id);
+    if (!data.bookmarks) return;
+    for (var i = 0; i < data.bookmarks.length; i++) {
+        if (data.bookmarks[i].bookmarkId === bookmarkId) {
+            window.location.href = data.bookmarks[i].url;
+            break;
+        }
+    }
+}
 
 layui.use(['layer', 'form', 'laydate'], function (){
     var layer = layui.layer
         ,form = layui.form
         ,laydate = layui.laydate;
-
-    var l;
 
     function setForm ($form, result, parent) {
         var value;
@@ -75,15 +124,14 @@ layui.use(['layer', 'form', 'laydate'], function (){
                         $form.find('[name="' + parent + '.' + i + '"]').val(value);
                     } else {
                         var ele = $form.find('[name="' + i + '"]');
-                        if (ele.prop('type') === 'text') {
-                            ele.val(value);
-                        }
                         if (ele.prop('type') === 'checkbox') {
                             if (value === 1) {
                                 ele.prop('checked', true);
                             } else {
                                 ele.prop('checked', false);
                             }
+                        } else {
+                            ele.val(value);
                         }
                     }
                 }
@@ -91,29 +139,73 @@ layui.use(['layer', 'form', 'laydate'], function (){
         }
     }
 
+    function setButton () {
+        var elements = document.getElementsByClassName('delete-button');
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', function () {
+                var $parent = $(this).parents('.item');
+                var id  = $(this).parent().attr('data-id');
+                layer.confirm('确定删除该书签？', {
+                    btn: ['确定','取消'],
+                    move: false,
+                    shadeClose: true,
+                }, function(){
+                    layer.close(layer.index);
+                    deleteBook(id, $parent);
+                });
+            });
+        }
+
+        elements = document.getElementsByClassName('info-button');
+        for (i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', function () {
+                var id  = $(this).parent().attr('data-id');
+                layer.open({
+                    type: 1,
+                    title: '书签',
+                    content: $('.bookmark-form')
+                });
+                setForm($('.bookmark-form'), findBookById(id), '');
+                form.render();
+            });
+        }
+
+        elements = document.getElementsByClassName('open-blank-button');
+        for (i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', function () {
+                var id  = $(this).parent().attr('data-id');
+                openBlank(id);
+            });
+        }
+
+        elements = document.getElementsByClassName('open-self-button');
+        for (i = 0; i < elements.length; i++) {
+            elements[i].addEventListener('click', function () {
+                var id  = $(this).parent().attr('data-id');
+                openSelf(id);
+            });
+        }
+    }
+
+    $.ajax({
+        url: '/bookmark/init',
+        type: 'post',
+        success: function (data) {
+            if (data.code === '000') {
+                window.data = data.result;
+                setButton();
+            }
+        }
+    });
+
+    var l;
+
     $('.addBookmark').click(function () {
         l = layer.open({
             type: 1,
             title: '书签',
-            closeBtn: 0,
-            shadeClose: true,
-            area: ['600px', '420px'],
+            // area: ['600px', '420px'],
             content: $('.bookmark-form')
-        });
-    });
-
-    $('.deleteBookmark').click(function () {
-        $.ajax({
-            url: '/bookmark/delete',
-            type: 'post',
-            data: {
-                bookmarkId: 4
-            },
-            success: function (data) {
-                if (data.code === '000') {
-                    console.log(data);
-                }
-            }
         });
     });
 

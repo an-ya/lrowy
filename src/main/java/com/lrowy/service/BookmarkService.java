@@ -19,13 +19,15 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.UnknownHostException;
 import java.util.Date;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -42,6 +44,24 @@ public class BookmarkService {
         File file = new File(filename);
         if (file.exists()) return file.delete();
         return false;
+    }
+
+    private void saveFavicon(Favicon favicon, String type, InputStream inputStream) throws IOException {
+        BufferedImage image = ImageUtil.readImageStream(type, inputStream);
+
+        String directory = "favicon/";
+        String uuid = UUID.randomUUID().toString().replace("-", "");
+        String iconName = uuid + "-favicon.png";
+        String blurIconName = uuid + "-favicon-blur.png";
+        File folder = new File(uploadPath + directory);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+
+        ImageIO.write(image, "png", new File(uploadPath + directory + iconName));
+        ImageIO.write(ImageUtil.customGaussianBlur(image), "png", new File(uploadPath + directory + blurIconName));
+        favicon.setFaviconUrl("/upload/" + directory + iconName);
+        favicon.setFaviconBlurUrl("/upload/" + directory + blurIconName);
     }
 
     public BaseResponse<Bookmark> init(Bookmark bookmark) {
@@ -86,25 +106,8 @@ public class BookmarkService {
                     if (hr.getCode() == 200) {
                         InputStream inputStream  = hr.getEntityContent();
                         String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
-                        BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
-
-                        String directory = "favicon/";
-                        String uuid = UUID.randomUUID().toString().replace("-", "");
-                        String iconName = uuid + "-favicon.png";
-                        String blurIconName = uuid + "-favicon-blur.png";
-                        File folder = new File(uploadPath + directory);
-                        if (!folder.exists()) {
-                            if (!folder.mkdirs()) {
-                                br.setInfo(SystemConstant.MKDIR_ERROR);
-                                return br;
-                            }
-                        }
-
-                        ImageIO.write(image, "png", new File(uploadPath + directory + iconName));
-                        ImageIO.write(ImageUtil.customGaussianBlur(image), "png", new File(uploadPath + directory + blurIconName));
+                        saveFavicon(favicon, suffix, inputStream);
                         favicon.setFaviconOriginalUrl(faviconUrl);
-                        favicon.setFaviconUrl("/upload/" + directory + iconName);
-                        favicon.setFaviconBlurUrl("/upload/" + directory + blurIconName);
                     }
 
                     favicon.setDomain(UrlUtil.getDomainName(url));
@@ -138,8 +141,32 @@ public class BookmarkService {
         return br;
     }
 
-    public BaseResponse<String> delete(int bookmarkId) {
+    public BaseResponse<Bookmark> uploadFavicon(Integer bookmarkId, MultipartFile file) {
+        BaseResponse<Bookmark> br = new BaseResponse<>();
+        if (bookmarkId == null || file == null) {
+            br.setInfo(SystemConstant.PARAMS_ERROR);
+            return br;
+        }
+        String suffix = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+        try {
+            Favicon favicon = bookmarkDao.findFaviconByBookmarkId(bookmarkId);
+            saveFavicon(favicon, suffix, file.getInputStream());
+            bookmarkDao.saveFavicon(favicon);
+            br.setResult(bookmarkDao.findBookmarkByBookmarkId(bookmarkId));
+        } catch (IOException e) {
+            e.printStackTrace();
+            br.setCode(SystemConstant.SYSTEM_ERROR.getCode());
+            br.setMsg(e.toString());
+        }
+        return br;
+    }
+
+    public BaseResponse<String> delete(Integer bookmarkId) {
         BaseResponse<String> br = new BaseResponse<>();
+        if (bookmarkId == null) {
+            br.setInfo(SystemConstant.PARAMS_ERROR);
+            return br;
+        }
         Favicon favicon = bookmarkDao.findFaviconByBookmarkId(bookmarkId);
         if (favicon == null) {
             br.setInfo(SystemConstant.PARAMS_ERROR);

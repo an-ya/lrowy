@@ -50,6 +50,14 @@
         ORDER BY bookmark.bookmarkCategoryId;
     </select>
 
+    <select id="findBookmarkByBookmarkId" resultMap="bookmark">
+        SELECT *
+        FROM bookmark
+        JOIN bookmark_favicon ON bookmark.bookmarkId=bookmark_favicon.bookmarkId
+        JOIN favicon ON favicon.faviconId=bookmark_favicon.faviconId
+        WHERE bookmark.bookmarkId=#{bookmarkId};
+    </select>
+
     <update id="updateBookmark" parameterType="com.lrowy.pojo.bookmark.Bookmark">
         UPDATE bookmark SET bookmarkCategoryId=#{bookmarkCategoryId},description=#{description},title=#{title},state=#{state},url=#{url},baseUrl=#{baseUrl},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},isAccessible=#{isAccessible},shortcutFlag=#{shortcutFlag},extraNetFlag=#{extraNetFlag},createDate=#{createDate} where bookmarkId=#{bookmarkId}
     </update>
@@ -74,6 +82,10 @@
         FROM bookmark_favicon,favicon
         WHERE bookmark_favicon.bookmarkId=#{bookmarkId} AND bookmark_favicon.faviconId=favicon.faviconId LIMIT 1;
     </select>
+
+    <update id="updateFavicon" parameterType="com.lrowy.pojo.bookmark.Favicon">
+        UPDATE favicon SET domain=#{domain},topDomain=#{topDomain},faviconUrl=#{faviconUrl},faviconBlurUrl=#{faviconBlurUrl},faviconOriginalUrl=#{faviconOriginalUrl} WHERE faviconId=#{faviconId}
+    </update>
 
     <delete id="deleteFavicon" parameterType="java.lang.Integer">
         DELETE FROM favicon WHERE faviconId=#{faviconId} AND 0=(SELECT COUNT(*) FROM bookmark_favicon WHERE faviconId=#{faviconId});

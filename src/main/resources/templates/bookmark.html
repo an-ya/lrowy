@@ -37,9 +37,6 @@
         <div class="addBookmark" style="text-align: center;">
             添加书签
         </div>
-        <div class="deleteBookmark" style="text-align: center;">
-            删除书签
-        </div>
     </div>
 </div>
 <div class="main">
@@ -58,14 +55,17 @@
         </div>
     </div>
     <div class="bookmark-list">
-        <div th:each="b : ${bookmarkResult.bookmarks}"  class="item">
+        <div th:each="b : ${bookmarkResult.bookmarks}" class="item">
             <img th:src="${b.favicon.faviconUrl}">
             <span th:text="${b.title}"></span>
             <div class="dropdown-content">
                 <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>
                 <div class="dropdown hidden">
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item">删除</li>
+                    <ul class="dropdown-menu" th:data-id="${b.bookmarkId}">
+                        <li class="dropdown-item open-blank-button">新窗口打开</li>
+                        <li class="dropdown-item open-self-button">当前页打开</li>
+                        <li class="dropdown-item info-button">信息</li>
+                        <li class="dropdown-item delete-button">删除</li>
                     </ul>
                 </div>
             </div>
