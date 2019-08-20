@@ -1,8 +1,8 @@
 package com.lrowy;
 
-import com.lrowy.pojo.bookmark.Bookmark;
-import com.lrowy.service.BookmarkService;
+import com.lrowy.pojo.common.http.HttpResult;
 
+import com.lrowy.service.HttpAPIService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 @SpringBootTest
 public class LrowyApplicationTests {
     @Resource
-    private BookmarkService bookmarkService;
+    private HttpAPIService httpAPIService;
 
     @Test
     public void contextLoads() {
@@ -22,6 +22,11 @@ public class LrowyApplicationTests {
 
     @Test
     public void testHttpClient() {
-        System.out.println(bookmarkService.init(new Bookmark("https://blog.csdn.net/qq_37385726/article/details/82020214")));
+        try {
+            HttpResult hr = httpAPIService.doGet("https://common.cnblogs.com/favicon.ico", false);
+            System.out.println(hr.getCode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

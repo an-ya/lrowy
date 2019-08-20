@@ -52,7 +52,32 @@ public class HttpAPIService {
 
         // 发起请求
         CloseableHttpResponse response = this.httpClient.execute(httpGet);
-        return new HttpResult(response.getStatusLine().getStatusCode(),response.getEntity(), "UTF-8");
+
+        if (response.getStatusLine().getStatusCode() == 403) {
+            return doGet(url, extraNetFlag, url);
+        } else {
+            return new HttpResult(response.getStatusLine().getStatusCode(), response.getEntity(), "UTF-8");
+        }
+    }
+
+    private HttpResult doGet(String url, boolean extraNetFlag, String referUrl) throws Exception {
+        // 声明 http get 请求
+        HttpGet httpGet = new HttpGet(url);
+
+        // 装载配置信息
+        if (extraNetFlag) {
+            httpGet.setConfig(extraNetConfig);
+        } else {
+            httpGet.setConfig(intraNetConfig);
+        }
+
+        // 设置Header
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.87 Safari/537.36");
+        httpGet.setHeader("Referer", referUrl); // 解决根据referer反爬虫
+
+        // 发起请求
+        CloseableHttpResponse response = this.httpClient.execute(httpGet);
+        return new HttpResult(response.getStatusLine().getStatusCode(), response.getEntity(), "UTF-8");
     }
 
     /**

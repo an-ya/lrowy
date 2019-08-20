@@ -66,22 +66,24 @@ function setDropdown () {
     var Target = new Array(dropdownTrigger.length);
     for (var i = 0; i < dropdownTrigger.length; i++) {
         Target[i] = false;
-        dropdownTrigger[i].addEventListener('click', function () {
-            if (!Target[i]) {
-                this.focus();
+        (function (arg) {
+            dropdownTrigger[i].addEventListener('click', function () {
+                if (!Target[arg]) {
+                    this.focus();
+                    var dropdown = this.nextElementSibling;
+                    dropdown.classList.toggle('hidden');
+                }
+                Target[arg] = false;
+            });
+            dropdownTrigger[i].addEventListener('blur', function () {
+                Target[arg] = true;
                 var dropdown = this.nextElementSibling;
-                dropdown.classList.toggle('hidden');
-            }
-            Target[i] = false;
-        });
-        dropdownTrigger[i].addEventListener('blur', function () {
-            Target[i] = true;
-            var dropdown = this.nextElementSibling;
-            dropdown.classList.add('hidden');
-            setTimeout(function () {
-                Target[i] = false;
-            }, 100);
-        });
+                dropdown.classList.add('hidden');
+                setTimeout(function () {
+                    Target[arg] = false;
+                }, 100);
+            });
+        })(i);
     }
 }
 
