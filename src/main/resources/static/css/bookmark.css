@@ -147,6 +147,28 @@ body {
     box-shadow: none!important;
 }
 
+.favicon-control {
+    overflow: hidden;
+}
+
+.favicon-control button {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 1px 6px;
+}
+
+#upload-favicon {
+    margin-top: 15px;
+}
+
+.favicon-display {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    margin-top: 15px;
+    margin-right: 13px;
+}
+
 @media screen and (max-width: 900px) {
     .main {
         width: 100%;

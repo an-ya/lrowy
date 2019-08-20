@@ -9,7 +9,11 @@ public class Favicon {
     private String faviconOriginalUrl;
 
     public Favicon() {
-
+        this.domain = "";
+        this.topDomain = "";
+        this.faviconUrl = "";
+        this.faviconBlurUrl = "";
+        this.faviconOriginalUrl = "";
     }
 
     public int getFaviconId() {

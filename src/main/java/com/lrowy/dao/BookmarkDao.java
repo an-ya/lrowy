@@ -16,6 +16,7 @@ public interface BookmarkDao {
     public int saveFavicon(Favicon favicon);
     public Favicon findFaviconByDomain(String domain);
     public Favicon findFaviconByBookmarkId(int bookmarkId);
+    public int updateFavicon(Favicon favicon);
     public int deleteFavicon(int faviconId);
     public int saveBookmarkFavicon(Bookmark bookmark);
     public int deleteBookmarkFavicon(int bookmarkId);

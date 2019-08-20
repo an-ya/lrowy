@@ -124,8 +124,18 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">图标原路径</label>
+        <div class="layui-input-block favicon-control">
+            <input type="text" name="favicon.faviconOriginalUrl" value="" class="layui-input"/>
+            <button type="button" id="set-button">设置</button>
+            <button type="button" id="upload-button" onclick="uploadFavicon()">上传</button>
+            <input type="file" id="upload-favicon">
+        </div>
+    </div>
+    <div class="layui-form-item">
         <div class="layui-input-block">
-            <input type="text" name="favicon.faviconOriginalUrl" value="" readonly class="layui-input"/>
+            <img class="favicon-display" id="faviconUrl" src="" alt="">
+            <img class="favicon-display" id="faviconBlurUrl" src="" alt="">
+            <img class="favicon-display" id="faviconOriginalUrl" src="" alt="">
         </div>
     </div>
     <div class="layui-form-item">
@@ -161,7 +171,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+            <button id="commitForm" class="layui-btn" lay-submit lay-filter="form">提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>

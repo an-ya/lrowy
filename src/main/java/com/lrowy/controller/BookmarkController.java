@@ -72,9 +72,15 @@ public class BookmarkController extends BaseController {
         return bookmarkService.delete(bookmarkId);
     }
 
-    @RequestMapping(value = "/bookmark/testUploadFavicon", method = RequestMethod.POST)
+    @RequestMapping(value = "/bookmark/changeFavicon", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<Bookmark> testUploadFavicon(Integer bookmarkId, MultipartFile file) {
+    public BaseResponse<Bookmark> changeFavicon(int bookmarkId, String faviconUrl) {
+        return bookmarkService.changeFavicon(bookmarkId, faviconUrl);
+    }
+
+    @RequestMapping(value = "/bookmark/uploadFavicon", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Bookmark> uploadFavicon(int bookmarkId, MultipartFile file) {
         return bookmarkService.uploadFavicon(bookmarkId, file);
     }
 }

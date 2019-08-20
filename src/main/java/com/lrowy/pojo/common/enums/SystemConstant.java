@@ -6,6 +6,7 @@ public enum SystemConstant {
     HTTPCLIENT_ERROR("002", "HttpClient请求错误"),
     NETWORK_ERROR("003", "服务器网络异常"),
     PARAMS_ERROR("004", "请求参数有误"),
+    PARAMS_INVALID("005", "请求无效"),
     MKDIR_ERROR("101", "文件夹创建失败"),
     DELETEFILE_ERROR("102", "删除文件失败"),
     JWT_SECERT("@#$%^&*()OPG#$%^&*(HG", "token秘钥"),

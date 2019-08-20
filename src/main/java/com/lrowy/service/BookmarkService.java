@@ -64,6 +64,22 @@ public class BookmarkService {
         favicon.setFaviconBlurUrl("/upload/" + directory + blurIconName);
     }
 
+    private Favicon getFaviconByUrl(String faviconUrl, String url, boolean extraNetFlag) throws Exception {
+        HttpResult hr;
+        Favicon favicon = new Favicon();
+        hr = httpAPIService.doGet(faviconUrl, extraNetFlag);
+        if (hr.getCode() == 200) {
+            InputStream inputStream  = hr.getEntityContent();
+            String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
+            saveFavicon(favicon, suffix, inputStream);
+            favicon.setFaviconOriginalUrl(faviconUrl);
+        }
+
+        favicon.setDomain(UrlUtil.getDomainName(url));
+        favicon.setTopDomain(UrlUtil.getTopDomainName(url));
+        return favicon;
+    }
+
     public BaseResponse<Bookmark> init(Bookmark bookmark) {
         HttpResult hr;
         BaseResponse<Bookmark> br = new BaseResponse<>();
@@ -82,36 +98,45 @@ public class BookmarkService {
             } else {
                 Document document = Jsoup.parse(hr.getEntityString(), hr.getCharset());
                 Elements head = document.head().children();
-                String rel;
                 for (Element e : head) {
                     if (e.tagName().equals("title") && e.text().length() > 0) {
                         bookmark.setTitle(e.text());
                     }
                 }
+
                 if (favicon == null) {
-                    favicon = new Favicon();
+                    Elements icons = new Elements();
+                    String rel;
                     for (Element e : head) {
                         rel = e.attr("rel");
                         if (e.tagName().equals("link") && (rel.equalsIgnoreCase("shortcut icon") || rel.equalsIgnoreCase("icon"))) {
-                            String href = e.attr("href");
-                            faviconUrl = UrlUtil.getRescFullPath(BaseUrl, href);
-                            break;
+                            icons.add(e);
+                        }
+                    }
+
+                    String s;
+                    boolean target = true;
+                    int maxSize = 0, size;
+                    for (Element i : icons) {
+                        s = i.attr("sizes");
+                        if (s != null) {
+                            target = false;
+                            size = Integer.parseInt(s.substring(s.lastIndexOf("x") + 1));
+                            if (size > maxSize) {
+                                faviconUrl = UrlUtil.getRescFullPath(BaseUrl, i.attr("href"));
+                                maxSize = size;
+                            }
+                        } else {
+                            if (target) {
+                                faviconUrl = UrlUtil.getRescFullPath(BaseUrl, i.attr("href"));
+                            }
                         }
                     }
 
                     if (faviconUrl.equals("")) {
                         faviconUrl = BaseUrl + "/favicon.ico";
                     }
-                    hr = httpAPIService.doGet(faviconUrl, extraNetFlag);
-                    if (hr.getCode() == 200) {
-                        InputStream inputStream  = hr.getEntityContent();
-                        String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
-                        saveFavicon(favicon, suffix, inputStream);
-                        favicon.setFaviconOriginalUrl(faviconUrl);
-                    }
-
-                    favicon.setDomain(UrlUtil.getDomainName(url));
-                    favicon.setTopDomain(UrlUtil.getTopDomainName(url));
+                    favicon = getFaviconByUrl(faviconUrl, url, extraNetFlag);
                     bookmarkDao.saveFavicon(favicon);
                 }
             }
@@ -130,7 +155,6 @@ public class BookmarkService {
             br.setCode(SystemConstant.SYSTEM_ERROR.getCode());
             br.setMsg(e.toString());
         }
-
         return br;
     }
 
@@ -141,19 +165,59 @@ public class BookmarkService {
         return br;
     }
 
-    public BaseResponse<Bookmark> uploadFavicon(Integer bookmarkId, MultipartFile file) {
+    public BaseResponse<Bookmark> uploadFavicon(int bookmarkId, MultipartFile file) {
         BaseResponse<Bookmark> br = new BaseResponse<>();
-        if (bookmarkId == null || file == null) {
+        if (file == null || bookmarkId == 0) {
             br.setInfo(SystemConstant.PARAMS_ERROR);
             return br;
         }
         String suffix = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf(".") + 1);
         try {
-            Favicon favicon = bookmarkDao.findFaviconByBookmarkId(bookmarkId);
+            Bookmark bookmark = bookmarkDao.findBookmarkByBookmarkId(bookmarkId);
+            Favicon favicon = bookmark.getFavicon();
             saveFavicon(favicon, suffix, file.getInputStream());
-            bookmarkDao.saveFavicon(favicon);
-            br.setResult(bookmarkDao.findBookmarkByBookmarkId(bookmarkId));
+            favicon.setFaviconOriginalUrl("");
+            bookmarkDao.updateFavicon(favicon);
+            bookmark.setFavicon(favicon);
+            br.setResult(bookmark);
         } catch (IOException e) {
+            e.printStackTrace();
+            br.setCode(SystemConstant.SYSTEM_ERROR.getCode());
+            br.setMsg(e.toString());
+        }
+        return br;
+    }
+
+    public BaseResponse<Bookmark> changeFavicon(int bookmarkId, String faviconUrl) {
+        BaseResponse<Bookmark> br = new BaseResponse<>();
+        if (faviconUrl == null || faviconUrl.equals("") || bookmarkId == 0) {
+            br.setInfo(SystemConstant.PARAMS_ERROR);
+            return br;
+        }
+        try {
+            Bookmark bookmark = bookmarkDao.findBookmarkByBookmarkId(bookmarkId);
+            Favicon favicon = bookmark.getFavicon();
+            if (favicon.getFaviconOriginalUrl().equals(faviconUrl)) {
+                br.setInfo(SystemConstant.PARAMS_INVALID);
+                return br;
+            }
+            HttpResult hr = httpAPIService.doGet(faviconUrl, bookmark.getExtraNetFlag() == 1);
+            if (hr.getCode() == 200) {
+                if (!favicon.getFaviconUrl().equals("")) deleteFaviconFile(favicon.getFaviconUrl());
+                if (!favicon.getFaviconBlurUrl().equals("")) deleteFaviconFile(favicon.getFaviconBlurUrl());
+
+                InputStream inputStream  = hr.getEntityContent();
+                String suffix = faviconUrl.substring(faviconUrl.lastIndexOf(".") + 1);
+                saveFavicon(favicon, suffix, inputStream);
+                favicon.setFaviconOriginalUrl(faviconUrl);
+                bookmarkDao.updateFavicon(favicon);
+                bookmark.setFavicon(favicon);
+                br.setResult(bookmark);
+            } else {
+                br.setCode(SystemConstant.HTTPCLIENT_ERROR.getCode());
+                br.setMsg(SystemConstant.HTTPCLIENT_ERROR.getDescription() + ",错误代码:" + hr.getCode() + ",发生错误的url:" + faviconUrl);
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             br.setCode(SystemConstant.SYSTEM_ERROR.getCode());
             br.setMsg(e.toString());
