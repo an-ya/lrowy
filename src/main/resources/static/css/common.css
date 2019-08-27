@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'iconfont';  /* project id 1286797 */
-    src: url('//at.alicdn.com/t/font_1286797_lg0k552zqye.eot');
-    src: url('//at.alicdn.com/t/font_1286797_lg0k552zqye.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_1286797_lg0k552zqye.woff2') format('woff2'),
-    url('//at.alicdn.com/t/font_1286797_lg0k552zqye.woff') format('woff'),
-    url('//at.alicdn.com/t/font_1286797_lg0k552zqye.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_1286797_lg0k552zqye.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_1286797_n31lzyxh75b.eot');
+    src: url('//at.alicdn.com/t/font_1286797_n31lzyxh75b.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1286797_n31lzyxh75b.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1286797_n31lzyxh75b.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1286797_n31lzyxh75b.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1286797_n31lzyxh75b.svg#iconfont') format('svg');
 }
 
 .iconfont{
@@ -80,12 +80,11 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
-    padding: 0 .8rem;
 }
 
 .header-menu .header-item {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
     width: 4rem;
     height: 100%;
@@ -173,9 +172,12 @@ body {
 
 .dropdown-content {
     position: relative;
+    overflow: hidden;
 }
 
 .dropdown-trigger {
+    width: 100%;
+    height: 100%;
     padding: 0;
     border: none;
     outline: none;
@@ -184,8 +186,7 @@ body {
 
 .dropdown {
     position: absolute;
-    top: 100%;
-    right: 2px;
+    visibility: hidden;
     margin: 5px 0;
     padding: 5px 0;
     width: 140px;
@@ -194,8 +195,6 @@ body {
     background-color: #fff;
     -webkit-transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
-    -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
     opacity: 1;
     z-index: 1010;
 }
@@ -220,8 +219,6 @@ body {
 
 .dropdown.hidden {
     opacity: 0;
-    visibility: hidden;
-    transform: translateY(20px);
 }
 
 .sidebar {

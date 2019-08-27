@@ -10,9 +10,10 @@
     <link rel="stylesheet" href="/layui-v2.5.4/css/layui.css">
     <link rel="stylesheet" th:href="@{/css/common.css}"/>
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}"/>
+    <link rel="stylesheet" th:href="@{/css/ivu-message.css}"/>
     <link rel="stylesheet" th:href="@{/css/shortcut.css}"/>
     <link rel="stylesheet" th:href="@{/css/bookmark.css}"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
 </head>
 <body>
 <div class="header">
@@ -42,30 +43,41 @@
 <div class="main">
     <div class="shortcut-container swiper-container">
         <div class="swiper-wrapper">
-            <div th:each="s : ${bookmarkResult.shortcuts}" class="swiper-slide shortcut">
+            <div th:each="s : ${bookmarkResult.shortcuts}" class="swiper-slide shortcut" th:data-id="${s.bookmarkId}" th:data-cate-id="${s.bookmarkCategoryId}">
                 <div class="favicon-blur" th:style="'background-image:url(' + ${s.favicon.faviconBlurUrl} + ');'"></div>
                 <img class="favicon-png" th:src="${s.favicon.faviconUrl}">
                 <span class="google-front" th:text="${s.title}"></span>
+                <div class="dropdown-content">
+                    <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>
+                    <div class="dropdown hidden">
+                        <ul class="dropdown-menu" th:data-id="${s.bookmarkId}" th:data-url="${s.url}">
+                            <li class="dropdown-item open-blank-button">新窗口打开</li>
+                            <li class="dropdown-item open-self-button">当前页打开</li>
+                            <li class="dropdown-item info-button">信息</li>
+                            <li class="dropdown-item delete-shortcut-button">删除</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div class="bookmark-category-container swiper-container">
         <div class="swiper-wrapper">
-            <div th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:class="'swiper-slide bookmark-category-item google-front' + ${i.index == 0 ? ' bookmark-category-item-active' : ''}" th:text="${b.name}"></div>
+            <div th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:class="'swiper-slide bookmark-category-item google-front' + ${i.index == 0 ? ' bookmark-category-item-active' : ''}" th:text="${b.name}" th:data-cate-id="${b.bookmarkCategoryId}"></div>
         </div>
     </div>
     <div class="bookmark-list">
-        <div th:each="b : ${bookmarkResult.bookmarks}" class="item">
+        <div th:each="b : ${bookmarkResult.bookmarks}" class="item" th:id="'bookmark-' + ${b.bookmarkId}">
             <img th:src="${b.favicon.faviconUrl}">
             <span th:text="${b.title}"></span>
             <div class="dropdown-content">
                 <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>
                 <div class="dropdown hidden">
-                    <ul class="dropdown-menu" th:data-id="${b.bookmarkId}">
+                    <ul class="dropdown-menu" th:data-id="${b.bookmarkId}" th:data-url="${b.url}">
                         <li class="dropdown-item open-blank-button">新窗口打开</li>
                         <li class="dropdown-item open-self-button">当前页打开</li>
                         <li class="dropdown-item info-button">信息</li>
-                        <li class="dropdown-item delete-button">删除</li>
+                        <li class="dropdown-item delete-bookmark-button">删除</li>
                     </ul>
                 </div>
             </div>
@@ -181,6 +193,7 @@
 <script src="/js/swiper.min.js"></script>
 <script src="/layui-v2.5.4/layui.js"></script>
 <script th:src="@{/js/nvi-notice.js}"></script>
+<script th:src="@{/js/ivu-message.js}"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/bookmark.js}"></script>
 </body>
