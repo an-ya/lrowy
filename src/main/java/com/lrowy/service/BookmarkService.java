@@ -119,7 +119,7 @@ public class BookmarkService {
                     int maxSize = 0, size;
                     for (Element i : icons) {
                         s = i.attr("sizes");
-                        if (s != null) {
+                        if (s != null && !s.equals("")) {
                             target = false;
                             size = Integer.parseInt(s.substring(s.lastIndexOf("x") + 1));
                             if (size > maxSize) {
@@ -238,7 +238,8 @@ public class BookmarkService {
         }
         bookmarkDao.deleteBookmark(bookmarkId);
         bookmarkDao.deleteBookmarkFavicon(bookmarkId);
-        if (bookmarkDao.deleteFavicon(favicon.getFaviconId()) > 0) {
+        int line = bookmarkDao.deleteFavicon(favicon.getFaviconId());
+        if (line > 0) {
             if (!deleteFaviconFile(favicon.getFaviconUrl()) || !deleteFaviconFile(favicon.getFaviconBlurUrl())) br.setInfo(SystemConstant.DELETEFILE_ERROR);
         }
         return br;

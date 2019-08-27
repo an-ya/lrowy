@@ -10,7 +10,6 @@ function init() {
         type: 'post',
         success: function (data) {
             if (data.code === '000') {
-                setDropdown();
                 if (data.result) {
                     setMenuButton();
                 } else {
@@ -61,40 +60,71 @@ function setMenuButton () {
     });
 }
 
+function setOneDropdown (e) {
+    var $dropdown = $(e.nextElementSibling);
+    var target = false, ele = $dropdown.clone(true), height = $dropdown.height(), t, transform = {};
+    e.addEventListener('click', function () {
+        clearTimeout(t);
+        if (!target) {
+            this.focus();
+
+            if (ele.hasClass('hidden')) {
+                var top, left;
+                if ($(this).offset().top + $(this).height() + height + 40 >= $(document).height()) {
+                    transform = {'-webkit-transform': 'translateY(-20px)', 'transform': 'translateY(-20px)'};
+                    top = $(this).offset().top - height - 20;
+                } else {
+                    transform = {'-webkit-transform': 'translateY(20px)', 'transform': 'translateY(20px)'};
+                    top = $(this).offset().top + $(this).height();
+                }
+
+                if ($(this).offset().left - (140 - $(this).width()) <= 0) {
+                    left = $(this).offset().left;
+                } else {
+                    left = $(this).offset().left - (140 - $(this).width())
+                }
+
+                if (left < 10) left = 10;
+                if (left > $(document).width() - 150) left = $(document).width() - 150;
+
+                ele.css({'visibility': 'visible', 'top': top, 'left': left});
+                ele.css(transform);
+                $('body').append(ele);
+                setTimeout(function () {
+                    ele.removeClass('hidden');
+                    ele.css({'-webkit-transform': 'translateY(0)', 'transform': 'translateY(0)'});
+                }, 14);
+            } else {
+                ele.addClass('hidden');
+                ele.css(transform);
+            }
+        }
+        target = false;
+    });
+    e.addEventListener('blur', function () {
+        target = true;
+        setTimeout(function () { target = false; }, 100);
+        ele.addClass('hidden');
+        ele.css(transform);
+        t = setTimeout(function () { ele.detach(); }, 300);
+    });
+}
+
 function setDropdown () {
     var dropdownTrigger = document.getElementsByClassName('dropdown-trigger');
-    var Target = new Array(dropdownTrigger.length);
     for (var i = 0; i < dropdownTrigger.length; i++) {
-        Target[i] = false;
-        (function (arg) {
-            dropdownTrigger[i].addEventListener('click', function () {
-                if (!Target[arg]) {
-                    this.focus();
-                    var dropdown = this.nextElementSibling;
-                    dropdown.classList.toggle('hidden');
-                }
-                Target[arg] = false;
-            });
-            dropdownTrigger[i].addEventListener('blur', function () {
-                Target[arg] = true;
-                var dropdown = this.nextElementSibling;
-                dropdown.classList.add('hidden');
-                setTimeout(function () {
-                    Target[arg] = false;
-                }, 100);
-            });
-        })(i);
+        setOneDropdown(dropdownTrigger[i]);
     }
 }
 
 function setCLick () {
-    document.querySelector('#login').addEventListener('click', function () {
+    $('#login').click(function () {
         $.ajax({
             url: '/login',
             type: 'post',
             success: function (data) {
                 if (data.code === '000') {
-                    $('#login').parent().parent().parent().replaceWith(menuButtonDom);
+                    $('#login').parents('.header-item').replaceWith(menuButtonDom);
                     setMenuButton();
                 }
             }

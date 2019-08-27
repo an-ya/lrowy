@@ -4,6 +4,7 @@ import com.lrowy.dao.BookmarkDao;
 import com.lrowy.pojo.User;
 import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.pojo.bookmark.BookmarkResult;
+import com.lrowy.pojo.common.enums.SystemConstant;
 import com.lrowy.pojo.common.response.BaseResponse;
 import com.lrowy.service.BookmarkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,23 @@ public class BookmarkController extends BaseController {
         br.setBookmarkCategories(bookmarkDao.findBookmarkCategory());
         res.setResult(br);
         return res;
+    }
+
+    @RequestMapping(value = "/bookmark/findById", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Bookmark> findById(Integer bookmarkId) {
+        BaseResponse<Bookmark> br = new BaseResponse<>();
+        if (bookmarkId == null || bookmarkId == 0) {
+            br.setInfo(SystemConstant.PARAMS_ERROR);
+            return br;
+        }
+        Bookmark bookmark = bookmarkDao.findBookmarkByBookmarkId(bookmarkId);
+        if (bookmark == null) {
+            br.setInfo(SystemConstant.PARAMS_ERROR);
+        } else {
+            br.setResult(bookmark);
+        }
+        return br;
     }
 
     @RequestMapping(value = "/bookmark/add", method = RequestMethod.POST)

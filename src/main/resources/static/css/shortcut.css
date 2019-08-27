@@ -42,14 +42,37 @@
 }
 
 .shortcut span {
-    margin: 6px 12px 0 12px;
+    display: block;
+    width: 116px;
+    margin-top: 12px;
     color: #fff;
-    text-shadow: rgba(0, 0, 0, .3) 1px 1px 4px;
+    font-size: 18px;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 2px;
     overflow: hidden;
+    white-space: nowrap;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+}
+
+.shortcut:hover .dropdown-content {
+    opacity: 1;
+}
+
+.shortcut .dropdown-content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 32px;
+    height: 50px;
+    opacity: 0;
+    -webkit-transition: .3s;
+    transition: .3s;
+    z-index: 10;
+}
+
+.shortcut .dropdown-content .dropdown-trigger {
+    color: #fff;
+    text-shadow: rgba(0, 0, 0, .3) 1px 1px 2px;
 }
 
 @media screen and (max-width: 900px) {
@@ -68,7 +91,8 @@
     }
 
     .shortcut span {
-        margin: 6px 6px 0 6px;
-        font-size: 13px;
+        margin-top: 6px;
+        width: 66px;
+        font-size: 14px;
     }
 }

@@ -1,0 +1,130 @@
+.ivu-message {
+    font-size: 14px;
+    position: fixed;
+    width: 100%;
+    top: 16px;
+    left: 0;
+    pointer-events: none;
+    z-index: 19980325;
+}
+
+.ivu-message-notice {
+    box-sizing: content-box;
+    padding: 12px;
+    text-align: center;
+    -webkit-transition: height .3s ease-in-out, padding .3s ease-in-out;
+    transition: height .3s ease-in-out, padding .3s ease-in-out;
+}
+
+.move-message-enter-active {
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    -webkit-animation-name: ivuMessageIn;
+    animation-name: ivuMessageIn;
+}
+
+.move-message-leave-active {
+    -webkit-animation-timing-function: ease-in-out;
+    animation-timing-function: ease-in-out;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    -webkit-animation-name: ivuMessageOut;
+    animation-name: ivuMessageOut;
+}
+
+.ivu-message-notice-content {
+    display: inline-block;
+    position: relative;
+    pointer-events: all;
+    padding: 8px 16px;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, .2);
+    text-align: center;
+    font-weight: bold;
+}
+
+.ivu-message-notice-content img {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    margin-right: 16px;
+}
+
+@-webkit-keyframes ivuMessageIn {
+    0% {
+        opacity: 0;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@keyframes ivuMessageIn {
+    0% {
+        opacity: 0;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+}
+
+@-webkit-keyframes ivuMessageOut {
+    0% {
+        opacity: 1;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes ivuMessageOut {
+    0% {
+        opacity: 1;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(0);
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform-origin: 0 0;
+        transform-origin: 0 0;
+        -webkit-transform: translateY(-100%);
+        transform: translateY(-100%);
+    }
+}

@@ -1,4 +1,3 @@
-var data = {};
 var vw = $(document).width(),
     vh = $(document).height(),
     area = ['700px', '560px'];
@@ -15,7 +14,13 @@ var s = new Swiper('.shortcut-container',{
     slidesPerView: 'auto',
     on: {
         slideChangeTransitionStart: function () {
-            selectCate(this.activeIndex);
+            var cateId = $(this.slides[this.activeIndex]).data('cateId');
+            for (var i = 0; i < c.slides.length; i++) {
+                if ($(c.slides[i]).data('cateId') === cateId) {
+                    $('.bookmark-category-item-active').removeClass('bookmark-category-item-active');
+                    c.slides[i].classList.add('bookmark-category-item-active');
+                }
+            }
         }
     }
 });
@@ -25,54 +30,21 @@ var c = new Swiper('.bookmark-category-container', {
     slidesPerView: 5,
     on: {
         tap: function () {
+            var slide = this.slides[this.clickedIndex];
             $('.bookmark-category-item-active').removeClass('bookmark-category-item-active');
-            this.slides[this.clickedIndex].classList.add('bookmark-category-item-active');
-            selectBook(this.clickedIndex);
+            slide.classList.add('bookmark-category-item-active');
+            var cateId = $(slide).data('cateId');
+            for (var i = 0; i < s.slides.length; i++) {
+                if ($(s.slides[i]).data('cateId') === cateId) {
+                    s.slideTo(i);
+                    break;
+                }
+            }
         }
     }
 });
 
-function selectCate (index) {
-    if (!data.shortcuts) return;
-    var target = data.shortcuts[index].bookmarkCategoryId;
-    for (var i = 0; i < data.bookmarkCategories.length; i++) {
-        if (data.bookmarkCategories[i].bookmarkCategoryId === target) {
-            $('.bookmark-category-item-active').removeClass('bookmark-category-item-active');
-            c.slides[i].classList.add('bookmark-category-item-active');
-        }
-    }
-}
-
-function selectBook (index) {
-    if (!data.bookmarkCategories) return;
-    var target = data.bookmarkCategories[index].bookmarkCategoryId;
-    for (var i = 0; i < data.shortcuts.length; i++) {
-        if (data.shortcuts[i].bookmarkCategoryId === target) {
-            s.slideTo(i);
-            break;
-        }
-    }
-}
-
-function findBookById(id) {
-    var bookmarkId = parseInt(id);
-    if (data.bookmarks) {
-        for (var i = 0; i < data.bookmarks.length; i++) {
-            if (data.bookmarks[i].bookmarkId === bookmarkId) {
-                return data.bookmarks[i];
-            }
-        }
-    }
-    if (data.shortcuts) {
-        for (i = 0; i < data.shortcuts.length; i++) {
-            if (data.shortcuts[i].bookmarkId === bookmarkId) {
-                return data.shortcuts[i];
-            }
-        }
-    }
-}
-
-function deleteBook(id, $parent) {
+function deleteBook(id, success) {
     $.ajax({
         url: '/bookmark/delete',
         type: 'post',
@@ -81,38 +53,13 @@ function deleteBook(id, $parent) {
         },
         success: function (data) {
             if (data.code === '000') {
-                $parent.addClass('hidden');
-                setTimeout(function () {
-                    $parent.remove();
-                }, 300);
+                success();
                 notice.open({duration: 5, content: '<div class="notice-title">成功删除书签</div>'});
             } else {
                 notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
             }
         }
     });
-}
-
-function openBlank(id) {
-    var bookmarkId = parseInt(id);
-    if (!data.bookmarks) return;
-    for (var i = 0; i < data.bookmarks.length; i++) {
-        if (data.bookmarks[i].bookmarkId === bookmarkId) {
-            window.open(data.bookmarks[i].url);
-            break;
-        }
-    }
-}
-
-function openSelf(id) {
-    var bookmarkId = parseInt(id);
-    if (!data.bookmarks) return;
-    for (var i = 0; i < data.bookmarks.length; i++) {
-        if (data.bookmarks[i].bookmarkId === bookmarkId) {
-            window.location.href = data.bookmarks[i].url;
-            break;
-        }
-    }
 }
 
 function setForm ($form, result, parent) {
@@ -203,62 +150,85 @@ layui.use(['layer', 'form', 'laydate'], function (){
     var l, type = 1;
 
     function setButton () {
-        var elements = document.getElementsByClassName('delete-button');
-        for (var i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', function () {
-                var $parent = $(this).parents('.item');
-                var id  = $(this).parent().attr('data-id');
-                layer.confirm('确定删除该书签？', {
-                    btn: ['确定','取消'],
-                    move: false,
-                    shadeClose: true,
-                }, function(){
+        $('.delete-bookmark-button').click(function () {
+            var id  = $(this).parent().data('id');
+            var $parent = $('#bookmark-' + id);
+            layer.confirm('确定删除该书签？', {
+                btn: ['确定','取消'],
+                move: false,
+                shadeClose: true,
+            }, function(){
+                deleteBook(id, function () {
                     layer.close(layer.index);
-                    deleteBook(id, $parent);
+                    $parent.addClass('hidden');
+                    setTimeout(function () {
+                        $parent.remove();
+                    }, 300);
                 });
             });
-        }
+        });
 
-        elements = document.getElementsByClassName('info-button');
-        for (i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', function () {
-                var id  = $(this).parent().attr('data-id');
-                type = 2;
-                $('#commitForm').text('提交修改');
-                layer.open({
-                    type: 1,
-                    area: area,
-                    title: '书签',
-                    content: $('.bookmark-form'),
-                    end: function () {
-                        document.querySelector(".bookmark-form").reset();
-                        setFavicon();
+        $('.delete-shortcut-button').click(function () {
+            var id  = $(this).parent().data('id');
+            layer.confirm('确定删除该书签？', {
+                btn: ['确定','取消'],
+                move: false,
+                shadeClose: true,
+            }, function(){
+                deleteBook(id, function () {
+                    layer.close(layer.index);
+                    for (var i = 0; i < s.slides.length; i++) {
+                        if ($(s.slides[i]).data('id') === id) {
+                            s.removeSlide(i);
+                            break;
+                        }
                     }
                 });
-                var bookmark = findBookById(id);
-                setForm($('.bookmark-form'), bookmark, '');
-                setFavicon(bookmark);
-                bookmarkId = bookmark.bookmarkId;
-                form.render();
             });
-        }
+        });
 
-        elements = document.getElementsByClassName('open-blank-button');
-        for (i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', function () {
-                var id  = $(this).parent().attr('data-id');
-                openBlank(id);
+        $('.info-button').click(function () {
+            var id  = $(this).parent().data('id');
+            $.ajax({
+                url: '/bookmark/findById',
+                type: 'post',
+                data: {
+                    bookmarkId: parseInt(id)
+                },
+                success: function (data) {
+                    if (data.code === '000') {
+                        type = 2;
+                        $('#commitForm').text('提交修改');
+                        layer.open({
+                            type: 1,
+                            area: area,
+                            title: '书签',
+                            content: $('.bookmark-form'),
+                            end: function () {
+                                document.querySelector(".bookmark-form").reset();
+                                setFavicon();
+                            }
+                        });
+                        setForm($('.bookmark-form'), data.result, '');
+                        setFavicon(data.result);
+                        bookmarkId = data.result.bookmarkId;
+                        form.render();
+                    }
+                }
             });
-        }
+        });
 
-        elements = document.getElementsByClassName('open-self-button');
-        for (i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', function () {
-                var id  = $(this).parent().attr('data-id');
-                openSelf(id);
-            });
-        }
+        $('.open-blank-button').click(function () {
+            window.open($(this).parent().data('url'), '_blank');
+        });
+
+        $('.open-self-button').click(function () {
+            window.location.href = $(this).parent().data('url');
+        });
     }
+
+    setButton();
+    setDropdown();
 
     document.getElementById('set-button').addEventListener('click', function () {
         if (!bookmarkId) return;
@@ -285,19 +255,8 @@ layui.use(['layer', 'form', 'laydate'], function (){
                         notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
                     }
                 }
-            })
+            });
         });
-    });
-
-    $.ajax({
-        url: '/bookmark/init',
-        type: 'post',
-        success: function (data) {
-            if (data.code === '000') {
-                window.data = data.result;
-                setButton();
-            }
-        }
     });
 
     $('.addBookmark').click(function () {
@@ -329,6 +288,8 @@ layui.use(['layer', 'form', 'laydate'], function (){
                 data: data.field,
                 success: function (data) {
                     if (data.code === '000') {
+                        type = 2;
+                        $('#commitForm').text('提交修改');
                         notice.open({duration: 5, content: '<div class="notice-title">成功添加书签</div>'});
                         setForm($('.bookmark-form'), data.result, '');
                         setFavicon(data.result);
