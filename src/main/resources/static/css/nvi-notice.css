@@ -8,14 +8,14 @@
 
 .notice-notice {
     position: relative;
-    height: 75px;
+    height: auto;
     margin-bottom: 10px;
     -webkit-transition: .3s .5s ease;
     transition: .3s .5s ease;
 }
 
-.notice-notice-hidden {
-    height: 0;
+.notice-notice.notice-notice-hidden {
+    height: 0!important;
     margin-bottom: 0;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .notice-notice-content-wrapper {
-    padding: 16px;
+    padding: 10px 16px;
     color: #fff;
     opacity: 0;
     -webkit-transition: .2s opacity ease;
@@ -72,8 +72,8 @@
 }
 
 .notice-title {
-    margin-bottom: 8px;
-    font-size: 1.2em;
+    margin-bottom: 6px;
+    font-size: 18px;
     font-weight: bold;
     overflow: hidden;
     white-space: nowrap;
@@ -92,7 +92,7 @@
 }
 
 .notice-desc {
-    font-size: 1em;
+    font-size: 14px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
@@ -109,14 +109,17 @@
     transition: .2s .6s transform ease;
 }
 
+.notice-icon {
+    float: left;
+    height: 40px;
+    margin-right: 10px;
+    font-size: 30px;
+}
+
 @media screen and (max-width: 900px) {
     .notice  {
         top: 60px;
         width: 200px;
-    }
-
-    .notice-notice {
-        height: 60px;
     }
 
     .notice-notice-content-wrapper {
@@ -124,6 +127,11 @@
     }
 
     .notice-title {
+        font-size: 16px;
         margin-bottom: 4px;
+    }
+
+    .notice-icon {
+        font-size: 24px;
     }
 }
