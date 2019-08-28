@@ -54,9 +54,9 @@ function deleteBook(id, success) {
         success: function (data) {
             if (data.code === '000') {
                 success();
-                notice.open({duration: 5, content: '<div class="notice-title">成功删除书签</div>'});
+                notice.success({title: '成功删除书签'});
             } else {
-                notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
+                notice.fail({title: '发生错误', desc: data.msg});
             }
         }
     });
@@ -105,7 +105,7 @@ img_input.addEventListener('change', function (e) {
         var file = files[0];
         var reader = new FileReader();
         if(!/image\/\w+/.test(file.type)){
-            notice.open({duration: 5, content: '<div class="notice-title">请选择图片类型文件</div>'});
+            notice.fail({title: '请选择图片文件'});
             return false;
         }
         reader.onload = function (e) {
@@ -131,11 +131,11 @@ function uploadFavicon() {
             contentType: false,
             success: function (data) {
                 if (data.code === '000') {
-                    notice.open({duration: 5, content: '<div class="notice-title">成功修改图标</div>'});
+                    notice.success({title: '成功修改图标'});
                     setForm($('.bookmark-form'), data.result, '');
                     setFavicon(data.result);
                 } else {
-                    notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
+                    notice.fail({title: '发生错误', desc: data.msg});
                 }
             }
         })
@@ -248,11 +248,11 @@ layui.use(['layer', 'form', 'laydate'], function (){
                 success: function (data) {
                     layer.close(layer.index);
                     if (data.code === '000') {
-                        notice.open({duration: 5, content: '<div class="notice-title">成功修改图标</div>'});
+                        notice.success({title: '成功修改图标'});
                         setForm($('.bookmark-form'), data.result, '');
                         setFavicon(data.result);
                     } else {
-                        notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
+                        notice.fail({title: '发生错误', desc: data.msg});
                     }
                 }
             });
@@ -290,13 +290,13 @@ layui.use(['layer', 'form', 'laydate'], function (){
                     if (data.code === '000') {
                         type = 2;
                         $('#commitForm').text('提交修改');
-                        notice.open({duration: 5, content: '<div class="notice-title">成功添加书签</div>'});
+                        notice.success({title: '成功添加书签'});
                         setForm($('.bookmark-form'), data.result, '');
                         setFavicon(data.result);
                         bookmarkId = data.result.bookmarkId;
                         form.render();
                     } else {
-                        notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
+                        notice.fail({title: '发生错误', desc: data.msg});
                     }
                 }
             });
@@ -307,11 +307,11 @@ layui.use(['layer', 'form', 'laydate'], function (){
                 data: data.field,
                 success: function (data) {
                     if (data.code === '000') {
-                        notice.open({duration: 5, content: '<div class="notice-title">成功修改书签</div>'});
+                        notice.success({title: '成功修改书签'});
                         setForm($('.bookmark-form'), data.result, '');
                         form.render();
                     } else {
-                        notice.open({duration: 5, content: '<div class="notice-title">' + data.msg + '</div>'});
+                        notice.fail({title: '发生错误', desc: data.msg});
                     }
                 }
             });
