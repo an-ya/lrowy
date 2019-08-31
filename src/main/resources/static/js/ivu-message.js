@@ -14,7 +14,7 @@
             e.children().eq(0).html(params.content);
             this.dom.append(e);
             e.addClass('move-message-enter-active');
-            e.css('height', e.height());
+            e.css('height', e.outerHeight());
             setTimeout(function () {
                 e.removeClass('move-message-enter-active');
             }, 300);
@@ -28,7 +28,7 @@
         },
         loading: function (params) {
             if (!params) params = {};
-            params.content = '<img src="images/Spinner-1s-120px.gif"/>loading . . .';
+            params.content = '<img src="images/Spinner-1s-120px.gif"/><span>loading . . .</span>';
             return this.open(params);
         },
         close: function (e, success) {

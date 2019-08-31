@@ -2,14 +2,14 @@
     font-size: 14px;
     position: fixed;
     width: 100%;
-    top: 16px;
+    top: 60px;
     left: 0;
     pointer-events: none;
     z-index: 19980325;
 }
 
 .ivu-message-notice {
-    box-sizing: content-box;
+    height: auto;
     padding: 12px;
     text-align: center;
     -webkit-transition: height .3s ease-in-out, padding .3s ease-in-out;
@@ -59,6 +59,7 @@
     width: 30px;
     height: 30px;
     margin-right: 16px;
+    vertical-align: middle;
 }
 
 @-webkit-keyframes ivuMessageIn {
@@ -126,5 +127,11 @@
         transform-origin: 0 0;
         -webkit-transform: translateY(-100%);
         transform: translateY(-100%);
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .ivu-message {
+        top: 50px;
     }
 }
