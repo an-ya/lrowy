@@ -44,7 +44,7 @@ var c = new Swiper('.bookmark-category-container', {
     }
 });
 
-function deleteBook(id, success) {
+function deleteBook (id, success) {
     $.ajax({
         url: '/bookmark/delete',
         type: 'post',
@@ -142,7 +142,7 @@ function uploadFavicon() {
     }
 }
 
-layui.use(['layer', 'form', 'laydate'], function (){
+layui.use(['layer', 'form', 'laydate'], function () {
     var layer = layui.layer
         ,form = layui.form
         ,laydate = layui.laydate;
@@ -280,7 +280,7 @@ layui.use(['layer', 'form', 'laydate'], function (){
     });
 
     //监听提交
-    form.on('submit', function (data){
+    form.on('submit', function (data) {
         if (type === 1) {
             $.ajax({
                 url: '/bookmark/add',
