@@ -28,9 +28,6 @@ public class MainController extends BaseController {
     public String index(Model model) {
         User user = isLogin() ? getUser() : null;
         model.addAttribute("user", user);
-
-        List<Bookmark> bm = bookmarkDao.findShortcut();
-        model.addAttribute("bookmark", bm);
         return "/index";
     }
 

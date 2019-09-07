@@ -4,7 +4,7 @@ var menuButtonDom = '<li class="header-item"><button class="menu-button"><span>M
 
 init();
 
-function init() {
+function init () {
     $.ajax({
         url: '/init',
         type: 'post',
