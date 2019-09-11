@@ -32,9 +32,13 @@
         }
 
         .main-second {
-            position: relative;
             height: 100%;
-            background: #fff;
+            background: transparent;
+        }
+
+        .main-third {
+            height: 100%;
+            background: transparent;
         }
 
         .main-back {
@@ -45,7 +49,7 @@
             height: 100%;
         }
 
-        .main-back:after {
+        .main:after {
             content: '';
             position: absolute;
             top: 0;
@@ -56,6 +60,31 @@
             background-image: linear-gradient(0deg, hsla(0, 0%, 100%, 0) 60%, #fff), linear-gradient(70deg, #dbedff 32%, #ebfff0);
             opacity: .3;
             z-index: -1;
+        }
+
+        .main-second:after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-image: linear-gradient(0deg, hsla(0, 0%, 100%, 0) 60%, #fff), linear-gradient(70deg, #e1ffe9 32%, #e8d8ff);
+            opacity: .3;
+            z-index: -1;
+        }
+
+        .main-back .whale {
+            display: block;
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            top: 40%;
+            right: 8%;
+            font-size: 120px;
+            color: #a9cacf;
+            opacity: 0;
         }
 
         .main-back .mark-wrapper {
@@ -157,12 +186,13 @@
     </div>
 </div>
 <div class="main-back">
-    <div class="mark-wrapper parallax" data-parallax-scroll-offset="0%" data-parallax-x="-300" data-parallax-y="-40%" data-parallax-opacity-min="0" data-parallax-opacity-max="0.3" data-parallax-opacity-range="0.625">
+    <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%">
         <i title="月球" class="iconfont mark" onclick="console.log('ok')">&#xe611;</i>
     </div>
+    <i class="iconfont whale parallax" data-parallax-offset="100%" data-parallax-x="15.7%" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="62.5%" onclick="console.log('ok')">&#xe693;</i>
 </div>
 <div class="main">
-    <div class="banner-content">
+    <div class="banner-content parallax" data-parallax-offset="top" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="height">
         <div class="banner-container swiper-container">
             <div class="swiper-parallax" data-swiper-parallax="-25%" th:style="'background-image:url(' + @{/images/banner02.jpg} + ');'"></div>
             <div class="swiper-wrapper google-front">
@@ -193,12 +223,16 @@
             </div>
             <div class="swiper-scrollbar"></div>
         </div>
-        <div class="swiper-button-prev" th:style="'background-image:url(' + @{/images/lastIco.png} + ');'"></div>
-        <div class="swiper-button-next" th:style="'background-image:url(' + @{/images/nextIco.png} + ');'"></div>
+        <div class="swiper-button-prev parallax" th:style="'background-image:url(' + @{/images/lastIco.png} + ');'" data-parallax-offset="parent.top" data-parallax-range="parent.height" data-parallax-x="46"></div>
+        <div class="swiper-button-next parallax" th:style="'background-image:url(' + @{/images/nextIco.png} + ');'" data-parallax-offset="parent.top" data-parallax-range="parent.height" data-parallax-x="-46"></div>
     </div>
 <!--    <div class="banner-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="banner-mask"></div></div>-->
     <div class="article-container">
-        <div class="article-title google-front"><span class="category-page elastic-show" style="animation-delay: 200ms;"><</span><span class="t fade-in" style="animation-delay: 100ms;">文章/page1</span><span class="category-page elastic-show" style="animation-delay: 300ms;">></span></div>
+        <div class="article-title google-front">
+            <span class="category-page elastic-show" style="animation-delay: 200ms;"><</span>
+            <span class="t fade-in" style="animation-delay: 100ms;">文章/page1</span>
+            <span class="category-page elastic-show" style="animation-delay: 300ms;">></span>
+        </div>
         <div class="article-category">
             <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);transition-delay: 100ms;" onclick="scrollToMain(1)"></div>
             <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);transition-delay: 200ms;"></div>
@@ -208,7 +242,8 @@
         </div>
     </div>
 </div>
-<div class="main-second"><div onclick="scrollToMain(0)">首页</div></div>
+<div class="main-second"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div></div>
+<div class="main-third"><div onclick="scrollToMain(1)" style="position: relative;text-align: center;">次页</div></div>
 <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="/js/swiper.min.js"></script>
