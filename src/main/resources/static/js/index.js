@@ -104,62 +104,94 @@ function scrollToMain (index) {
 var parallax = $('.parallax');
 
 function isParcent(result) {
-    var pattern = new RegExp(/^\d+%$/);
+    var pattern = new RegExp(/^-?\d+(\.\d+)?%$/);
     return pattern.test(result);
 }
 
 function toPoint(percent){
-    var str=percent.replace("%","");
-    str= str/100;
+    var str = percent.replace("%","");
+    str = str / 100;
     return str;
 }
 
 function scrollEvent () {
-    var scrollTop = $(this).scrollTop(), translateX = -scrollTop / vh * 300 + 'px', translateY = -scrollTop / vh * vw * .4 + 'px', opacity = (1 - scrollTop / vh * 1.6) * .3;
-    $('.mark-wrapper').css({'-webkit-transform': 'translate(' + translateX + ',' + translateY + ')', 'transform': 'translate(' + translateX + ',' + translateY + ')', 'opacity': opacity});
+    var scrollTop = $(this).scrollTop();
 
     parallax.each(function () {
         var $this = $(this);
-        var scrollOffset = $this.data('parallaxScrollOffset');
+        var offset = $this.data('parallaxOffset');
         var x = $this.data('parallaxX');
         var y = $this.data('parallaxY');
-        var opacityMin = $this.data('parallaxOpacityMin');
-        var oacityMax = $this.data('parallaxOpacityMax');
-        var opacityRange = $this.data('parallaxOpacityRange');
+        var opacityO = $this.data('parallaxOpacityO');
+        var opacityE = $this.data('parallaxOpacityE');
+        var scaleO = $this.data('parallaxScaleO');
+        var scaleE = $this.data('parallaxScaleE');
+        var range = $this.data('parallaxRange');
 
-        if (scrollOffset && isParcent(scrollOffset)) {
-            scrollOffset = toPoint(scrollOffset) * vh;
+        if (offset !== undefined) {
+            if (offset === 'parent.top') {
+                offset = $this.parent().offset().top;
+            }
+            if (offset === 'top') {
+                offset = $this.offset().top;
+            }
+            if (isParcent(offset)) {
+                offset = toPoint(offset) * vh;
+            }
         }
-        if (x && isParcent(x)) {
-            x = toPoint(x) * vw;
-        }
-        if (y && isParcent(y)) {
-            y = toPoint(y) * vh;
+        if (x !== undefined && isParcent(x)) x = toPoint(x) * vw;
+        if (y !== undefined && isParcent(y)) y = toPoint(y) * vh;
+        if (range !== undefined) {
+            if (range === 'parent.height') {
+                range = $this.parent().height();
+            }
+            if (range === 'height') {
+                range = $this.height();
+            }
+            if (isParcent(range)) {
+                range = toPoint(range) * vh;
+            }
+        } else {
+            range = vh;
         }
 
-        var css = {}, translateX, translateY;
-        if (x && scrollOffset) translateX = (scrollTop - scrollOffset) / x;
-        if (y && scrollOffset) translateY = (scrollTop - scrollOffset) / y;
+        console.log(scrollTop);
+        console.log(offset);
+
+        var css = {}, translate, translateX, translateY, opacity, scale;
+        if (x !== undefined && offset !== undefined && scrollTop > offset - range && scrollTop <= offset + range) translateX = Math.abs(scrollTop - offset) * x / range + 'px';
+        if (y !== undefined && offset !== undefined && scrollTop > offset - range && scrollTop <= offset + range) translateY = Math.abs(scrollTop - offset) * y / range + 'px';
 
         if (translateX && translateY) {
-            css = {'-webkit-transform': 'translate(' + translateX + ',' + translateY + ')', 'transform': 'translate(' + translateX + ',' + translateY + ')'};
+            translate =  'translate(' + translateX + ',' + translateY + ')';
         } else if (translateX) {
-            css = {'-webkit-transform': 'translate(' + translateX + ')', 'transform': 'translate(' + translateX + ')'};
+            translate = 'translate(' + translateX + ')';
         } else if (translateY) {
-            css = {'-webkit-transform': 'translate(0,' + translateY + ')', 'transform': 'translate(0,' + translateY + ')'};
+            translate = 'translate(0,' + translateY + ')';
         }
-    });
 
-    var target = $('.banner-container').offset().top, height = $('.banner-container').height(), opacity2 = 1 - (scrollTop - target) / height, translateX2 = (scrollTop - target) / height * 46 + 'px';
-    if (opacity2 < 0) opacity2 = 0;
-    if (opacity2 > 1) opacity2 = 1;
-    if (scrollTop > target) {
-        $('.banner-content').css('opacity', opacity2);
-        $('.swiper-button-prev').css({'-webkit-transform': 'translateX(' + translateX2 + ')', 'transform': 'translateX(' + translateX2 + ')'});
-        $('.swiper-button-next').css({'-webkit-transform': 'translateX(-' + translateX2 + ')', 'transform': 'translateX(-' + translateX2 + ')'});
-    } else {
-        $('.banner-content').css({'opacity': 1});
-    }
+        if (scaleO !== undefined && scaleE !== undefined && range !== undefined && offset !== undefined) {
+            scale = Math.abs(scrollTop - offset) / range * (scaleE - scaleO) + scaleO;
+            scale = 'scale(' + scale + ')';
+        }
+
+        if (translate && scale) {
+            css = {'-webkit-transform': translate + ' ' + scale, 'transform': translate + ' ' + scale};
+        } else if (translate) {
+            css = {'-webkit-transform': translate, 'transform': translate};
+        } else if (scale) {
+            css = {'-webkit-transform': scale, 'transform': scale};
+        }
+
+        if (scrollTop > offset - range && scrollTop <= offset + range && opacityO !== undefined && opacityE !== undefined && range !== undefined && offset !== undefined) {
+            opacity = Math.abs(scrollTop - offset) / range * (opacityE - opacityO) + opacityO;
+            if (opacity > 1) opacity = 1;
+            css['opacity'] = opacity;
+        }
+
+        console.log(css);
+        $this.css(css);
+    });
     preScrollEvent(scrollTop);
 }
 
@@ -167,4 +199,5 @@ $(document).scroll(scrollEvent);
 $(window).resize(function () {
     vh = $(window).height();
     vw = $(window).width();
+    scrollEvent();
 });
