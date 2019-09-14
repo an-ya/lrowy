@@ -87,6 +87,14 @@
             opacity: 0;
         }
 
+        .main-back .hua {
+            position: absolute;
+            width: 900px;
+            bottom: 0;
+            left: 0;
+            opacity: 0;
+        }
+
         .main-back .mark-wrapper {
             position: absolute;
             top: 40%;
@@ -149,6 +157,10 @@
             transition: .3s;
         }
 
+        .parallax {
+            visibility: hidden;
+        }
+
         @media screen and (max-width: 900px) {
             .article-category {
                 width: 100%;
@@ -186,10 +198,11 @@
     </div>
 </div>
 <div class="main-back">
-    <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%">
+    <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%" data-parallax-mode="staticOut">
         <i title="月球" class="iconfont mark" onclick="console.log('ok')">&#xe611;</i>
     </div>
-    <i class="iconfont whale parallax" data-parallax-offset="100%" data-parallax-x="15.7%" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="62.5%" onclick="console.log('ok')">&#xe693;</i>
+    <i class="iconfont whale parallax" data-parallax-offset="70%" data-parallax-x="-5%" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-scale-e="1" data-parallax-scale-o="0.95" data-parallax-range="30%" data-parallax-mode="static" onclick="console.log('ok')">&#xe693;</i>
+    <img class="hua parallax" th:src="@{/images/hua.png}" alt="" data-parallax-offset="80%" data-parallax-x="40" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-range="20%" data-parallax-mode="static"/>
 </div>
 <div class="main">
     <div class="banner-content parallax" data-parallax-offset="top" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="height">
@@ -233,7 +246,7 @@
             <span class="t fade-in" style="animation-delay: 100ms;">文章/page1</span>
             <span class="category-page elastic-show" style="animation-delay: 300ms;">></span>
         </div>
-        <div class="article-category">
+        <div class="article-category fade-in">
             <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);transition-delay: 100ms;" onclick="scrollToMain(1)"></div>
             <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);transition-delay: 200ms;"></div>
             <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);transition-delay: 300ms;"></div>
@@ -243,7 +256,7 @@
     </div>
 </div>
 <div class="main-second"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div></div>
-<div class="main-third"><div onclick="scrollToMain(1)" style="position: relative;text-align: center;">次页</div></div>
+<div class="main-third"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">次页</div></div>
 <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="/js/swiper.min.js"></script>

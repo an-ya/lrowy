@@ -29,7 +29,7 @@ $(document).ready(function () {
     });
 });
 
-var vh = $(window).height(), vw = $(window).width(), isScrolling = false, articleCategory = $('.article-category'), articleCategoryItem = articleCategory.children();
+var vh = $(window).height(), vw = $(window).width(), isScrolling = false, scrollTop = 0, articleCategory = $('.article-category'), articleCategoryItem = articleCategory.children();
 
 function preScrollEvent (scrollTop) {
     if (isScrolling) return;
@@ -102,6 +102,8 @@ function scrollToMain (index) {
 }
 
 var parallax = $('.parallax');
+scrollEvent(0);
+parallax.css('visibility', 'visible');
 
 function isParcent(result) {
     var pattern = new RegExp(/^-?\d+(\.\d+)?%$/);
@@ -114,8 +116,20 @@ function toPoint(percent){
     return str;
 }
 
+function getRange(scrollTop, offset, range) {
+    if (scrollTop < offset - range) {
+        return 0
+    } else if (scrollTop >= offset - range && scrollTop <= offset) {
+        return 1
+    } else if (scrollTop >= offset && scrollTop <= offset + range) {
+        return 2
+    } else {
+        return 3
+    }
+}
+
 function scrollEvent () {
-    var scrollTop = $(this).scrollTop();
+    scrollTop = $(this).scrollTop();
 
     parallax.each(function () {
         var $this = $(this);
@@ -127,6 +141,7 @@ function scrollEvent () {
         var scaleO = $this.data('parallaxScaleO');
         var scaleE = $this.data('parallaxScaleE');
         var range = $this.data('parallaxRange');
+        var mode = $this.data('parallaxMode');
 
         if (offset !== undefined) {
             if (offset === 'parent.top') {
@@ -138,6 +153,8 @@ function scrollEvent () {
             if (isParcent(offset)) {
                 offset = toPoint(offset) * vh;
             }
+        } else {
+            offset = 0;
         }
         if (x !== undefined && isParcent(x)) x = toPoint(x) * vw;
         if (y !== undefined && isParcent(y)) y = toPoint(y) * vh;
@@ -155,12 +172,28 @@ function scrollEvent () {
             range = vh;
         }
 
-        console.log(scrollTop);
-        console.log(offset);
-
-        var css = {}, translate, translateX, translateY, opacity, scale;
-        if (x !== undefined && offset !== undefined && scrollTop > offset - range && scrollTop <= offset + range) translateX = Math.abs(scrollTop - offset) * x / range + 'px';
-        if (y !== undefined && offset !== undefined && scrollTop > offset - range && scrollTop <= offset + range) translateY = Math.abs(scrollTop - offset) * y / range + 'px';
+        var css = {}, translate, translateX, translateY, opacity, scale, r = getRange(scrollTop, offset, range);
+        if (x !== undefined) {
+            if (mode === 'static' && (r === 0 || r === 1)) translateX = '0px';
+            if (mode === 'symmetry') {
+                if (r === 0) translateX = x + 'px';
+                if (r === 1) translateX = (offset - scrollTop) * x / range + 'px';
+            }
+            if (r === 2) translateX = (scrollTop - offset) * x / range + 'px';
+            if (mode !== undefined && r === 3) translateX = x + 'px';
+        }
+        if (y !== undefined) {
+            if (mode === 'symmetry') {
+                if (r === 0) translateY = y + offset + range - scrollTop + 'px';
+                if (r === 1) translateY = (offset - scrollTop) * y / range + 'px';
+            }
+            if (r === 2) translateY = (scrollTop - offset) * y / range + 'px';
+        }
+        if (mode === 'static' && (r === 0 || r === 1)) translateY = offset - scrollTop + 'px';
+        if (mode !== undefined && r === 3) {
+            if (y === undefined) y = 0;
+            translateY = y + offset + range - scrollTop + 'px';
+        }
 
         if (translateX && translateY) {
             translate =  'translate(' + translateX + ',' + translateY + ')';
@@ -170,8 +203,14 @@ function scrollEvent () {
             translate = 'translate(0,' + translateY + ')';
         }
 
-        if (scaleO !== undefined && scaleE !== undefined && range !== undefined && offset !== undefined) {
-            scale = Math.abs(scrollTop - offset) / range * (scaleE - scaleO) + scaleO;
+        if (scaleO !== undefined && scaleE !== undefined) {
+            if (mode === 'static' && (r === 0 || r === 1)) scale = scaleO;
+            if (mode === 'symmetry') {
+                if (r === 0) scale = scaleE;
+                if (r === 1) scale = (offset - scrollTop) / range * (scaleE - scaleO) + scaleO;
+            }
+            if (r === 2) scale = (scrollTop - offset) / range * (scaleE - scaleO) + scaleO;
+            if (mode !== undefined && r === 3) scale = scaleE;
             scale = 'scale(' + scale + ')';
         }
 
@@ -183,13 +222,19 @@ function scrollEvent () {
             css = {'-webkit-transform': scale, 'transform': scale};
         }
 
-        if (scrollTop > offset - range && scrollTop <= offset + range && opacityO !== undefined && opacityE !== undefined && range !== undefined && offset !== undefined) {
-            opacity = Math.abs(scrollTop - offset) / range * (opacityE - opacityO) + opacityO;
+        if (opacityO !== undefined && opacityE !== undefined) {
+            if (mode === 'symmetry') {
+                if (r === 0) opacity = opacityE;
+                if (r === 1) opacity = (offset - scrollTop) / range * (opacityE - opacityO) + opacityO;
+            } else if (r === 0 || r === 1) {
+                opacity = opacityO;
+            }
+            if (r === 2) opacity = (scrollTop - offset) / range * (opacityE - opacityO) + opacityO;
+            if (mode !== undefined && r === 3) opacity = opacityE;
             if (opacity > 1) opacity = 1;
             css['opacity'] = opacity;
         }
 
-        console.log(css);
         $this.css(css);
     });
     preScrollEvent(scrollTop);
