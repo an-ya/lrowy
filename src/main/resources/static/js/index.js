@@ -102,7 +102,7 @@ function scrollToMain (index) {
 }
 
 var parallax = $('.parallax');
-scrollEvent(0);
+scrollEvent();
 parallax.css('visibility', 'visible');
 
 function isParcent(result) {
@@ -198,7 +198,7 @@ function scrollEvent () {
         if (translateX && translateY) {
             translate =  'translate(' + translateX + ',' + translateY + ')';
         } else if (translateX) {
-            translate = 'translate(' + translateX + ')';
+            translate = 'translate(' + translateX + ',0)';
         } else if (translateY) {
             translate = 'translate(0,' + translateY + ')';
         }
@@ -246,3 +246,20 @@ $(window).resize(function () {
     vw = $(window).width();
     scrollEvent();
 });
+
+$('.main-back').on('mousewheel DOMMouseScroll', onMouseScroll);
+function onMouseScroll(e){
+    e.preventDefault();
+    if (isScrolling) return;
+    if (scrollTop >= $(document).height()) return;
+    var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
+    var delta = Math.max(-1, Math.min(1, wheel));
+    var index;
+    if (delta < 0) {
+        index = parseInt(scrollTop / vh) + 1;
+    } else {
+        index = parseInt(scrollTop / vh) - 1;
+        if (index < 0) index = 0;
+    }
+    scrollToMain(index);
+}

@@ -87,12 +87,18 @@
             opacity: 0;
         }
 
-        .main-back .hua {
+        .main .hua-wrapper {
             position: absolute;
-            width: 900px;
+            width: 100%;
+            height: 260px;
             bottom: 0;
             left: 0;
-            opacity: 0;
+            pointer-events: none;
+        }
+
+        .main .hua-wrapper .hua {
+            display: block;
+            height: 100%;
         }
 
         .main-back .mark-wrapper {
@@ -201,8 +207,7 @@
     <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%" data-parallax-mode="staticOut">
         <i title="月球" class="iconfont mark" onclick="console.log('ok')">&#xe611;</i>
     </div>
-    <i class="iconfont whale parallax" data-parallax-offset="70%" data-parallax-x="-5%" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-scale-e="1" data-parallax-scale-o="0.95" data-parallax-range="30%" data-parallax-mode="static" onclick="console.log('ok')">&#xe693;</i>
-    <img class="hua parallax" th:src="@{/images/hua.png}" alt="" data-parallax-offset="80%" data-parallax-x="40" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-range="20%" data-parallax-mode="static"/>
+    <i class="iconfont whale parallax" data-parallax-offset="70%" data-parallax-x="-5%" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-range="30%" data-parallax-mode="static" onclick="console.log('ok')">&#xe693;</i>
 </div>
 <div class="main">
     <div class="banner-content parallax" data-parallax-offset="top" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="height">
@@ -254,8 +259,13 @@
             <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);transition-delay: 500ms;"></div>
         </div>
     </div>
+    <div class="hua-wrapper">
+        <img class="hua parallax" th:src="@{/images/hua.png}" data-parallax-offset="0" data-parallax-x="40" data-parallax-opacity-e="0.3" data-parallax-opacity-o="1" data-parallax-range="80%" onclick="console.log('ok')" alt=""/>
+    </div>
 </div>
-<div class="main-second"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div></div>
+<div class="main-second">
+    <div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div>
+</div>
 <div class="main-third"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">次页</div></div>
 <script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
