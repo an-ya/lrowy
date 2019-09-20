@@ -93,12 +93,14 @@
             height: 260px;
             bottom: 0;
             left: 0;
+            overflow: hidden;
             pointer-events: none;
         }
 
         .main .hua-wrapper .hua {
             display: block;
             height: 100%;
+            margin-left: 20%;
         }
 
         .main-back .mark-wrapper {
@@ -141,7 +143,17 @@
         .category-page {
             display: inline-block;
             padding: 0 10px;
+            cursor: auto;
+        }
+
+        #category-page-prev, #category-page-next {
             cursor: pointer;
+        }
+
+        #category-page-prev.disabled, #category-page-next.disabled {
+            opacity: .35;
+            cursor: auto;
+            pointer-events: none;
         }
 
         .article-category {
@@ -153,14 +165,29 @@
         }
 
         .article-category-item {
-            display: inline-block;
+            position: relative;
             width: 18%;
             height: 260px;
-            background: no-repeat top center;
-            background-size: cover;
             opacity: 1;
             -webkit-transition: .3s;
             transition: .3s;
+            overflow: hidden;
+        }
+
+        .article-category-item-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: no-repeat top center;
+            background-size: cover;
+            visibility: hidden;
+        }
+
+        .article-category-item-wrapper.active {
+            visibility: visible;
+            z-index: 10;
         }
 
         .parallax {
@@ -247,27 +274,46 @@
 <!--    <div class="banner-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="banner-mask"></div></div>-->
     <div class="article-container">
         <div class="article-title google-front">
-            <span class="category-page elastic-show" style="animation-delay: 200ms;"><</span>
+            <span class="category-page elastic-show" style="animation-delay: 200ms;" onclick="prevCatePage()"><span id="category-page-prev"><</span></span>
             <span class="t fade-in" style="animation-delay: 100ms;">文章/page1</span>
-            <span class="category-page elastic-show" style="animation-delay: 300ms;">></span>
+            <span class="category-page elastic-show" style="animation-delay: 300ms;" onclick="nextCatePage()"><span id="category-page-next">></span></span>
         </div>
-        <div class="article-category fade-in">
-            <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);transition-delay: 100ms;" onclick="scrollToMain(1)"></div>
-            <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);transition-delay: 200ms;"></div>
-            <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);transition-delay: 300ms;"></div>
-            <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/4.jpg);transition-delay: 400ms;"></div>
-            <div class="article-category-item" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);transition-delay: 500ms;"></div>
+        <div class="article-category fade-in view-p" data-view-y="-50" data-view-opacity="0">
+            <div class="article-category-item" style="transition-delay: 100ms;">
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);" onclick="scrollToMain(1)"></div>
+                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);"></div>
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);"></div>
+            </div>
+            <div class="article-category-item" style="transition-delay: 200ms;">
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
+                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);"></div>
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);"></div>
+            </div>
+            <div class="article-category-item" style="transition-delay: 300ms;">
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
+                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);"></div>
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);"></div>
+            </div>
+            <div class="article-category-item" style="transition-delay: 400ms;">
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);" onclick="scrollToMain(1)"></div>
+                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/4.jpg);"></div>
+            </div>
+            <div class="article-category-item" style="transition-delay: 500ms;">
+                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
+                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);"></div>
+            </div>
         </div>
     </div>
     <div class="hua-wrapper">
-        <img class="hua parallax" th:src="@{/images/hua.png}" data-parallax-offset="0" data-parallax-x="40" data-parallax-opacity-e="0.3" data-parallax-opacity-o="1" data-parallax-range="80%" onclick="console.log('ok')" alt=""/>
+        <img class="hua parallax" th:src="@{/images/hua-min.png}" data-parallax-offset="0" data-parallax-x="40" data-parallax-opacity-e="0.3" data-parallax-opacity-o="1" data-parallax-range="80%" alt=""/>
     </div>
 </div>
 <div class="main-second">
     <div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div>
 </div>
 <div class="main-third"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">次页</div></div>
-<script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>
+<!--<script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>-->
+<script src="https://cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="/js/swiper.min.js"></script>
 <script src="/layui-v2.5.4/layui.js"></script>
