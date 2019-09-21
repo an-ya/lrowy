@@ -31,11 +31,6 @@
             background: transparent;
         }
 
-        .main-second {
-            height: 100%;
-            background: transparent;
-        }
-
         .main-third {
             height: 100%;
             background: transparent;
@@ -272,13 +267,19 @@
         <div class="swiper-button-next parallax" th:style="'background-image:url(' + @{/images/nextIco.png} + ');'" data-parallax-offset="parent.top" data-parallax-range="parent.height" data-parallax-x="-46"></div>
     </div>
 <!--    <div class="banner-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="banner-mask"></div></div>-->
+    <div class="hua-wrapper">
+        <img class="hua parallax" th:src="@{/images/hua-min.png}" data-parallax-offset="0" data-parallax-x="40" data-parallax-opacity-e="0.3" data-parallax-opacity-o="1" data-parallax-range="80%" alt=""/>
+    </div>
+</div>
+<div class="main main-second">
+    <div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div>
     <div class="article-container">
-        <div class="article-title google-front">
-            <span class="category-page elastic-show" style="animation-delay: 200ms;" onclick="prevCatePage()"><span id="category-page-prev"><</span></span>
-            <span class="t fade-in" style="animation-delay: 100ms;">文章/page1</span>
-            <span class="category-page elastic-show" style="animation-delay: 300ms;" onclick="nextCatePage()"><span id="category-page-next">></span></span>
+        <div class="article-title google-front view-p" data-view-Attr="children">
+            <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 200ms;" onclick="prevCatePage()"><span id="category-page-prev"><</span></span>
+            <span class="t fade-in" data-view-anim-in="fade-in" data-view-anim-out="fade-out" style="animation-delay: 100ms;">文章/page1</span>
+            <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 300ms;" onclick="nextCatePage()"><span id="category-page-next">></span></span>
         </div>
-        <div class="article-category fade-in view-p" data-view-y="-50" data-view-opacity="0">
+        <div class="article-category fade-in view-p" data-view-y="-50" data-view-opacity="0" data-view-mode="static">
             <div class="article-category-item" style="transition-delay: 100ms;">
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);" onclick="scrollToMain(1)"></div>
                 <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);"></div>
@@ -304,12 +305,6 @@
             </div>
         </div>
     </div>
-    <div class="hua-wrapper">
-        <img class="hua parallax" th:src="@{/images/hua-min.png}" data-parallax-offset="0" data-parallax-x="40" data-parallax-opacity-e="0.3" data-parallax-opacity-o="1" data-parallax-range="80%" alt=""/>
-    </div>
-</div>
-<div class="main-second">
-    <div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div>
 </div>
 <div class="main-third"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">次页</div></div>
 <!--<script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>-->
