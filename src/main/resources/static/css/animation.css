@@ -102,6 +102,19 @@
     animation-name: elasticHide;
 }
 
+.bl-show {
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    -webkit-animation-duration: .3s;
+    animation-duration: .3s;
+    -webkit-animation-fill-mode: backwards;
+    animation-fill-mode: backwards;
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    -webkit-animation-name: BLShow;
+    animation-name: BLShow;
+}
+
 @-webkit-keyframes fadeIn {
     0% {
         opacity: 0;
@@ -367,5 +380,20 @@
         -webkit-transform: translate3d(0, 5px, 0);
         transform: translate3d(0, 5px, 0);
         opacity: .6;
+    }
+}
+
+@keyframes BLShow {
+    0% {
+        opacity: 0;
+        transform-origin: left bottom;
+        -webkit-transform: scale(.6);
+        transform: scale(.6);
+    }
+    100% {
+        opacity: 1;
+        transform-origin: left bottom;
+        -webkit-transform: scale(1);
+        transform: scale(1);
     }
 }
