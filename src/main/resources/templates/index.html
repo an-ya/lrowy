@@ -45,31 +45,30 @@
             height: 100%;
         }
 
-        .main:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-repeat: no-repeat;
-            background-image: linear-gradient(0deg, hsla(0, 0%, 100%, 0) 60%, #fff), linear-gradient(70deg, #dbedff 32%, #ebfff0);
-            opacity: .3;
-            z-index: -1;
-        }
+        /*.main:after {*/
+        /*    content: '';*/
+        /*    position: absolute;*/
+        /*    top: 0;*/
+        /*    left: 0;*/
+        /*    width: 100%;*/
+        /*    height: 100%;*/
+        /*    background-repeat: no-repeat;*/
+        /*    background-image: linear-gradient(0deg, hsla(0, 0%, 100%, 0) 60%, #fff), linear-gradient(70deg, #dbedff 32%, #ebfff0);*/
+        /*    opacity: .3;*/
+        /*    z-index: -1;*/
+        /*}*/
 
-        .main-second:after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-repeat: no-repeat;
-            background-image: linear-gradient(0deg, hsla(0, 0%, 100%, 0) 60%, #fff), linear-gradient(70deg, #e1ffe9 32%, #e8d8ff);
-            opacity: .3;
-            z-index: -1;
-        }
+        /*.main-second:after {*/
+        /*    content: '';*/
+        /*    position: absolute;*/
+        /*    top: 100%;*/
+        /*    left: 0;*/
+        /*    width: 50%;*/
+        /*    height: 100%;*/
+        /*    background-color: #f2f3f7;*/
+        /*    opacity: .3;*/
+        /*    z-index: -1;*/
+        /*}*/
 
         .main-back .whale {
             display: block;
@@ -132,11 +131,15 @@
         }
 
         .article-title {
-            position: relative;
+            position: absolute;
+            top: 100%;
+            left: 50%;
             height: 60px;
             font-size: 1.2rem;
             text-align: center;
             line-height: 60px;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
         }
 
         .category-page {
@@ -195,12 +198,7 @@
 
         @media screen and (max-width: 900px) {
             .article-container {
-                justify-content: flex-start;
                 align-items: flex-start;
-            }
-
-            .article-title {
-                margin-left: 8%;
             }
 
             .article-category {
@@ -247,10 +245,10 @@
     </div>
 </div>
 <div class="main-back">
-    <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%" data-parallax-mode="staticOut">
-        <i title="月球" class="iconfont mark" onclick="console.log('ok')">&#xe611;</i>
-    </div>
-    <i class="iconfont whale parallax" data-parallax-offset="70%" data-parallax-x="-5%" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-range="30%" data-parallax-mode="static" onclick="console.log('ok')">&#xe693;</i>
+<!--    <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%" data-parallax-mode="staticOut">-->
+<!--        <i title="月球" class="iconfont mark" onclick="console.log('ok')">&#xe611;</i>-->
+<!--    </div>-->
+<!--    <i class="iconfont whale parallax" data-parallax-offset="70%" data-parallax-x="-5%" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-range="30%" data-parallax-mode="static" onclick="console.log('ok')">&#xe693;</i>-->
 </div>
 <div class="main">
     <div class="banner-content parallax" data-parallax-offset="top" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="height">
@@ -295,38 +293,48 @@
     </div>
 </div>
 <div class="main main-second">
+    <div class="article-title google-front view-p" data-view-Attr="children" data-view-delay="100" data-view-mode="static">
+        <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 200ms;" onclick="prevCatePage()"><span id="category-page-prev"><</span></span>
+        <span class="t fade-in" data-view-anim-in="fade-in" data-view-anim-out="fade-out" style="animation-delay: 100ms;">文章/page1</span>
+        <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 300ms;" onclick="nextCatePage()"><span id="category-page-next">></span></span>
+    </div>
     <div class="article-container">
-        <div class="article-title google-front view-p" data-view-Attr="children" data-view-delay="100" data-view-mode="static">
-            <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 200ms;" onclick="prevCatePage()"><span id="category-page-prev"><</span></span>
-            <span class="t fade-in" data-view-anim-in="fade-in" data-view-anim-out="fade-out" style="animation-delay: 100ms;">文章/page1</span>
-            <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 300ms;" onclick="nextCatePage()"><span id="category-page-next">></span></span>
-        </div>
         <div class="article-category fade-in view-p" data-view-y="-50" data-view-opacity="0" data-view-delay="100" data-view-mode="static">
-            <div class="article-category-item" style="transition-delay: 100ms;">
+            <div class="article-category-item bl-show" style="transition-delay: 100ms;animation-delay: 100ms;">
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);" onclick="scrollToMain(1)"></div>
                 <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);"></div>
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);"></div>
             </div>
-            <div class="article-category-item" style="transition-delay: 200ms;">
+            <div class="article-category-item bl-show" style="transition-delay: 200ms;animation-delay: 200ms;">
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
                 <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);"></div>
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);"></div>
             </div>
-            <div class="article-category-item" style="transition-delay: 300ms;">
+            <div class="article-category-item bl-show" style="transition-delay: 300ms;animation-delay: 300ms;">
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
                 <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);"></div>
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);"></div>
             </div>
-            <div class="article-category-item" style="transition-delay: 400ms;">
+            <div class="article-category-item bl-show" style="transition-delay: 400ms;animation-delay: 400ms;">
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);" onclick="scrollToMain(1)"></div>
                 <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/4.jpg);"></div>
             </div>
-            <div class="article-category-item" style="transition-delay: 500ms;">
+            <div class="article-category-item bl-show" style="transition-delay: 500ms;animation-delay: 500ms;">
                 <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
                 <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);"></div>
             </div>
         </div>
     </div>
+    <div class="bl-show" style="
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f2f3f7;
+            -webkit-animation-duration: .5s;
+            animation-duration: .5s;
+            z-index: -1;"></div>
 </div>
 <div class="main-third"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div></div>
 <!--<script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>-->
