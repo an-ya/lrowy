@@ -1,4 +1,9 @@
 var vh = $(window).height(), vw = $(window).width(), isScrolling = false, scrollTop = 0, articleCategory = $('.article-category'), articleCategoryItem = articleCategory.children(), articleCategoryItemNum = articleCategoryItem.length;
+var area = ['700px', '560px'];
+if (vw < 900) {
+    area[0] = 0.9 * vw + 'px';
+    area[1] = 0.8 * vh + 'px';
+}
 var page = 2, pageMin = 1, mode = 2, pageMax = Math.ceil($('.article-category-item-wrapper').length / 5), changingPage = false;
 var $parallax = $('.parallax'), parallax = [], $viewP = $('.view-p'), viewP = [];
 $parallax.css('visibility', 'visible');
@@ -10,6 +15,10 @@ $(document).scroll(scrollEvent);
 $(window).resize(function () {
     vh = $(window).height();
     vw = $(window).width();
+    if (vw < 900) {
+        area[0] = 0.9 * vw + 'px';
+        area[1] = 0.8 * vh + 'px';
+    }
     scrollEvent();
 });
 
@@ -440,11 +449,47 @@ $(document).ready(function () {
         }
     });
 
-    layui.use('layer', function () {
-        var layer = layui.layer;
+    layui.use(['layer', 'form'], function () {
+        var layer = layui.layer
+            ,form = layui.form;
+
+        var $form = $('.article-category-form'), type = 1;
 
         $('.test').click(function () {
+            layer.open({
+                type: 1,
+                area: area,
+                title: '文章分类',
+                scrollbar: false,
+                content: $form,
+                end: function () {
+                    document.querySelector(".article-category-form").reset();
+                }
+            });
+        });
 
+        form.on('submit', function (data) {
+            if (type === 1) {
+                $.ajax({
+                    url: '/articleCategory/add',
+                    type: 'post',
+                    data: data.field,
+                    success: function (data) {
+                        if (data.code === '000') {
+                            type = 2;
+                            $('#commitForm').text('修改');
+                            notice.success({title: '成功添加分类'});
+                            $form.find('[name=articleCategoryId]').val(data.result.articleCategoryId);
+                        } else {
+                            notice.fail({title: '发生错误', desc: data.msg});
+                        }
+                    }
+                });
+            } else {
+                console.log(data.field);
+            }
+
+            return false;
         });
     });
 });

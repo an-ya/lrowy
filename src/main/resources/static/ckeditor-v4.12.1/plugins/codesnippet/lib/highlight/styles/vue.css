@@ -1,0 +1,246 @@
+code,
+pre {
+    font-family: "Roboto Mono", Monaco, courier, monospace;
+    font-size: 0.85rem;
+    background-color: #f8f8f8;
+    -webkit-font-smoothing: initial;
+    -moz-osx-font-smoothing: initial;
+}
+code {
+    color: #d63200;
+    padding: 3px 5px;
+    margin: 0 2px;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+
+pre {
+    border-radius: 2px;
+    position: relative;
+}
+pre code {
+    overflow-x: auto;
+    color: #525252;
+    white-space: pre;
+    padding: 1.2em 1.4em;
+    font-size: 0.9rem;
+    line-height: 1.6rem;
+    display: block;
+}
+pre code .hljs-tag,
+pre code .hljs-tag pre code .hljs-title,
+pre code .hljs-change,
+pre code .hljs-winutils,
+pre code .hljs-flow,
+pre code .hljs-tex pre code .hljs-special {
+    color: #2973b7;
+}
+pre code .hljs-symbol,
+pre code .hljs-symbol pre code .hljs-string,
+pre code .hljs-value,
+pre code .hljs-regexp,
+pre code .hljs-string,
+pre code .hljs-subst,
+pre code .hljs-haskell pre code .hljs-type,
+pre code .hljs-preprocessor,
+pre code .hljs-ruby pre code .hljs-class pre code .hljs-parent,
+pre code .hljs-built_in,
+pre code .hljs-sql pre code .hljs-aggregate,
+pre code .hljs-django pre code .hljs-template_tag,
+pre code .hljs-django pre code .hljs-variable,
+pre code .hljs-smalltalk pre code .hljs-class,
+pre code .hljs-javadoc,
+pre code .hljs-django pre code .hljs-filter pre code .hljs-argument,
+pre code .hljs-smalltalk pre code .hljs-localvars,
+pre code .hljs-smalltalk pre code .hljs-array,
+pre code .hljs-attr_selector,
+pre code .hljs-pseudo,
+pre code .hljs-addition,
+pre code .hljs-stream,
+pre code .hljs-envvar,
+pre code .hljs-apache pre code .hljs-tag,
+pre code .hljs-apache pre code .hljs-cbracket,
+pre code .hljs-tex pre code .hljs-command,
+pre code .hljs-prompt {
+    color: #42b983;
+}
+pre code .hljs-function pre code .hljs-keyword,
+pre code .hljs-constant {
+    color: #0092db;
+}
+pre code .hljs-keyword,
+pre code .hljs-attribute {
+    color: #d63200;
+}
+pre code .hljs-number,
+pre code .hljs-literal {
+    color: #a32eff;
+}
+pre code .hljs-class pre code .hljs-title {
+    color: #fff;
+}
+pre code .hljs-title {
+    color: #a6e22e;
+}
+pre code .hljs-tag pre code .hljs-value,
+pre code .hljs-comment,
+pre code .hljs-java pre code .hljs-annotation,
+pre code .hljs-python pre code .hljs-decorator,
+pre code .hljs-template_comment,
+pre code .hljs-pi,
+pre code .hljs-doctype,
+pre code .hljs-deletion,
+pre code .hljs-shebang,
+pre code .hljs-apache pre code .hljs-sqbracket,
+pre code .hljs-tex pre code .hljs-formula {
+    color: #707070;
+}
+pre code .hljs-coffeescript pre code .hljs-javascript,
+pre code .hljs-javascript pre code .hljs-xml,
+pre code .hljs-tex pre code .hljs-formula,
+pre code .hljs-xml pre code .hljs-javascript,
+pre code .hljs-xml pre code .hljs-vbscript,
+pre code .hljs-xml pre code .hljs-css,
+pre code .hljs-xml pre code .hljs-cdata {
+    opacity: 0.5;
+}
+pre code.hljs.language-apache::before,
+pre code.hljs.language-bash::before,
+pre code.hljs.language-coffeescript::before,
+pre code.hljs.language-cpp::before,
+pre code.hljs.language-c::before,
+pre code.hljs.language-cs::before,
+pre code.hljs.language-css::before,
+pre code.hljs.language-dockerfile::before,
+pre code.hljs.language-diff::before,
+pre code.hljs.language-glsl::before,
+pre code.hljs.language-golang::before,
+pre code.hljs.language-html::before,
+pre code.hljs.language-http::before,
+pre code.hljs.language-ini::before,
+pre code.hljs.language-java::before,
+pre code.hljs.language-javascript::before,
+pre code.hljs.language-json::before,
+pre code.hljs.language-makefile::before,
+pre code.hljs.language-markdown::before,
+pre code.hljs.language-nginx::before,
+pre code.hljs.language-objectivec::before,
+pre code.hljs.language-perl::before,
+pre code.hljs.language-php::before,
+pre code.hljs.language-python::before,
+pre code.hljs.language-ruby::before,
+pre code.hljs.language-sql::before,
+pre code.hljs.language-shell::before,
+pre code.hljs.language-typescript::before,
+pre code.hljs.language-vbscript::before,
+pre code.hljs.language-verilog::before,
+pre code.hljs.language-xhtml::before,
+pre code.hljs.language-xml::before {
+    font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #ccc;
+    text-align: right;
+    font-size: 0.9em;
+    padding: 5px 10px 0;
+    line-height: 15px;
+    height: 15px;
+    font-weight: 600;
+}
+pre code.hljs.language-apache::before {
+    content: "Apache";
+}
+pre code.hljs.language-bash::before {
+    content: "Bash";
+}
+pre code.hljs.language-coffeescript::before {
+    content: "CoffeeScript";
+}
+pre code.hljs.language-cpp::before {
+    content: "C++";
+}
+pre code.hljs.language-c::before {
+    content: "C";
+}
+pre code.hljs.language-cs::before {
+    content: "C#";
+}
+pre code.hljs.language-css::before {
+    content: "CSS";
+}
+pre code.hljs.language-dockerfile::before {
+    content: "Dockerfile";
+}
+pre code.hljs.language-diff::before {
+    content: "Diff";
+}
+pre code.hljs.language-glsl::before {
+    content: 'GLSL';
+}
+pre code.hljs.language-golang::before {
+    content: "Golang";
+}
+pre code.hljs.language-html::before {
+    content: "HTML";
+}
+pre code.hljs.language-http::before {
+    content: "HTTP";
+}
+pre code.hljs.language-ini::before {
+    content: "INI";
+}
+pre code.hljs.language-java::before {
+    content: "Java";
+}
+pre code.hljs.language-javascript::before {
+    content: "JS";
+}
+pre code.hljs.language-json::before {
+    content: "JSON";
+}
+pre code.hljs.language-makefile::before {
+    content: "Makefile";
+}
+pre code.hljs.language-markdown::before {
+    content: "Markdown";
+}
+pre code.hljs.language-nginx::before {
+    content: "Nginx";
+}
+pre code.hljs.language-objectivec::before {
+    content: "Objective-C";
+}
+pre code.hljs.language-perl::before {
+    content: "Perl";
+}
+pre code.hljs.language-php::before {
+    content: "PHP";
+}
+pre code.hljs.language-python::before {
+    content: "Python";
+}
+pre code.hljs.language-ruby::before {
+    content: "Ruby";
+}
+pre code.hljs.language-sql::before {
+    content: "SQL";
+}
+pre code.hljs.language-shell::before {
+    content: "Shell";
+}
+pre code.hljs.language-typescript::before {
+    content: "TypeScript";
+}
+pre code.hljs.language-vbscript::before {
+    content: "VBScript";
+}
+pre code.hljs.language-verilog::before {
+    content: "Verilog";
+}
+pre code.hljs.language-xhtml::before {
+    content: "XHTML";
+}
+pre code.hljs.language-xml::before {
+    content: "XML";
+}

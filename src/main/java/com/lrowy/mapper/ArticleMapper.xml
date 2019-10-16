@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lrowy.dao.ArticleDao">
+    <insert id="saveArticleCategory" parameterType="com.lrowy.pojo.article.ArticleCategory">
+        <selectKey keyProperty="articleCategoryId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO article_category (name,imgUrl) VALUE (#{name},#{imgUrl});
+    </insert>
+
+    <select id="findArticleCategory" resultType="com.lrowy.pojo.article.ArticleCategory">
+        SELECT * FROM article_category;
+    </select>
+
+    <delete id="deleteArticleCategory" parameterType="java.lang.Integer">
+        DELETE FROM article_category WHERE articleCategoryId=#{articleCategoryId};
+    </delete>
+</mapper>
