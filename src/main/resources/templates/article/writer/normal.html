@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Anya-编辑工具</title>
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="layui-v2.5.4/css/layui.css">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
+    <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
+    <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
+    <script src="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+    <style>
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .header-item .side {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            border: none;
+            outline: none;
+            background: none;
+        }
+
+        .header-item .side i {
+            color: #5f656f;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .main {
+            box-sizing: border-box;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #editor {
+            width: 70%;
+            height: 100%;
+            visibility: hidden;
+        }
+
+        #cke_1_bottom {
+            height: 20px;
+        }
+
+        .browser-wrapper {
+            flex-grow: 1;
+            height: 100%;
+            min-width: 300px;
+        }
+
+        .browser-content {
+            height: calc(100% - 30px);
+        }
+
+        .browser-content iframe {
+            border: 0;
+        }
+
+        iframe.disable {
+            pointer-events: none;
+        }
+
+        .browser-toolbox {
+            box-sizing: content-box;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            height: 28px;
+            padding: 0 6px;
+            border-top: 1px solid #d1d1d1;
+            overflow: hidden;
+        }
+
+        .browser-toolbox input {
+            flex-grow: 1;
+            height: 20px;
+            width: 50px;
+            padding: 0 14px;
+            color: #8a8a8a;
+            border: 0;
+            outline: 0;
+            border-radius: 10px;
+            background: #f8f8f8;
+        }
+
+        .browser-toolbox input:focus {
+            color: #304455;
+        }
+
+        .browser-toolbox button {
+            height: 28px;
+            padding: 1px 6px;
+            line-height: 28px;
+            border: none;
+            outline: none;
+            background: none;
+        }
+
+        .browser-toolbox button:hover {
+            background: #e5e5e5;
+        }
+
+        .browser-toolbox button i {
+            font-size: 16px;
+        }
+
+        .browser-toolbox .dropdown-content {
+            flex-shrink: 0;
+        }
+
+        .browser-toolbox .dropdown-content button {
+            padding: 0 6px;
+        }
+
+        @media screen and (max-width: 900px) {
+            .browser-wrapper {
+                display: none!important;
+            }
+
+            #editor {
+                width: 100%;
+            }
+
+            .cke_resizer {
+                display: none;
+            }
+
+            .header-menu .browser {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <ul class="header-menu">
+        <li class="header-item dropdown-content">
+            <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>
+            <div class="dropdown hidden">
+                <ul class="dropdown-menu">
+                    <li id="login" class="dropdown-item" onclick="login()">登录</li>
+                    <li class="dropdown-item">注册</li>
+                </ul>
+            </div>
+        </li>
+        <li class="header-item browser">
+            <button title="内嵌预览器" class="side" onclick="openIframe()"><i class="iconfont">&#xe7e3;</i></button>
+        </li>
+    </ul>
+    <span class="logo google-front">Anya'编辑工具</span>
+</div>
+<div class="sidebar">
+    <div class="sidebar-inner">
+        <div class="test" style="text-align: center;">
+            测试书签
+        </div>
+        <form class="article-form layui-form layui-form-pane" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">编号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="bookmarkId" value="0" readonly class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">标题</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" value="" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">路径</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" value="" required lay-verify="required" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">访问数</label>
+                <div class="layui-input-block">
+                    <input type="text" name="visits" value="0" readonly class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">分类</label>
+                <div class="layui-input-block">
+                    <select name="bookmarkCategoryId" lay-verify="required">
+                        <option value=""></option>
+                        <option value="1">常用</option>
+                        <option value="2">收藏</option>
+                        <option value="3">技术</option>
+                        <option value="4">游戏</option>
+                        <option value="5">博客</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">创建日期</label>
+                <div class="layui-input-block">
+                    <input type="text" id="createDate" name="createDate" value="" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="main">
+    <textarea id="editor"></textarea>
+    <div class="browser-wrapper">
+        <div class="browser-content"><iframe id="browser" width="100%" height="100%" src="http://localhost:8080"></iframe></div>
+        <div class="browser-toolbox">
+            <input id="browser-url" value="http://" placeholder="" title="iframe无法追踪当前路径值，同时当前的所有浏览将不会被记录" onkeydown="keyup_submit()">
+            <button title="重置为默认绑定页" onclick="iframeGo('http://localhost:8080/bookmark')"><i class="iconfont" style="font-size:19px;">&#xe614;</i></button>
+            <button title="回退" onclick="iframeBack()"><i class="iconfont">&#xe644;</i></button>
+            <button title="前进" onclick="iframeForward()"><i class="iconfont" style="display:block;transform:rotate(180deg);">&#xe644;</i></button>
+            <button title="刷新" onclick="refreshIframe()"><i class="iconfont" style="font-size:19px;">&#xe62a;</i></button>
+            <div class="dropdown-content">
+                <button title="收藏夹" class="dropdown-trigger"><i class="iconfont">&#xe658;</i></button>
+                <div class="dropdown hidden">
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item" onclick="iframeGo('http://localhost:8080')">首页</li>
+                        <li class="dropdown-item" onclick="iframeGo('https://www.baidu.com')">百度</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
+<script src="/ckeditor-v4.12.1/ckeditor.js"></script>
+<script src="/layui-v2.5.4/layui.js"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/nvi-notice.js}"></script>
+<script th:src="@{/js/ivu-message.js}"></script>
+<script th:src="@{/js/writer.js}"></script>
+</body>
+</html>

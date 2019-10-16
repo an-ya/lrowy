@@ -266,6 +266,7 @@ layui.use(['layer', 'form', 'laydate'], function () {
             type: 1,
             area: area,
             title: '书签',
+            scrollbar: false,
             content: $('.bookmark-form'),
             end: function () {
                 document.querySelector(".bookmark-form").reset();

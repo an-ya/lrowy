@@ -3,6 +3,7 @@ package com.lrowy.pojo.article;
 public class ArticleCategory {
     private int articleCategoryId;
     private String name;
+    private String imgUrl;
 
     public ArticleCategory() {
 
@@ -22,5 +23,13 @@ public class ArticleCategory {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

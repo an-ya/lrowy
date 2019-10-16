@@ -5,24 +5,15 @@ var menuButtonDom = '<li class="header-item"><button class="menu-button"><span>M
 init();
 
 function init () {
-    $.ajax({
-        url: '/init',
-        type: 'post',
-        success: function (data) {
-            if (data.code === '000') {
-                if (data.result) {
-                    setMenuButton();
-                } else {
-                    setCLick();
-                }
-            }
-        }
-    });
+    setCLick();
+    setDropdown();
+    setMenuButton();
 }
 
 function setMenuButton () {
     var menuButton = document.querySelector('.menu-button');
     var sidebar = document.querySelector('.sidebar');
+    if (!menuButton) return;
     document.body.addEventListener('click', function (e) {
         var target = e.target;
         if (!(menuButton.contains(target) || menuButton === target) && !sidebar.contains(target)) {

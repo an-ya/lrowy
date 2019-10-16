@@ -7,9 +7,12 @@ public class Article {
     private int creatorId;
     private int articleCategoryId;
     private String title;
+    private String content;
     private String description;
-    private String templet;
+    private String template;
     private int visits;
+    private int delFlag;
+    private int hiddenFlag;
     private Date createDate;
 
     public Article() {
@@ -48,6 +51,14 @@ public class Article {
         this.title = title;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -56,12 +67,12 @@ public class Article {
         this.description = description;
     }
 
-    public Date getCreateDate() {
-        return createDate;
+    public String getTemplate() {
+        return template;
     }
 
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
+    public void setTemplate(String template) {
+        this.template = template;
     }
 
     public int getVisits() {
@@ -72,11 +83,27 @@ public class Article {
         this.visits = visits;
     }
 
-    public String getTemplet() {
-        return templet;
+    public int getDelFlag() {
+        return delFlag;
     }
 
-    public void setTemplet(String templet) {
-        this.templet = templet;
+    public void setDelFlag(int delFlag) {
+        this.delFlag = delFlag;
+    }
+
+    public int getHiddenFlag() {
+        return hiddenFlag;
+    }
+
+    public void setHiddenFlag(int hiddenFlag) {
+        this.hiddenFlag = hiddenFlag;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }
