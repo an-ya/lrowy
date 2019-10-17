@@ -83,7 +83,7 @@
     border: 1px dashed #fff;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 920px) {
     .banner-content {
         width: 100%;
         height: 200px;

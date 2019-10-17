@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class ArticleController extends BaseController {
     @Autowired
@@ -21,6 +23,8 @@ public class ArticleController extends BaseController {
     public String writer(Model model) {
         User user = isLogin() ? getUser() : null;
         model.addAttribute("user", user);
+        List<ArticleCategory> articleCategoryList = articleDao.findArticleCategory();
+        model.addAttribute("articleCategoryList", articleCategoryList);
 
         return "/article/writer/normal";
     }
