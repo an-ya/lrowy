@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lrowy.dao.ArticleDao">
+    <insert id="saveArticle" parameterType="com.lrowy.pojo.article.Article">
+        <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO article (creatorId,articleCategoryId,title,content,description,template,visits,delFlag,hiddenFlag,createDate,updateDate) VALUE (#{creatorId},#{articleCategoryId},#{title},#{content},#{description},#{template},#{visits},#{delFlag},#{hiddenFlag},#{createDate},#{updateDate});
+    </insert>
+
+    <select id="findArticle" resultType="com.lrowy.pojo.article.Article">
+        SELECT * FROM article WHERE articleId=#{articleId};
+    </select>
+
+    <update id="updateArticle" parameterType="com.lrowy.pojo.article.Article">
+        UPDATE article SET creatorId=#{creatorId},articleCategoryId=#{articleCategoryId},title=#{title},content=#{content},description=#{description},template=#{template},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},createDate=#{createDate},updateDate=#{updateDate} where articleId=#{articleId};
+    </update>
+
+    <delete id="deleteArticle" parameterType="java.lang.Integer">
+        DELETE FROM article WHERE articleId=#{articleId};
+    </delete>
+
     <insert id="saveArticleCategory" parameterType="com.lrowy.pojo.article.ArticleCategory">
         <selectKey keyProperty="articleCategoryId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
@@ -8,7 +27,7 @@
         INSERT INTO article_category (name,imgUrl) VALUE (#{name},#{imgUrl});
     </insert>
 
-    <select id="findArticleCategory" resultType="com.lrowy.pojo.article.ArticleCategory">
+    <select id="findAllArticleCategory" resultType="com.lrowy.pojo.article.ArticleCategory">
         SELECT * FROM article_category;
     </select>
 

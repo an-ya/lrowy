@@ -34,7 +34,7 @@ CREATE TABLE bookmark_favicon (
 CREATE TABLE article (
   articleId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   creatorId int(10) NOT NULL,
-  articleCategoryId int(10) NOT NULL,
+  articleCategoryId int(10),
   title varchar(128),
   content text,
   description varchar(128),
@@ -42,7 +42,8 @@ CREATE TABLE article (
   visits int(10) NOT NULL,
   delFlag tinyint(1) NOT NULL,
   hiddenFlag tinyint(1) NOT NULL,
-  createDate datetime NOT NULL
+  createDate datetime NOT NULL,
+  updateDate datetime NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 CREATE TABLE article_category (
   articleCategoryId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,

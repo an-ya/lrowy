@@ -167,9 +167,6 @@
 </div>
 <div class="sidebar">
     <div class="sidebar-inner">
-        <div class="test" style="text-align: center;">
-            测试书签
-        </div>
         <form class="article-form layui-form layui-form-pane" action="">
             <div class="layui-form-item">
                 <label class="layui-form-label">编号</label>
@@ -230,10 +227,14 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">更新日期</label>
                 <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="form">立即提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    <input type="text" id="updateDate" name="updateDate" value="" class="layui-input"/>
                 </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn" id="article-form-btn" lay-submit lay-filter="form"></button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </form>
     </div>
