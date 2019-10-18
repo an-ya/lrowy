@@ -14,9 +14,17 @@ public class Article {
     private int delFlag;
     private int hiddenFlag;
     private Date createDate;
+    private Date updateDate;
 
     public Article() {
-
+        Date now = new Date();
+        this.title = "";
+        this.content = "";
+        this.description = "";
+        this.template = "";
+        this.hiddenFlag = 1;
+        this.createDate = now;
+        this.updateDate = now;
     }
 
     public int getArticleId() {
@@ -105,5 +113,13 @@ public class Article {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }

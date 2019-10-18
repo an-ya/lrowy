@@ -228,6 +228,7 @@ body {
     bottom: 0;
     height: 100vh;
     box-shadow: 0 0 2px rgba(0,0,0,0.25);
+    background: #fff;
     -webkit-transition: all 0.4s cubic-bezier(0.4, 0, 0, 1);
     transition: all 0.4s cubic-bezier(0.4, 0, 0, 1);
     -webkit-transform: translate(-110%, 0);
@@ -246,7 +247,7 @@ body {
 
 .sidebar-inner {
     width: 14rem;
-    padding: 50px 10px 10px 20px;
+    padding: 50px 10px 20px 10px;
 }
 
 .main {

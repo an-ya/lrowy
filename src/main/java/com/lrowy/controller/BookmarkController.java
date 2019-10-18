@@ -7,16 +7,12 @@ import com.lrowy.pojo.bookmark.BookmarkResult;
 import com.lrowy.pojo.common.enums.SystemConstant;
 import com.lrowy.pojo.common.response.BaseResponse;
 import com.lrowy.service.BookmarkService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Controller
 public class BookmarkController extends BaseController {
@@ -24,11 +20,6 @@ public class BookmarkController extends BaseController {
     private BookmarkService bookmarkService;
     @Autowired
     private BookmarkDao bookmarkDao;
-
-    @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
-    }
 
     @RequestMapping("/bookmark")
     public String index(Model model) {
