@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -20,6 +21,20 @@ import java.util.List;
 public class ArticleController extends BaseController {
     @Autowired
     private ArticleDao articleDao;
+
+    @RequestMapping("/article/{id}")
+    public String writer(Model model, @PathVariable(name="id") int id) {
+        User user = isLogin() ? getUser() : null;
+        model.addAttribute("user", user);
+        Article article = articleDao.findArticle(id);
+        if (article == null) {
+            model.addAttribute("msg", "未找到编号为" + id + "的文章");
+            return "/error";
+        } else {
+            model.addAttribute("article", article);
+            return "/article/templates/normal";
+        }
+    }
 
     @RequestMapping("/writer")
     public String writer(Model model) {
