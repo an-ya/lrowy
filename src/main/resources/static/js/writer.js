@@ -12,7 +12,7 @@ if (hash === '') {
 }
 
 function init(id) {
-    var loading = message.loading({loadingText: '保存中 . . .'});
+    var loading = message.loading({loadingText: '加载中 . . .'});
     $.ajax({
         url: '/article/init',
         type: 'post',
@@ -24,8 +24,9 @@ function init(id) {
             if (data.code === '000') {
                 type = 2;
                 articleFormBtn.text('修改文章');
-                setForm($('.article-form'), data.result, '');
                 editor.setData(data.result.content);
+                setForm($('.article-form'), data.result, '');
+                iframeGo('/article/' + data.result.articleId);
             } else {
                 type = 1;
                 articleFormBtn.text('新增文章');
@@ -152,7 +153,7 @@ function saveArticle (editor, success) {
 function updateArticle (params, success) {
     var loading = message.loading({loadingText: '保存中 . . .'});
     $.ajax({
-        url: '/article/add',
+        url: '/article/update',
         type: 'post',
         data: params,
         success: function (data) {
@@ -194,7 +195,7 @@ editor.addCommand('saveContent', {
         if (type === 1) {
             saveArticle(edt);
         } else if (type === 2) {
-            updateArticle({content: edt.getDate()});
+            updateArticle({content: edt.getData()});
         }
     }
 });
