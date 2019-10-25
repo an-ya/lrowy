@@ -72,6 +72,10 @@ body {
     z-index: 1000;
 }
 
+.header-space {
+    height: 60px;
+}
+
 .header-menu {
     position: relative;
     display: flex;
@@ -260,6 +264,10 @@ body {
     }
 
     .header {
+        height: 50px;
+    }
+
+    .header-space {
         height: 50px;
     }
 
