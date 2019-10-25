@@ -195,7 +195,7 @@ editor.addCommand('saveContent', {
         if (type === 1) {
             saveArticle(edt);
         } else if (type === 2) {
-            updateArticle({content: edt.getData()});
+            updateArticle({articleId: articleId, content: edt.getData()});
         }
     }
 });
