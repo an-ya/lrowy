@@ -11,10 +11,6 @@
     <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=20191020">
     <script src="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <style>
-        h1 {
-            position: relative;
-        }
-
         ul {
             margin: 0;
             padding: 0;
@@ -24,15 +20,61 @@
             list-style: none;
         }
 
+        .header {
+            background: #fafafa;
+            box-shadow: none;
+        }
+
+        .sidebar-inner {
+            padding: 50px 0 20px 0;
+        }
+
+        .directory {
+            border-left: 1px solid #eee;
+        }
+
+        .directory .dir-head {
+            padding: 8px 15px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .directory .dir-body {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .directory .dir-body .cursor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            border-left: 2px solid #3867d6;
+            background: rgba(56, 103, 214, .12);
+            -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
         .directory ul {
             line-height: 26px;
         }
 
         .directory li {
             position: relative;
+            padding: 0 15px;
+        }
+
+        /*.directory li.active {*/
+        /*    background: rgba(56, 103, 214, .12);*/
+        /*}*/
+
+        .directory li.active a {
+            color: #3867d6;
         }
 
         .directory a {
+            position: relative;
             display: block;
             color: #304455;
             line-height: 26px;
@@ -40,11 +82,7 @@
         }
 
         .directory a:hover {
-            color: rgba(56, 103, 214, 1);
-        }
-
-        .directory a.active {
-            background: rgba(56, 103, 214, .12);
+            color: #3867d6;
         }
 
         .directory.none {
@@ -52,17 +90,20 @@
         }
 
         .level1 {margin-left: 15px;}
-        .level1:after {position: absolute;content: '#';top: 0;left: -15px;}
+        .level1 a:after {position: absolute;content: '#';top: 0;left: -15px;}
         .level2 {margin-left: 30px;}
-        .level2:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;border-radius: 50%;background: #304455;}
+        .level2 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;border-radius: 50%;background: #304455;}
         .level3 {margin-left: 45px;}
-        .level3:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
+        .level3 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
         .level4 {margin-left: 45px;}
-        .level4:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
+        .level4 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
         .level5 {margin-left: 60px;}
-        .level5:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
+        .level5 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
         .level6 {margin-left: 75px;}
-        .level6:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
+        .level6 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
+        .active .item a:after{background: #3867d6;}
+        .level1 a:hover:after{color: #304455;}
+        .active .level1 a:after{background: transparent;color: #3867d6;}
 
         .main {
             width: 946px;
@@ -85,6 +126,7 @@
         }
 
         .right-side {
+            display: block;
             width: 280px;
             float: right;
         }
@@ -158,8 +200,7 @@
 <div class="sidebar">
     <div class="sidebar-inner">
         <div class="right-side-copy">
-            <div>Article-2</div>
-            <div class="directory none"><h3 style="margin-top: 0;">目录</h3></div>
+            <div class="directory none"><div class="dir-head">目录</div><div class="dir-body"><div class="cursor"></div></div></div>
         </div>
     </div>
 </div>
@@ -168,8 +209,7 @@
         <div class="article" id="article" th:utext="${article.content}"></div>
     </div>
     <div class="right-side">
-        <div>Article-2</div>
-        <div class="directory none sticky" data-sticky-top="24" data-width="280"><h3 style="margin-top: 0;">目录</h3></div>
+        <div class="directory none sticky" data-sticky-top="24" data-width="280"><div class="dir-head">目录</div><div class="dir-body"><div class="cursor"></div></div></div>
     </div>
 </div>
 <script>hljs.initHighlightingOnLoad();</script>
@@ -178,35 +218,44 @@
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
 <script>
-    var $directory = $('.directory'),dirString = '', num = 0;
-    $("#article").children().each(function () {
-        var $this = $(this);
-        var tagName = $this[0].tagName;
+    var page = $('html, body'), scrollTop, isScrolling = false;
+    var bash = decodeURIComponent(window.location.hash);
+    var $sticky = $('.sticky'), stickyInitFlag = false;
+    var directoryIndex, showType;
 
-        if (tagName.substr(0,1) === 'H') {
-            var contentH = $this.text().replace(/\s*/g, '');
-            contentH = contentH.replace(/\./g, '-');
-            var level = tagName.substr(1,1);
-            var hID = num + '-' + contentH;
-            $this.attr('id', hID);
-            hID = '##' + hID;
+    function setDirectory () {
+        var dirString = '', num = 0, minLevel = 7;
+        $("#article").children().each(function () {
+            var $this = $(this);
+            var tagName = $this[0].tagName;
 
-            dirString += '<li class="level' + level + '"><a href="' + hID + '">' + contentH + '</a></li>';
-            num += 1;
+            if (tagName.substr(0,1) === 'H') {
+                var contentH = $this.text().replace(/\s*/g, '');
+                contentH = contentH.replace(/\./g, '-');
+                var level = tagName.substr(1,1);
+                var hID = num + '-' + contentH;
+                $this.attr('id', hID);
+                hID = '##' + hID;
+
+                dirString += '<li><div class="item level' + level + '"><a href="' + hID + '">' + contentH + '</a></div></li>';
+                num += 1;
+                if (level < minLevel) minLevel = level;
+            }
+        });
+        dirString = '<ul>' + dirString + '</ul>';
+        if (num > 0) {
+            $('.directory .dir-body').append(dirString);
+            $('.directory ul').css('margin-left', -(minLevel - 1) * 15 + 'px');
+            $('.directory').removeClass('none');
+            $('.directory .item').mdRipple();
+            setAnchor();
+            initCursor(bash);
         }
-    });
-    dirString = '<ul>' + dirString + '</ul>';
-    if (num > 0) {
-        $directory.append(dirString);
-        $directory.removeClass('none');
-        $('.directory a').mdRipple();
     }
 
-    var page = $('html, body');
-
     function pageTo (href) {
-        var target;
-        var pattern = /##.+/;
+        isScrolling = true;
+        var target, pattern = /##.+/;
         if (href === '#') {
             target = 0;
         } else if (pattern.test(href)) {
@@ -219,35 +268,62 @@
             return;
         }
         var limit = $(document).height() - $(window).height();
-        if (target > limit) {
-            target = limit;
-        }
+        if (target > limit) target = limit;
         page.on('scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove', function () {
             page.stop();
+            requestAnimationFrame(function () {isScrolling = false;});
         });
         page.animate({scrollTop: target}, 600, function () {
+            requestAnimationFrame(function () {isScrolling = false;});
             page.off('scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove');
         });
     }
 
-    $('a[href*="#"]').mousedown(function () {
-        $('.directory a').removeClass('active');
-        $(this).addClass('active');
-        return false;
-    });
+    function setAnchor () {
+        $('a[href*="#"]').mousedown(function () {
+            if (isScrolling) return;
+            var $this = $(this);
+            var href = $this.attr('href'), index = $this.parents('li').prevAll().length;
+            $('.directory .dir-body').each(function () {setCursor(index, $(this));});
+            $this.on('mouseup mouseleave', function () {
+                pageTo(href);
+                window.location.hash = href;
+                $this.off('mouseup mouseleave');
+            });
+        });
+    }
 
-    $('a[href*="#"]').click(function () {
-        var href = $(this).attr('href');
-        window.location.hash = href;
-        pageTo(href);
-        return false;
-    });
+    function setCursor (index, dir) {
+        var top = 0, li = dir.find('ul').children().eq(index);
+        li.prevAll().each(function () {top += $(this).height();});
+        dir.find('.cursor').css({'top': top, 'height': li.height()});
+        dir.find('li').removeClass('active');
+        li.addClass('active');
+        directoryIndex = index;
+    }
 
-    var $sticky = $('.sticky'), stickyInitFlag = false, scrollTop;
+    function initCursor (href) {
+        $('a[href*="#"]').each(function () {
+            var $this = $(this), ref = $this.attr('href');
+            if (ref === href) {
+                var index = $this.parents('li').prevAll().length;
+                $('.directory .dir-body').each(function () {setCursor(index, $(this));});
+            }
+        });
+    }
 
-    function stickyInit() {
+    function setChange () {
+        var vw = $(window).width();
+        if (vw > 960) {
+            if (showType === 0 && directoryIndex !== undefined) setCursor(directoryIndex, $('.right-side .dir-body'));
+            showType = 1;
+        } else {
+            if (showType === 1 && directoryIndex !== undefined) setTimeout(function () {setCursor(directoryIndex, $('.right-side-copy .dir-body'));}, 300);
+            showType = 0;
+        }
+
         if (!stickyInitFlag) {
-            if ($(window).width() > 960) {
+            if (vw > 960) {
                 $sticky.data('offsetTop', $sticky.offset().top);
                 scrollEvent();
                 stickyInitFlag = true;
@@ -256,7 +332,6 @@
             }
         }
     }
-    stickyInit();
 
     function scrollEvent () {
         scrollTop = $(this).scrollTop();
@@ -268,12 +343,18 @@
             } else {
                 $this.css({'position': '', 'top': '', 'width': ''});
             }
-        })
+        });
+        if (isScrolling) return;
+        $('.article :header').each(function () {
+           if (scrollTop + 60 > $(this).offset().top) {
+              initCursor('##' + $(this).attr('id'));
+           }
+        });
     }
 
-    $(window).resize(stickyInit);
+    $(window).resize(setChange);
     $(document).scroll(scrollEvent);
-    $(document).ready(function () {pageTo(decodeURIComponent(window.location.hash));});
+    $(document).ready(function () {setDirectory();setChange();pageTo(bash);});
 </script>
 </body>
 </html>
