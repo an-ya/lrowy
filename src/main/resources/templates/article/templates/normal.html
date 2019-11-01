@@ -25,11 +25,17 @@
             box-shadow: none;
         }
 
+        .main {
+            display: flex;
+            justify-content: space-between;
+        }
+
         .sidebar-inner {
             padding: 50px 0 20px 0;
         }
 
         .directory {
+            display: block;
             border-left: 1px solid #eee;
         }
 
@@ -50,8 +56,8 @@
             left: 0;
             width: 100%;
             height: 0;
-            border-left: 2px solid #3867d6;
-            background: rgba(56, 103, 214, .12);
+            border-left: 2px solid #2979ff;
+            background: rgba(41, 121, 255, .12);
             -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
             transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
@@ -64,10 +70,6 @@
             position: relative;
             padding: 0 15px;
         }
-
-        /*.directory li.active {*/
-        /*    background: rgba(56, 103, 214, .12);*/
-        /*}*/
 
         .directory li.active a {
             color: #3867d6;
@@ -82,7 +84,7 @@
         }
 
         .directory a:hover {
-            color: #3867d6;
+            color: #2979ff;
         }
 
         .directory.none {
@@ -101,9 +103,9 @@
         .level5 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
         .level6 {margin-left: 75px;}
         .level6 a:after {position: absolute;content: '';top: 11px;left: -15px;width: 4px;height: 4px;background: #304455;}
-        .active .item a:after{background: #3867d6;}
+        .active .item a:after{background: #2979ff;}
         .level1 a:hover:after{color: #304455;}
-        .active .level1 a:after{background: transparent;color: #3867d6;}
+        .active .level1 a:after{background: transparent;color: #2979ff;}
 
         .main {
             width: 946px;
@@ -121,18 +123,22 @@
 
         .left-side {
             width: 656px;
-            float: left;
             padding: 0 24px;
         }
 
         .right-side {
-            display: block;
             width: 280px;
-            float: right;
+            margin-left: 10px;
+        }
+
+        .right-side .directory {
+            position: sticky;
+            top: 84px;
         }
 
         .right-side-copy {
-            display: none;
+            height: 0;
+            overflow: hidden;
         }
 
         .md-ripple-container {
@@ -153,13 +159,42 @@
             transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
+        .article {
+            padding: 1px 0;
+        }
+
+        .about {
+            position: relative;
+            padding: 8px 15px;
+        }
+
+        .about i {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            color: #fafafa;
+            font-size: 60px;
+            -webkit-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%);
+            z-index: -1;
+        }
+
+        .about .info .name {
+            margin-bottom: 6px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
         @media screen and (max-width: 960px) {
+            .header {
+                height: 50px;
+            }
+
             .main {
                 width: 100%;
             }
 
             .left-side {
-                float: none;
                 margin: 0 auto;
             }
 
@@ -168,7 +203,7 @@
             }
 
             .right-side-copy {
-                display: block;
+                height: auto;
             }
         }
 
@@ -200,6 +235,14 @@
 <div class="sidebar">
     <div class="sidebar-inner">
         <div class="right-side-copy">
+            <img style="width: 44px;height: 44px;border-radius: 50%;" src="https://www.lrowy.com//img/user/default.png"/>
+            <div class="about">
+                <i class="iconfont">&#xe636;</i>
+                <div class="info">
+                    <div class="name">黯伢</div>
+                    <div class="desc">程序员</div>
+                </div>
+            </div>
             <div class="directory none"><div class="dir-head">目录</div><div class="dir-body"><div class="cursor"></div></div></div>
         </div>
     </div>
@@ -209,38 +252,46 @@
         <div class="article" id="article" th:utext="${article.content}"></div>
     </div>
     <div class="right-side">
-        <div class="directory none sticky" data-sticky-top="24" data-width="280"><div class="dir-head">目录</div><div class="dir-body"><div class="cursor"></div></div></div>
+        <img style="width: 44px;height: 44px;border-radius: 50%;" src="https://www.lrowy.com//img/user/default.png"/>
+        <div class="about">
+            <i class="iconfont">&#xe636;</i>
+            <div class="info">
+                <div class="name">黯伢</div>
+                <div class="desc">程序员</div>
+            </div>
+        </div>
+        <div class="directory none sticky" data-sticky-top="24" data-width="280">
+            <div class="dir-head">目录</div>
+            <div class="dir-body"><div class="cursor"></div></div>
+        </div>
     </div>
 </div>
 <script>hljs.initHighlightingOnLoad();</script>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
+<script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
 <script>
-    var page = $('html, body'), scrollTop, isScrolling = false;
+    var page = $('html, body'), scrollTop, isScrolling = false, scrollCount = 0;
     var bash = decodeURIComponent(window.location.hash);
-    var $sticky = $('.sticky'), stickyInitFlag = false;
-    var directoryIndex, showType;
+    var dirIndex = -1, showType, currentDir;
+    var $header = $('.header');
 
     function setDirectory () {
         var dirString = '', num = 0, minLevel = 7;
-        $("#article").children().each(function () {
+        $('.article :header').each(function () {
             var $this = $(this);
-            var tagName = $this[0].tagName;
+            var contentH = $this.text().replace(/\s*/g, '');
+            contentH = contentH.replace(/\./g, '-');
+            var level = $this[0].tagName.substr(1,1);
+            var hID = num + '-' + contentH;
+            $this.attr('id', hID);
+            hID = '##' + hID;
 
-            if (tagName.substr(0,1) === 'H') {
-                var contentH = $this.text().replace(/\s*/g, '');
-                contentH = contentH.replace(/\./g, '-');
-                var level = tagName.substr(1,1);
-                var hID = num + '-' + contentH;
-                $this.attr('id', hID);
-                hID = '##' + hID;
-
-                dirString += '<li><div class="item level' + level + '"><a href="' + hID + '">' + contentH + '</a></div></li>';
-                num += 1;
-                if (level < minLevel) minLevel = level;
-            }
+            dirString += '<li><div class="item level' + level + '"><a href="' + hID + '">' + contentH + '</a></div></li>';
+            num += 1;
+            if (level < minLevel) minLevel = level;
         });
         dirString = '<ul>' + dirString + '</ul>';
         if (num > 0) {
@@ -254,7 +305,6 @@
     }
 
     function pageTo (href) {
-        isScrolling = true;
         var target, pattern = /##.+/;
         if (href === '#') {
             target = 0;
@@ -264,42 +314,41 @@
             var ele = $(id);
             if (ele.length === 0) return;
             target = ele.offset().top - 60;
+            var limit = Math.round($(document).height() - $(window).height());
+            if (target > limit) target = limit;
         } else {
             return;
         }
-        var limit = $(document).height() - $(window).height();
-        if (target > limit) target = limit;
-        page.on('scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove', function () {
-            page.stop();
-            requestAnimationFrame(function () {isScrolling = false;});
-        });
-        page.animate({scrollTop: target}, 600, function () {
-            requestAnimationFrame(function () {isScrolling = false;});
-            page.off('scroll mousedown wheel DOMMouseScroll mousewheel keyup touchmove');
-        });
+        isScrolling = true;
+        scrollCount++;
+        page.stop().animate({scrollTop: target}, 600, function () {isScrolling = false;});
     }
 
     function setAnchor () {
-        $('a[href*="#"]').mousedown(function () {
-            if (isScrolling) return;
+        $('a[href*="#"]').on('mousedown touchstart', function () {
             var $this = $(this);
             var href = $this.attr('href'), index = $this.parents('li').prevAll().length;
-            $('.directory .dir-body').each(function () {setCursor(index, $(this));});
-            $this.on('mouseup mouseleave', function () {
+            setCursor(index, currentDir);
+            $this.on('mouseup mouseleave touchend', function () {
                 pageTo(href);
                 window.location.hash = href;
-                $this.off('mouseup mouseleave');
+                $this.off('mouseup mouseleave touchend');
             });
         });
     }
 
     function setCursor (index, dir) {
         var top = 0, li = dir.find('ul').children().eq(index);
-        li.prevAll().each(function () {top += $(this).height();});
-        dir.find('.cursor').css({'top': top, 'height': li.height()});
-        dir.find('li').removeClass('active');
-        li.addClass('active');
-        directoryIndex = index;
+        if (index < 0) {
+            dir.find('.cursor').css({'top': 0, 'height': 0, 'border': 'none'});
+            dir.find('li').removeClass('active');
+        } else {
+            li.prevAll().each(function () {top += $(this).height();});
+            dir.find('.cursor').css({'top': top, 'height': li.height(), 'border': ''});
+            dir.find('li').removeClass('active');
+            li.addClass('active');
+        }
+        dirIndex = index;
     }
 
     function initCursor (href) {
@@ -307,54 +356,63 @@
             var $this = $(this), ref = $this.attr('href');
             if (ref === href) {
                 var index = $this.parents('li').prevAll().length;
-                $('.directory .dir-body').each(function () {setCursor(index, $(this));});
+                setCursor(index, currentDir);
             }
         });
     }
 
-    function setChange () {
-        var vw = $(window).width();
-        if (vw > 960) {
-            if (showType === 0 && directoryIndex !== undefined) setCursor(directoryIndex, $('.right-side .dir-body'));
+    // 常规判断方法
+    function setResize () {
+        var h = $header.height();
+        if (h === 60) {
+            currentDir = $('.right-side .dir-body');
+            if (showType === 0) setCursor(dirIndex, currentDir);
             showType = 1;
         } else {
-            if (showType === 1 && directoryIndex !== undefined) setTimeout(function () {setCursor(directoryIndex, $('.right-side-copy .dir-body'));}, 300);
+            currentDir = $('.right-side-copy .dir-body');
+            if (showType === 1) setCursor(dirIndex, currentDir);
             showType = 0;
         }
+    }
 
-        if (!stickyInitFlag) {
-            if (vw > 960) {
-                $sticky.data('offsetTop', $sticky.offset().top);
-                scrollEvent();
-                stickyInitFlag = true;
+    // 设置监听器判断方法
+    function setResizeObserver() {
+        var observer = new ResizeObserver(function (entries) {
+            if (entries[0].contentRect.height > 0) {
+                currentDir = $('.right-side .dir-body');
+                setCursor(dirIndex, currentDir);
             } else {
-                $sticky.data('offsetTop', 10000);
+                currentDir = $('.right-side-copy .dir-body');
+                setCursor(dirIndex, currentDir);
             }
-        }
+        });
+        observer.observe($('.right-side .dir-body')[0]);
     }
 
     function scrollEvent () {
         scrollTop = $(this).scrollTop();
-        $sticky.each(function () {
-            var $this = $(this);
-            var top = $this.data('stickyTop');
-            if (scrollTop + 60 + top > $this.data('offsetTop')) {
-                $this.css({'position': 'fixed', 'top': 60 + top, 'width': $sticky.data('width')});
-            } else {
-                $this.css({'position': '', 'top': '', 'width': ''});
-            }
-        });
         if (isScrolling) return;
+        if (scrollCount > 0) {scrollCount--;return;}
+
+        var target = false;
         $('.article :header').each(function () {
-           if (scrollTop + 60 > $(this).offset().top) {
-              initCursor('##' + $(this).attr('id'));
+           if (scrollTop + 61 >= $(this).offset().top) {
+               initCursor('##' + $(this).attr('id'));
+               target = true;
            }
         });
+        if (!target) {setCursor(-1, currentDir);}
     }
 
-    $(window).resize(setChange);
-    $(document).scroll(scrollEvent);
-    $(document).ready(function () {setDirectory();setChange();pageTo(bash);});
+
+    $(window).resize(setResize);
+    // lodash throttle常用于防止事件在短时间内触发极多次，如ios上的滚轮事件，文本输入框change事件。
+    $(window).scroll(_.throttle(scrollEvent, 100));
+    $(document).ready(function () {
+        setResize();
+        setDirectory();
+        pageTo(bash);
+    });
 </script>
 </body>
 </html>

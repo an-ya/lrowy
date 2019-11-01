@@ -34,7 +34,7 @@
             // Individual element actions
             this.each(function(){
                 var elem = $(this);
-                elem.on(_namespaceEvents('mousedown'), _mouseDown);
+                elem.on(_namespaceEvents('mousedown touchstart'), _mouseDown);
                 elem.on(_namespaceEvents('focus'), _drawFocus);
                 elem.on(_namespaceEvents('blur'), _clearContainer);
             });
@@ -129,10 +129,10 @@
                     'transform': 'translate(' + coords.x + 'px,' + coords.y + 'px) translate(-50%,-50%) scale(' + scale + ')'
                 });
 
-                elem.bind(_namespaceEvents('mouseup mouseleave'), function(e){
+                elem.bind(_namespaceEvents('mouseup mouseleave touchend'), function(e){
                     mouseDown = false;
                     _hideRipple(ripple);
-                    $(this).unbind(_namespaceEvents('mouseup mouseleave'));
+                    $(this).unbind(_namespaceEvents('mouseup mouseleave touchend'));
                 });
             }
 
