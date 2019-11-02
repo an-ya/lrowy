@@ -249,7 +249,7 @@
 </div>
 <div class="main clear">
     <div class="left-side">
-        <div class="article" id="article" th:utext="${article.content}"></div>
+        <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
     </div>
     <div class="right-side">
         <img style="width: 44px;height: 44px;border-radius: 50%;" src="https://www.lrowy.com//img/user/default.png"/>
@@ -306,15 +306,17 @@
 
     function pageTo (href) {
         var target, pattern = /##.+/;
+        var limit = Math.round($(document).height() - $(window).height());
         if (href === '#') {
             target = 0;
+        } else if (href === '##') {
+            target = limit;
         } else if (pattern.test(href)) {
             var len = href.length, hash = href.lastIndexOf("#");
             var id = href.substr(hash, len - hash);
             var ele = $(id);
             if (ele.length === 0) return;
             target = ele.offset().top - 60;
-            var limit = Math.round($(document).height() - $(window).height());
             if (target > limit) target = limit;
         } else {
             return;
@@ -404,6 +406,14 @@
         if (!target) {setCursor(-1, currentDir);}
     }
 
+    function setArticle (id, html) {
+        var $article = $('#article');
+        if (id === $article.data('articleId')) {
+            $('#article').html(html);
+            hljs.highlightBlock(ele)
+            pageTo('##');
+        }
+    }
 
     $(window).resize(setResize);
     // lodash throttle常用于防止事件在短时间内触发极多次，如ios上的滚轮事件，文本输入框change事件。

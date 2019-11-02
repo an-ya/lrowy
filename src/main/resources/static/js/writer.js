@@ -89,6 +89,10 @@ function iframeForward () {
     }
 }
 
+function iframeReset () {
+    iframeGo('/article/' + articleId);
+}
+
 function setSize (vw, vh, ev) {
     window.vw = vw;
     window.vh = vh;
@@ -129,11 +133,12 @@ function setForm ($form, result, parent) {
 
 function saveArticle (editor, success) {
     var loading = message.loading({loadingText: '保存中 . . .'});
+    var html = editor.getData();
     $.ajax({
         url: '/article/add',
         type: 'post',
         data: {
-            content: editor.getData()
+            content: html
         },
         success: function (data) {
             message.close(loading);
@@ -159,7 +164,13 @@ function updateArticle (params, success) {
         success: function (data) {
             message.close(loading);
             if (data.code === '000') {
-                if (!params.content) setForm($('.article-form'), data.result, '');
+                if (!params.content) {
+                    setForm($('.article-form'), data.result, '');
+                } else {
+                    try {
+                        iwindow.setArticle(data.result.articleId, params.content);
+                    } catch (e) {}
+                }
                 notice.success({title: '成功更改文章'});
                 if (success) success();
             } else {
