@@ -1,6 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lrowy.dao.ArticleDao">
+    <resultMap id="article" type="com.lrowy.pojo.article.Article">
+        <id column="articleId" property="articleId"/>
+        <result column="creatorId" property="creatorId"/>
+        <result column="articleCategoryId" property="articleCategoryId"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="description" property="description"/>
+        <result column="template" property="template"/>
+        <result column="visits" property="visits"/>
+        <result column="delFlag" property="delFlag"/>
+        <result column="hiddenFlag" property="hiddenFlag"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+        <collection property="tags" ofType="com.lrowy.pojo.article.ArticleTag">
+            <id column="articleTagId" property="articleTagId"/>
+            <result column="name" property="name"/>
+        </collection>
+    </resultMap>
+
     <insert id="saveArticle" parameterType="com.lrowy.pojo.article.Article">
         <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
@@ -8,8 +27,41 @@
         INSERT INTO article (creatorId,articleCategoryId,title,content,description,template,visits,delFlag,hiddenFlag,createDate,updateDate) VALUE (#{creatorId},#{articleCategoryId},#{title},#{content},#{description},#{template},#{visits},#{delFlag},#{hiddenFlag},#{createDate},#{updateDate});
     </insert>
 
-    <select id="findArticle" resultType="com.lrowy.pojo.article.Article">
-        SELECT * FROM article WHERE articleId=#{articleId};
+    <select id="findArticle" resultMap="article">
+        SELECT *
+        FROM article
+        LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
+        LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
+        WHERE article.articleId=#{articleId};
+    </select>
+
+    <select id="findArticleByTags" resultMap="article">
+        SELECT *
+        FROM article
+        LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
+        LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
+        WHERE article.articleId IN
+            (SELECT article.articleId
+            FROM article
+            LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
+            LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
+            <if test="length > 0">
+                <where>
+                    <foreach collection="tags" item="item" index="index">
+                        <if test="index != 0">OR </if>
+                        article_tag.articleTagId=#{item}
+                    </foreach>
+                </where>
+            </if>
+            GROUP BY article.articleId
+            HAVING count(*) >= #{length});
+    </select>
+
+    <select id="findAllArticle" resultMap="article">
+        SELECT *
+        FROM article
+        LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
+        LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId;
     </select>
 
     <update id="updateArticle" parameterType="com.lrowy.pojo.article.Article">
@@ -18,6 +70,10 @@
 
     <delete id="deleteArticle" parameterType="java.lang.Integer">
         DELETE FROM article WHERE articleId=#{articleId};
+    </delete>
+
+    <delete id="deleteTagWithArticle" parameterType="java.lang.Integer">
+        DELETE FROM article_tag_r WHERE articleId=#{articleId} AND articleTagId=#{articleTagId};
     </delete>
 
     <insert id="saveArticleCategory" parameterType="com.lrowy.pojo.article.ArticleCategory">
@@ -34,4 +90,8 @@
     <delete id="deleteArticleCategory" parameterType="java.lang.Integer">
         DELETE FROM article_category WHERE articleCategoryId=#{articleCategoryId};
     </delete>
+
+    <select id="findAllArticleTag" resultType="com.lrowy.pojo.article.ArticleTag">
+        SELECT * FROM article_tag;
+    </select>
 </mapper>

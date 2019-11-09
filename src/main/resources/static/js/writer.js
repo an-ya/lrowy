@@ -1,4 +1,4 @@
-var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn');
+var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [];
 if (hash === '') {
     type = 1;
     articleFormBtn.text('新增文章');
@@ -103,6 +103,27 @@ function setSize (vw, vh, ev) {
     }
 }
 
+function setTag(list, name) {
+    var string = '';
+    for (var i = 0; i < list.length ; i++) string += '<span class="tag">' + list[i].name + '<i class="iconfont" data-id="">&#xe601;</i></span>';
+    $('[name="'+ name + '"]').html(string);
+}
+
+function setArticleByTags() {
+    $.ajax({
+        url: '/article/get',
+        type: 'post',
+        data: {
+            tags: tags
+        },
+        success: function (data) {
+            if (data.code === '000') {
+                console.log(data)
+            }
+        }
+    });
+}
+
 function setForm ($form, result, parent) {
     var value;
     for (i in result) {
@@ -111,6 +132,8 @@ function setForm ($form, result, parent) {
             if (value == null) break;
             if (typeof value == 'object' && value.constructor === Object) {
                 setForm($form, value, i);
+            } else if (value.constructor === Array) {
+                setTag(value, i);
             } else {
                 if (parent.length > 0) {
                     $form.find('[name="' + parent + '.' + i + '"]').val(value);
@@ -216,6 +239,44 @@ editor.ui.addButton('saveContentBtn', {
     toolbar: 'about',
     command: 'saveContent',
     icon: 'samples/img/save.png'
+});
+
+// new Swiper('.tags', {
+//     preventClicks: false,
+//     slidesPerColumn: 2,
+//     slidesPerView: 'auto',
+//     on: {
+//         tap: function () {
+//             var $this = $(this.slides[this.clickedIndex]);
+//             var id = parseInt($this.data('id'));
+//             if ($this.hasClass('tag-item-active')) {
+//                 _.pull(tags, id);
+//                 $this.removeClass('tag-item-active');
+//             } else {
+//                 tags.push(id);
+//                 $this.addClass('tag-item-active');
+//             }
+//             setArticleByTags();
+//             this.slideTo(this.clickedIndex);
+//         }
+//     }
+// });
+var $tagItem = $('.tag-item');
+$tagItem.mdRipple();
+$tagItem.on('mousedown touchstart', function () {
+    var $this = $(this);
+    var id = parseInt($this.data('id'));
+    $this.on('mouseup mouseleave touchend', function () {
+        if ($this.hasClass('tag-item-active')) {
+            _.pull(tags, id);
+            $this.removeClass('tag-item-active');
+        } else {
+            tags.push(id);
+            $this.addClass('tag-item-active');
+        }
+        setArticleByTags();
+        $this.off('mouseup mouseleave touchend');
+    });
 });
 
 layui.use(['form', 'laydate'], function () {

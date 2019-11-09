@@ -5,20 +5,12 @@ import java.io.Serializable;
 public class BasePagingResponse<T>  extends BaseResponse<T>  implements Serializable {
     private static final long serialVersionUID = -2318695489851376315L;
 
-    //公共变量
-    public static final String ASC = "asc";
-    public static final String DESC = "desc";
-
     //当前页数
     private int pageNo = 1;
 
     //每页条数
     private int pageSize = 20;
 
-    /**
-     * 结果总数
-     * @TODO:是否用实际数量？或大数据量时显示当前最大的数目。
-     */
     private long totalCount = -1;
 
     public BasePagingResponse(){
@@ -40,7 +32,6 @@ public class BasePagingResponse<T>  extends BaseResponse<T>  implements Serializ
     public int getPageNo() {
         return pageNo;
     }
-
 
     /**
      * 获得每页显示条数

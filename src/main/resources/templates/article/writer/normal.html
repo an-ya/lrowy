@@ -45,6 +45,96 @@
             overflow: hidden;
         }
 
+        .tag {
+            display: inline-block;
+            height: 20px;
+            padding: 0 10px;
+            margin-right: 8px;
+            line-height: 20px;
+            border-radius: 10px;
+            background: #eee;
+        }
+
+        .tag i {
+            margin-left: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .tags {
+            padding: 0 10px;
+            overflow: hidden;
+            border-bottom: 1px solid #eee;
+            -webkit-transition: height .3s ease;
+            transition: height .3s ease;
+        }
+
+        .tag-item {
+            position: relative;
+            display: inline-block;
+            height: 20px;
+            padding: 0 10px;
+            line-height: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            overflow: hidden;
+            -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .tag-item:hover {
+            color: #2979ff;
+        }
+
+        .tag-item-active {
+            color: #2979ff;
+            background: rgba(41, 121, 255, .12);
+        }
+
+        .article-list .article {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .article-list .article .t {
+            margin-bottom: 9px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .article-list .article .bottom {
+            display: flex;
+            align-items: center;
+            color: #8a8a8a;
+            font-size: 13px;
+        }
+
+        .article-form {
+            padding: 10px;
+        }
+
+        .article-form .tag {
+            margin: 8px 0 8px 8px;
+        }
+
+        .md-ripple-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-clip: padding-box;
+            pointer-events: none;
+        }
+
+        .md-ripple-container svg {
+            position: absolute;
+            fill: rgba(56, 103, 214, .12);
+            -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
         #editor {
             width: 70%;
             height: 100%;
@@ -167,6 +257,19 @@
 </div>
 <div class="sidebar">
     <div class="sidebar-inner">
+        <div class="h1">标签</div>
+        <div class="tags">
+            <div th:each="tag : ${tags}" class="tag-item" th:text="${tag.name}" th:attr="data-id=${tag.articleTagId}"></div>
+        </div>
+        <div class="article-list">
+            <div th:each="article : ${articles}" class="article">
+                <div class="t line1" th:text="${article.title}"></div>
+                <div class="bottom">
+                    <span th:each="tag : ${article.tags}" class="tag" th:text="${tag.name}"></span>
+                    <span th:if="${article.description != null && article.description != ''}" class="desc line1" th:text="${article.description}"></span>
+                </div>
+            </div>
+        </div>
         <form class="article-form layui-form layui-form-pane" action="">
             <div class="layui-form-item">
                 <label class="layui-form-label">编号</label>
@@ -221,6 +324,13 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">标签</label>
+                <div class="layui-input-block" name="tags">
+<!--                    <span class="tag">mysql<i class="iconfont" data-id="1">&#xe601;</i></span>-->
+<!--                    <span class="tag">js<i class="iconfont" data-id="2">&#xe601;</i></span>-->
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">创建日期</label>
                 <div class="layui-input-block">
                     <input type="text" id="createDate" name="createDate" value="" class="layui-input"/>
@@ -263,11 +373,13 @@
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
+<script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script src="/ckeditor-v4.12.1/ckeditor.js"></script>
 <script src="/layui-v2.5.4/layui.js"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/ivu-message.js}"></script>
+<script th:src="@{/js/md-ripple.js}"></script>
 <script th:src="@{/js/writer.js}"></script>
 </body>
 </html>

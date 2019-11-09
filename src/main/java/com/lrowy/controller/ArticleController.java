@@ -5,16 +5,15 @@ import com.lrowy.pojo.User;
 
 import com.lrowy.pojo.article.Article;
 import com.lrowy.pojo.article.ArticleCategory;
+import com.lrowy.pojo.article.ArticleTag;
 import com.lrowy.pojo.common.enums.SystemConstant;
 import com.lrowy.pojo.common.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -42,12 +41,16 @@ public class ArticleController extends BaseController {
         model.addAttribute("user", user);
         List<ArticleCategory> articleCategoryList = articleDao.findAllArticleCategory();
         model.addAttribute("articleCategoryList", articleCategoryList);
+        List<ArticleTag> articleTags = articleDao.findAllArticleTag();
+        model.addAttribute("tags", articleTags);
+        List<Article> articles = articleDao.findAllArticle();
+        model.addAttribute("articles", articles);
         return "/article/writer/normal";
     }
 
     @RequestMapping("/article/init")
     @ResponseBody
-    public BaseResponse<Article> articleCategoryAdd(int articleId) {
+    public BaseResponse<Article> articleInit(int articleId) {
         Article article = articleDao.findArticle(articleId);
         BaseResponse<Article> br = new BaseResponse<>();
         if (article == null) {
@@ -56,6 +59,16 @@ public class ArticleController extends BaseController {
         } else {
             br.setResult(article);
         }
+        return br;
+    }
+
+    @RequestMapping("/article/get")
+    @ResponseBody
+    public BaseResponse<List<Article>> articleCet(@RequestParam(value = "tags[]", required = false) int[] tags) {
+        if (tags == null) tags = new int[0];
+        List<Article> articles = articleDao.findArticleByTags(tags, tags.length);
+        BaseResponse<List<Article>> br = new BaseResponse<>();
+        br.setResult(articles);
         return br;
     }
 
@@ -77,12 +90,28 @@ public class ArticleController extends BaseController {
         return br;
     }
 
+    @RequestMapping("/article/tag/delete")
+    @ResponseBody
+    public BaseResponse<String> deleteTagWithArticle(int articleId, int articleTagId) {
+        articleDao.deleteTagWithArticle(articleId, articleTagId);
+        return new BaseResponse<>();
+    }
+
     @RequestMapping("/articleCategory/add")
     @ResponseBody
     public BaseResponse<ArticleCategory> articleCategoryAdd(@ModelAttribute ArticleCategory articleCategory) {
         articleDao.saveArticleCategory(articleCategory);
         BaseResponse<ArticleCategory> br = new BaseResponse<>();
         br.setResult(articleCategory);
+        return br;
+    }
+
+    @RequestMapping("/articleTag/get")
+    @ResponseBody
+    public BaseResponse<List<ArticleTag>> articleTagGet() {
+        List<ArticleTag> articleTags = articleDao.findAllArticleTag();
+        BaseResponse<List<ArticleTag>> br = new BaseResponse<>();
+        br.setResult(articleTags);
         return br;
     }
 }

@@ -30,19 +30,13 @@
             justify-content: space-between;
         }
 
-        .sidebar-inner {
-            padding: 50px 0 20px 0;
-        }
-
         .directory {
             display: block;
             border-left: 1px solid #eee;
         }
 
-        .directory .dir-head {
+        .directory .h1 {
             padding: 8px 15px;
-            font-size: 16px;
-            font-weight: bold;
         }
 
         .directory .dir-body {
@@ -163,6 +157,10 @@
             padding: 1px 0;
         }
 
+        .article_wrapper {
+            overflow: hidden;
+        }
+
         .about {
             position: relative;
             padding: 8px 15px;
@@ -243,13 +241,15 @@
                     <div class="desc">程序员</div>
                 </div>
             </div>
-            <div class="directory none"><div class="dir-head">目录</div><div class="dir-body"><div class="cursor"></div></div></div>
+            <div class="directory none"><div class="h1">目录</div><div class="dir-body"><div class="cursor"></div></div></div>
         </div>
     </div>
 </div>
 <div class="main clear">
     <div class="left-side">
-        <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
+        <div class="article_wrapper">
+            <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
+        </div>
     </div>
     <div class="right-side">
         <img style="width: 44px;height: 44px;border-radius: 50%;" src="https://www.lrowy.com//img/user/default.png"/>
@@ -261,7 +261,7 @@
             </div>
         </div>
         <div class="directory none sticky" data-sticky-top="24" data-width="280">
-            <div class="dir-head">目录</div>
+            <div class="h1">目录</div>
             <div class="dir-body"><div class="cursor"></div></div>
         </div>
     </div>
@@ -278,7 +278,7 @@
     var dirIndex = -1, showType, currentDir;
     var $header = $('.header');
 
-    function setDirectory () {
+    function setDirectory (resetFlag) {
         var dirString = '', num = 0, minLevel = 7;
         $('.article :header').each(function () {
             var $this = $(this);
@@ -295,7 +295,11 @@
         });
         dirString = '<ul>' + dirString + '</ul>';
         if (num > 0) {
-            $('.directory .dir-body').append(dirString);
+            if (resetFlag) {
+                $('.directory .dir-body').html('<div class="cursor"></div>' + dirString);
+            } else {
+                $('.directory .dir-body').append(dirString);
+            }
             $('.directory ul').css('margin-left', -(minLevel - 1) * 15 + 'px');
             $('.directory').removeClass('none');
             $('.directory .item').mdRipple();
@@ -327,7 +331,9 @@
     }
 
     function setAnchor () {
-        $('a[href*="#"]').on('mousedown touchstart', function () {
+        var a = $('a[href*="#"]');
+        a.off('mousedown touchstart');
+        a.on('mousedown touchstart', function () {
             var $this = $(this);
             var href = $this.attr('href'), index = $this.parents('li').prevAll().length;
             setCursor(index, currentDir);
@@ -408,9 +414,13 @@
 
     function setArticle (id, html) {
         var $article = $('#article');
+        var $wrapper = $('.article_wrapper');
         if (id === $article.data('articleId')) {
+            $wrapper.height($article.height());
             $('#article').html(html);
-            hljs.highlightBlock(ele)
+            hljs.highlightBlock($article[0]);
+            setDirectory(true);
+            $wrapper.height($article.height());
             pageTo('##');
         }
     }

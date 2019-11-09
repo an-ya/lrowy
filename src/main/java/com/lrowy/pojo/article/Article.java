@@ -1,6 +1,7 @@
 package com.lrowy.pojo.article;
 
 import java.util.Date;
+import java.util.List;
 
 public class Article {
     private int articleId;
@@ -15,6 +16,7 @@ public class Article {
     private int hiddenFlag;
     private Date createDate;
     private Date updateDate;
+    private List<ArticleTag> tags;
 
     public Article() {
         Date now = new Date();
@@ -121,5 +123,13 @@ public class Article {
 
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    public List<ArticleTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<ArticleTag> tags) {
+        this.tags = tags;
     }
 }
