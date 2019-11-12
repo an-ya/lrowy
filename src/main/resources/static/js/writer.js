@@ -1,4 +1,4 @@
-var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [];
+var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [], pageNo = 1, pageSize = 2, totalCount;
 if (hash === '') {
     type = 1;
     articleFormBtn.text('新增文章');
@@ -12,6 +12,7 @@ if (hash === '') {
 }
 
 function init(id) {
+    setArticleByTags(1);
     var loading = message.loading({loadingText: '加载中 . . .'});
     $.ajax({
         url: '/article/init',
@@ -109,16 +110,61 @@ function setTag(list, name) {
     $('[name="'+ name + '"]').html(string);
 }
 
-function setArticleByTags() {
+function setPageList() {
+    var string = '';
+    var lastPage = Math.ceil(totalCount / pageSize);
+    string += pageNo === 1 ? '<a class="iconfont page disabled" data-page="prev">&#xe60e;</a>' : '<a class="iconfont page" data-page="prev">&#xe60e;</a>';
+    string += pageNo === 1 ? '<span class="page current" data-page="1">1</span>' : '<span class="page" data-page="1">1</span>';
+    if (pageNo > 4) string += '<span class="page page-space">…</span>';
+    for (var i = pageNo - 2; i <= pageNo + 2; i++) {
+        if (i > 1 && i < lastPage) string += pageNo === i ? '<span class="page current" data-page="' + i + '">' + i + '</span>' : '<span class="page" data-page="' + i + '">' + i + '</span>';
+    }
+    if (pageNo < lastPage - 3) string += '<span class="page page-space">…</span>';
+    if (lastPage > 1) string += pageNo === lastPage ? '<span class="page current" data-page="' + lastPage + '">' + lastPage + '</span>' : '<span class="page" data-page="' + lastPage + '">' + lastPage + '</span>';
+    string += pageNo === lastPage ? '<a class="iconfont page disabled" data-page="next">&#xe60b;</a>' : '<a class="iconfont page" data-page="next">&#xe60b;</a>';
+    $('.page-list').html(string);
+    $('.page').click(function () {
+        var page = $(this).data('page');
+        if ($(this).hasClass('disabled')) return;
+        if (page === 'prev') page = pageNo - 1;
+        if (page === 'next') page = pageNo + 1;
+        setArticleByTags(page);
+    });
+}
+
+function setArticleByTags(page) {
+    $('.h1 img').show();
     $.ajax({
         url: '/article/get',
         type: 'post',
         data: {
-            tags: tags
+            tags: tags,
+            pageNo: page,
+            pageSize: pageSize
         },
         success: function (data) {
+            $('.h1 img').hide();
             if (data.code === '000') {
-                console.log(data)
+                if (data.result && data.result.length > 0) {
+                    var articles = data.result, tags, string = '', i = 0, j = 0;
+                    for (i = 0; i < articles.length; i++) {
+                        tags = articles[i].tags;
+                        string += '<div class="article"><div class="t line1">' + articles[i].title + '</div><div class="bottom">';
+                        for (j = 0; j < tags.length; j++) {
+                            string += '<span class="tag">' + tags[j].name + '</span>';
+                        }
+                        if (!articles[i]) string += '<span class="desc line1">' + articles[i].description + '</span>';
+                        string += '</div></div>';
+                    }
+                    $('.article-list').html(string);
+                    pageNo = data.pageNo;
+                    pageSize = data.pageSize;
+                    totalCount = data.totalCount;
+                    setPageList();
+                } else {
+                    $('.article-list').html('<div class="none">无匹配文章</div>');
+                    $('.page-list').html('');
+                }
             }
         }
     });

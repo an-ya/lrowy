@@ -7,12 +7,14 @@ import com.lrowy.pojo.article.Article;
 import com.lrowy.pojo.article.ArticleCategory;
 import com.lrowy.pojo.article.ArticleTag;
 import com.lrowy.pojo.common.enums.SystemConstant;
+import com.lrowy.pojo.common.response.BasePagingResponse;
 import com.lrowy.pojo.common.response.BaseResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -64,12 +66,20 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/article/get")
     @ResponseBody
-    public BaseResponse<List<Article>> articleCet(@RequestParam(value = "tags[]", required = false) int[] tags) {
+    public BasePagingResponse<List<Article>> articleCet(@RequestParam(value = "tags[]", required = false) int[] tags, Integer pageSize, Integer pageNo) {
         if (tags == null) tags = new int[0];
-        List<Article> articles = articleDao.findArticleByTags(tags, tags.length);
-        BaseResponse<List<Article>> br = new BaseResponse<>();
-        br.setResult(articles);
-        return br;
+        BasePagingResponse<List<Article>> page = new BasePagingResponse<>();
+        if (pageSize != null) {
+            page.setPageSize(pageSize);
+        }
+        if (pageNo != null) {
+            page.setPageNo(pageNo);
+        }
+        List<Article> articles = articleDao.findArticleByTags(tags, tags.length, (page.getPageNo()-1)*page.getPageSize(), page.getPageSize());
+        int count = articleDao.findArticleNumByTags(tags, tags.length);
+        page.setTotalCount(count);
+        page.setResult(articles);
+        return page;
     }
 
     @RequestMapping("/article/add")

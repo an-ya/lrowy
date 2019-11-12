@@ -2,6 +2,7 @@ package com.lrowy.pojo.common.response;
 
 import com.lrowy.pojo.common.enums.SystemConstant;
 import java.io.Serializable;
+import java.util.List;
 
 public class BaseResponse<T> implements Serializable {
     private static final long serialVersionUID = 1234567890123456789L;
@@ -17,6 +18,10 @@ public class BaseResponse<T> implements Serializable {
 
     //结果对象，一般是页面VO
     private T result;
+
+    public BaseResponse() {
+
+    }
 
     public boolean isSuccess() {
         return success;

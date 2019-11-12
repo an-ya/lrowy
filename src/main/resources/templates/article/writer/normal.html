@@ -109,12 +109,54 @@
             font-size: 13px;
         }
 
+        .article-list .none {
+            height: 50px;
+            text-align: center;
+            line-height: 50px;
+            border-bottom: 1px solid #eee;
+        }
+
         .article-form {
             padding: 10px;
         }
 
         .article-form .tag {
             margin: 8px 0 8px 8px;
+        }
+
+        .page-list {
+            font-size: 0;
+            padding: 10px;
+        }
+
+        .page-list .page {
+            display: inline-block;
+            height: 20px;
+            padding: 0 6px;
+            font-size: 14px;
+            line-height: 20px;
+            cursor: pointer;
+        }
+
+        .page-list .page.current {
+            color: #2979ff;
+            background: rgba(41, 121, 255, .12);
+            pointer-events: none;
+        }
+
+        .page-list .page.disabled {
+            color: #d2d2d2;
+            cursor: not-allowed;
+        }
+
+        .page-list .page-space {
+            cursor: default;
+            border: none;
+            pointer-events: none;
+        }
+
+        .page-list span {
+            border: 1px solid #fafafa;
         }
 
         .md-ripple-container {
@@ -257,18 +299,31 @@
 </div>
 <div class="sidebar">
     <div class="sidebar-inner">
-        <div class="h1">标签</div>
+        <div class="h1">标签<img src="images/Spinner-1s-120px.gif" style="display: none;"/></div>
         <div class="tags">
             <div th:each="tag : ${tags}" class="tag-item" th:text="${tag.name}" th:attr="data-id=${tag.articleTagId}"></div>
         </div>
         <div class="article-list">
-            <div th:each="article : ${articles}" class="article">
-                <div class="t line1" th:text="${article.title}"></div>
-                <div class="bottom">
-                    <span th:each="tag : ${article.tags}" class="tag" th:text="${tag.name}"></span>
-                    <span th:if="${article.description != null && article.description != ''}" class="desc line1" th:text="${article.description}"></span>
-                </div>
-            </div>
+<!--            <div th:each="article : ${articles}" class="article">-->
+<!--                <div class="t line1" th:text="${article.title}"></div>-->
+<!--                <div class="bottom">-->
+<!--                    <span th:each="tag : ${article.tags}" class="tag" th:text="${tag.name}"></span>-->
+<!--                    <span th:if="${article.description != null && article.description != ''}" class="desc line1" th:text="${article.description}"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+        <div class="page-list">
+<!--            <a class="iconfont page">&#xe60e;</a>-->
+<!--            <span class="page">1</span>-->
+<!--            <span class="page page-space">…</span>-->
+<!--            <span class="page">3</span>-->
+<!--            <span class="page">4</span>-->
+<!--            <span class="page current">5</span>-->
+<!--            <span class="page">6</span>-->
+<!--            <span class="page">7</span>-->
+<!--            <span class="page page-space">…</span>-->
+<!--            <span class="page">9</span>-->
+<!--            <a class="iconfont page">&#xe60b;</a>-->
         </div>
         <form class="article-form layui-form layui-form-pane" action="">
             <div class="layui-form-item">

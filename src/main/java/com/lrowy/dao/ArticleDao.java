@@ -9,7 +9,8 @@ import java.util.List;
 public interface ArticleDao {
     public int saveArticle(Article article);
     public Article findArticle(int articleId);
-    public List<Article> findArticleByTags(int[] tags, int length);
+    public List<Article> findArticleByTags(int[] tags, int length, int offset, int pageSize);
+    public int findArticleNumByTags(int[] tags, int length);
     public List<Article> findAllArticle();
     public int updateArticle(Article article);
     public int deleteArticle(int articleId);

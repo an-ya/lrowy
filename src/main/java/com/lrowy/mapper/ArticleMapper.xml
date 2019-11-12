@@ -20,6 +20,11 @@
         </collection>
     </resultMap>
 
+    <resultMap id="page" type="com.lrowy.pojo.common.response.BasePagingResponse">
+        <result property="totalCount" column="totalCount"/>
+        <collection property="result" resultSet="articles" javaType="java.util.List" resultMap="article"/>
+    </resultMap>
+
     <insert id="saveArticle" parameterType="com.lrowy.pojo.article.Article">
         <selectKey keyProperty="articleId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
@@ -41,6 +46,8 @@
         LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
         LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
         WHERE article.articleId IN
+        (SELECT t.articleId
+        FROM
             (SELECT article.articleId
             FROM article
             LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
@@ -54,7 +61,29 @@
                 </where>
             </if>
             GROUP BY article.articleId
-            HAVING count(*) >= #{length});
+            HAVING count(*)>=#{length}
+            LIMIT #{offset},#{pageSize})
+        t);
+    </select>
+
+    <select id="findArticleNumByTags" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM
+            (SELECT article.articleId
+            FROM article
+            LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
+            LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
+            <if test="length > 0">
+                <where>
+                    <foreach collection="tags" item="item" index="index">
+                        <if test="index != 0">OR </if>
+                        article_tag.articleTagId=#{item}
+                    </foreach>
+                </where>
+            </if>
+            GROUP BY article.articleId
+            HAVING count(*)>=#{length})
+        t;
     </select>
 
     <select id="findAllArticle" resultMap="article">
