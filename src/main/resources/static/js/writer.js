@@ -3,16 +3,15 @@ if (hash === '') {
     type = 1;
     articleFormBtn.text('新增文章');
 } else if (pattern.test(hash)) {
-    articleId = parseInt(hash.replace(pattern, '$2'));
-    init(articleId);
+    getArticle(parseInt(hash.replace(pattern, '$2')));
 } else {
     type = 1;
     articleFormBtn.text('新增文章');
     notice.fail({title:'参数错误'});
 }
+setArticleByTags(1);
 
-function init(id) {
-    setArticleByTags(1);
+function getArticle(id) {
     var loading = message.loading({loadingText: '加载中 . . .'});
     $.ajax({
         url: '/article/init',
@@ -23,6 +22,8 @@ function init(id) {
         success: function (data) {
             message.close(loading);
             if (data.code === '000') {
+                window.location.hash = '#/' + id;
+                articleId = id;
                 type = 2;
                 articleFormBtn.text('修改文章');
                 editor.setData(data.result.content);
@@ -110,6 +111,26 @@ function setTag(list, name) {
     $('[name="'+ name + '"]').html(string);
 }
 
+function setArticles(articles) {
+    var tags, string = '', i = 0, j = 0, c = '';
+    for (i = 0; i < articles.length; i++) {
+        tags = articles[i].tags;
+        c = articles[i].articleId === articleId ? 'article article-active' : 'article';
+        string += '<div class="' + c + '"><div class="t line1" data-id="' + articles[i].articleId + '">' + articles[i].title + '</div><div class="bottom">';
+        for (j = 0; j < tags.length; j++) {
+            string += '<span class="tag">' + tags[j].name + '</span>';
+        }
+        if (!articles[i]) string += '<span class="desc line1">' + articles[i].description + '</span>';
+        string += '</div></div>';
+    }
+    $('.article-list').html(string);
+    $('.article .t').click(function () {
+        $('.article').removeClass('article-active');
+        $(this).parent().addClass('article-active');
+        getArticle($(this).data('id'));
+    });
+}
+
 function setPageList() {
     var string = '';
     var lastPage = Math.ceil(totalCount / pageSize);
@@ -146,20 +167,10 @@ function setArticleByTags(page) {
             $('.h1 img').hide();
             if (data.code === '000') {
                 if (data.result && data.result.length > 0) {
-                    var articles = data.result, tags, string = '', i = 0, j = 0;
-                    for (i = 0; i < articles.length; i++) {
-                        tags = articles[i].tags;
-                        string += '<div class="article"><div class="t line1">' + articles[i].title + '</div><div class="bottom">';
-                        for (j = 0; j < tags.length; j++) {
-                            string += '<span class="tag">' + tags[j].name + '</span>';
-                        }
-                        if (!articles[i]) string += '<span class="desc line1">' + articles[i].description + '</span>';
-                        string += '</div></div>';
-                    }
-                    $('.article-list').html(string);
                     pageNo = data.pageNo;
                     pageSize = data.pageSize;
                     totalCount = data.totalCount;
+                    setArticles(data.result);
                     setPageList();
                 } else {
                     $('.article-list').html('<div class="none">无匹配文章</div>');
@@ -287,38 +298,37 @@ editor.ui.addButton('saveContentBtn', {
     icon: 'samples/img/save.png'
 });
 
-// new Swiper('.tags', {
-//     preventClicks: false,
-//     slidesPerColumn: 2,
-//     slidesPerView: 'auto',
-//     on: {
-//         tap: function () {
-//             var $this = $(this.slides[this.clickedIndex]);
-//             var id = parseInt($this.data('id'));
-//             if ($this.hasClass('tag-item-active')) {
-//                 _.pull(tags, id);
-//                 $this.removeClass('tag-item-active');
-//             } else {
-//                 tags.push(id);
-//                 $this.addClass('tag-item-active');
-//             }
-//             setArticleByTags();
-//             this.slideTo(this.clickedIndex);
-//         }
-//     }
-// });
 var $tagItem = $('.tag-item');
 $tagItem.mdRipple();
 $tagItem.on('mousedown touchstart', function () {
     var $this = $(this);
     var id = parseInt($this.data('id'));
+    var longPress = false, end = false;
+    setTimeout(function () {
+        longPress = true;
+        if (!end) $this.addClass('tag-item-long-press');
+    }, 300);
     $this.on('mouseup mouseleave touchend', function () {
+        end  = true;
+        $this.removeClass('tag-item-long-press');
         if ($this.hasClass('tag-item-active')) {
-            _.pull(tags, id);
-            $this.removeClass('tag-item-active');
+            if (longPress) {
+                _.pull(tags, id);
+                $this.removeClass('tag-item-active');
+            } else {
+                tags = [];
+                $tagItem.removeClass('tag-item-active');
+            }
         } else {
-            tags.push(id);
-            $this.addClass('tag-item-active');
+            if (longPress) {
+                tags.push(id);
+                $this.addClass('tag-item-active');
+            } else {
+                tags = [];
+                tags.push(id);
+                $tagItem.removeClass('tag-item-active');
+                $this.addClass('tag-item-active');
+            }
         }
         setArticleByTags();
         $this.off('mouseup mouseleave touchend');
