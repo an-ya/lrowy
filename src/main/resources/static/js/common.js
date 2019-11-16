@@ -61,18 +61,20 @@ function setOneDropdown (e) {
 
             if (ele.hasClass('hidden')) {
                 var top, left;
-                if ($(this).offset().top + $(this).height() + height + 40 >= $(document).height()) {
+                var offsetTop = ele.hasClass('fixed') ? $(this)[0].offsetTop : $(this).offset().top;
+                var limitHeight = ele.hasClass('fixed') ? $(window).height() : $(document).height();
+                if (offsetTop + $(this).height() + height + 40 >= limitHeight) {
                     transform = {'-webkit-transform': 'translateY(-20px)', 'transform': 'translateY(-20px)'};
-                    top = $(this).offset().top - height - 20;
+                    top = offsetTop - height - 20;
                 } else {
                     transform = {'-webkit-transform': 'translateY(20px)', 'transform': 'translateY(20px)'};
-                    top = $(this).offset().top + $(this).height();
+                    top = offsetTop + $(this).height();
                 }
 
                 if ($(this).offset().left - (140 - $(this).width()) <= 0) {
                     left = $(this).offset().left;
                 } else {
-                    left = $(this).offset().left - (140 - $(this).width())
+                    left = $(this).offset().left - (140 - $(this).width());
                 }
 
                 if (left < 10) left = 10;
@@ -117,9 +119,28 @@ function setCLick () {
                 if (data.code === '000') {
                     $('#login').parents('.header-item').replaceWith(menuButtonDom);
                     setMenuButton();
+                    if (iframeReset) iframeReset();
                 }
             }
         });
     });
 }
+
+Date.prototype.Format = function(fmt) { //author: meizz
+    var o = {
+        "M+" : this.getMonth()+1,                 //月份
+        "d+" : this.getDate(),                    //日
+        "h+" : this.getHours(),                   //小时
+        "m+" : this.getMinutes(),                 //分
+        "s+" : this.getSeconds(),                 //秒
+        "q+" : Math.floor((this.getMonth()+3)/3), //季度
+        "S"  : this.getMilliseconds()             //毫秒
+    };
+    if(/(y+)/.test(fmt))
+        fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+    for(var k in o)
+        if(new RegExp("("+ k +")").test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+    return fmt;
+};
 

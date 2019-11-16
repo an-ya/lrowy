@@ -12,9 +12,11 @@ public interface ArticleDao {
     public List<Article> findArticleByTags(int[] tags, int length, int offset, int pageSize);
     public int findArticleNumByTags(int[] tags, int length);
     public List<Article> findAllArticle();
-    public int updateArticle(Article article);
+    public int updateArticleInfo(Article article);
+    public int updateArticleContent(Article article);
     public int deleteArticle(int articleId);
     public int deleteTagWithArticle(int articleId, int articleTagId);
+    public int addTagWithArticle(int articleId, int[] tags);
     public int saveArticleCategory(ArticleCategory articleCategory);
     public List<ArticleCategory> findAllArticleCategory();
     public int deleteArticleCategory(int articleCategoryId);

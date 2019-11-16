@@ -1,4 +1,6 @@
-var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [], pageNo = 1, pageSize = 2, totalCount;
+var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [], currentTags = [], pageNo = 1, pageSize = 4, totalCount;
+var form = layui.form, laydate = layui.laydate;
+
 if (hash === '') {
     type = 1;
     articleFormBtn.text('新增文章');
@@ -28,6 +30,8 @@ function getArticle(id) {
                 articleFormBtn.text('修改文章');
                 editor.setData(data.result.content);
                 setForm($('.article-form'), data.result, '');
+                form.render();
+                setTagDeleteEvent();
                 iframeGo('/article/' + data.result.articleId);
             } else {
                 type = 1;
@@ -105,12 +109,6 @@ function setSize (vw, vh, ev) {
     }
 }
 
-function setTag(list, name) {
-    var string = '';
-    for (var i = 0; i < list.length ; i++) string += '<span class="tag">' + list[i].name + '<i class="iconfont" data-id="">&#xe601;</i></span>';
-    $('[name="'+ name + '"]').html(string);
-}
-
 function setArticles(articles) {
     var tags, string = '', i = 0, j = 0, c = '';
     for (i = 0; i < articles.length; i++) {
@@ -120,7 +118,7 @@ function setArticles(articles) {
         for (j = 0; j < tags.length; j++) {
             string += '<span class="tag">' + tags[j].name + '</span>';
         }
-        if (!articles[i]) string += '<span class="desc line1">' + articles[i].description + '</span>';
+        if (articles[i].description) string += '<span class="desc line1">' + articles[i].description + '</span>';
         string += '</div></div>';
     }
     $('.article-list').html(string);
@@ -159,7 +157,9 @@ function setArticleByTags(page) {
         url: '/article/get',
         type: 'post',
         data: {
-            tags: tags,
+            tags: tags.map(function (item) {
+                return item.id;
+            }),
             pageNo: page,
             pageSize: pageSize
         },
@@ -178,6 +178,99 @@ function setArticleByTags(page) {
                 }
             }
         }
+    });
+}
+
+function setTag(list, name) {
+    currentTags = list;
+    var string = '';
+    for (var i = 0; i < list.length ; i++) string += '<span class="tag">' + list[i].name + '<i class="iconfont" data-id="' + list[i].articleTagId + '" data-name="' + list[i].name + '">&#xe601;</i></span>';
+    $('[name="'+ name + '"]').html(string);
+}
+
+function setTagDeleteEvent() {
+    $('.article-form .tag i').click(function () {
+        var $this = $(this);
+        var id = $this.data('id');
+        var name = $this.data('name');
+        layer.confirm('确定解除标签：' + name + '？', {
+            btn: ['确定','取消'],
+            move: false,
+            shadeClose: true,
+        }, function(){
+            $.ajax({
+                url: '/article/tag/delete',
+                type: 'post',
+                data: {
+                    articleId: articleId,
+                    articleTagId: id,
+                },
+                success: function (data) {
+                    layer.close(layer.index);
+                    if (data.code === '000') {
+                        setArticleByTags(pageNo);
+                        $this.parents('.tag').remove();
+                        notice.success({title: '成功解除标签'});
+                    } else {
+                        notice.fail({title: '发生错误', desc: data.msg});
+                    }
+                }
+            });
+        });
+    });
+}
+
+function addTagEvent() {
+    var string = '确定绑定标签', has = false, list = [];
+    if (tags.length === 0) {
+        layer.msg('未选中任何标签');
+        return;
+    }
+    for (var i = 0; i < tags.length; i++) {
+        has = false;
+        for (var j = 0; j < currentTags.length; j++) {
+            if (tags[i].id === currentTags[j].articleTagId) {
+                has = true;
+                break;
+            }
+        }
+        if (!has) list.push(tags[i]);
+    }
+    for (i = 0; i < list.length; i++) {
+        if (i !== 0) string += '、';
+        string += list[i].name;
+    }
+    string += '?';
+    if (list.length === 0) {
+        layer.msg('文章已经绑定选中标签');
+        return;
+    }
+    layer.confirm(string, {
+        btn: ['确定','取消'],
+        move: false,
+        shadeClose: true,
+    }, function(){
+        $.ajax({
+            url: '/article/tag/add',
+            type: 'post',
+            data: {
+                articleId: articleId,
+                tags: list.map(function (item) {
+                    return item.id;
+                }),
+            },
+            success: function (data) {
+                layer.close(layer.index);
+                if (data.code === '000') {
+                    setArticleByTags(pageNo);
+                    setTag(data.result.tags, 'tags');
+                    setTagDeleteEvent();
+                    notice.success({title: '成功绑定标签'});
+                } else {
+                    notice.fail({title: '发生错误', desc: data.msg});
+                }
+            }
+        });
     });
 }
 
@@ -211,7 +304,7 @@ function setForm ($form, result, parent) {
     }
 }
 
-function saveArticle (editor, success) {
+function saveArticle (editor) {
     var loading = message.loading({loadingText: '保存中 . . .'});
     var html = editor.getData();
     $.ajax({
@@ -226,8 +319,9 @@ function saveArticle (editor, success) {
                 type = 2;
                 window.location.hash = '#/' + data.result.articleId;
                 setForm($('.article-form'), data.result, '');
+                form.render();
+                setArticleByTags(pageNo);
                 notice.success({title: '成功新增文章'});
-                if (success) success();
             } else {
                 notice.fail({title: '发生错误', desc: data.msg});
             }
@@ -235,24 +329,26 @@ function saveArticle (editor, success) {
     });
 }
 
-function updateArticle (params, success) {
+function updateArticle (params) {
     var loading = message.loading({loadingText: '保存中 . . .'});
     $.ajax({
-        url: '/article/update',
+        url: params.content ? '/article/update/content' : '/article/update/info',
         type: 'post',
         data: params,
         success: function (data) {
             message.close(loading);
             if (data.code === '000') {
-                if (!params.content) {
-                    setForm($('.article-form'), data.result, '');
-                } else {
+                if (params.content) {
+                    $('.article-form').find('[name="updateDate"]').val(data.result.updateDate);
                     try {
-                        iwindow.setArticle(data.result.articleId, params.content);
+                        iwindow.setArticle(params.articleId, params.content);
                     } catch (e) {}
+                } else {
+                    setArticleByTags(pageNo);
+                    setForm($('.article-form'), data.result, '');
                 }
+                form.render();
                 notice.success({title: '成功更改文章'});
-                if (success) success();
             } else {
                 notice.fail({title: '发生错误', desc: data.msg});
             }
@@ -298,11 +394,22 @@ editor.ui.addButton('saveContentBtn', {
     icon: 'samples/img/save.png'
 });
 
+function removeTagData(data, id) {
+    var temp = [];
+    for (var i = 0; i < data.length; i++) {
+        if (data[i].id !== id) {
+            temp.push(data[i]);
+        }
+    }
+    return temp;
+}
+
 var $tagItem = $('.tag-item');
 $tagItem.mdRipple();
 $tagItem.on('mousedown touchstart', function () {
     var $this = $(this);
     var id = parseInt($this.data('id'));
+    var name = $this.data('name');
     var longPress = false, end = false;
     setTimeout(function () {
         longPress = true;
@@ -313,7 +420,7 @@ $tagItem.on('mousedown touchstart', function () {
         $this.removeClass('tag-item-long-press');
         if ($this.hasClass('tag-item-active')) {
             if (longPress) {
-                _.pull(tags, id);
+                tags = removeTagData(tags, id);
                 $this.removeClass('tag-item-active');
             } else {
                 tags = [];
@@ -321,11 +428,11 @@ $tagItem.on('mousedown touchstart', function () {
             }
         } else {
             if (longPress) {
-                tags.push(id);
+                tags.push({id: id, name: name});
                 $this.addClass('tag-item-active');
             } else {
                 tags = [];
-                tags.push(id);
+                tags.push({id: id, name: name});
                 $tagItem.removeClass('tag-item-active');
                 $this.addClass('tag-item-active');
             }
@@ -335,23 +442,17 @@ $tagItem.on('mousedown touchstart', function () {
     });
 });
 
-layui.use(['form', 'laydate'], function () {
-    var form = layui.form
-        ,laydate = layui.laydate;
+laydate.render({elem: '#createDate', type: 'datetime'});
+laydate.render({elem: '#updateDate', type: 'datetime'});
 
-    laydate.render({elem: '#createDate', type: 'datetime'});
+form.on('submit', function (data) {
+    if (type === 1) {
+        saveArticle(data.field);
+    } else if (type === 2) {
+        var field = data.field;
+        if (data.field.autoUpdateDate === 'on') field.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+        updateArticle(field);
+    }
 
-    form.on('submit', function (data) {
-        if (type === 1) {
-            saveArticle(data.field, function () {
-                form.render();
-            });
-        } else if (type === 2) {
-            updateArticle(data.field, function () {
-                form.render();
-            });
-        }
-
-        return false;
-    });
+    return false;
 });

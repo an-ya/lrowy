@@ -41,7 +41,7 @@
     </select>
 
     <select id="findArticleByTags" resultMap="article">
-        SELECT *
+        SELECT article.articleId,article.creatorId,article.title,article.description,article_tag.articleTagId,article_tag.name
         FROM article
         LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
         LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
@@ -52,18 +52,16 @@
             FROM article
             LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
             LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
-            <if test="length > 0">
-                <where>
-                    <foreach collection="tags" item="item" index="index">
-                        <if test="index != 0">OR </if>
-                        article_tag.articleTagId=#{item}
-                    </foreach>
-                </where>
-            </if>
+            <where>
+                <foreach collection="tags" item="item" index="index" separator=" OR ">
+                    article_tag.articleTagId=#{item}
+                </foreach>
+            </where>
             GROUP BY article.articleId
             HAVING count(*)>=#{length}
             LIMIT #{offset},#{pageSize})
-        t);
+        t)
+        ORDER BY article.articleId;
     </select>
 
     <select id="findArticleNumByTags" resultType="java.lang.Integer">
@@ -73,14 +71,11 @@
             FROM article
             LEFT JOIN article_tag_r ON article.articleId=article_tag_r.articleId
             LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId
-            <if test="length > 0">
-                <where>
-                    <foreach collection="tags" item="item" index="index">
-                        <if test="index != 0">OR </if>
-                        article_tag.articleTagId=#{item}
-                    </foreach>
-                </where>
-            </if>
+            <where>
+                <foreach collection="tags" item="item" index="index" separator=" OR ">
+                    article_tag.articleTagId=#{item}
+                </foreach>
+            </where>
             GROUP BY article.articleId
             HAVING count(*)>=#{length})
         t;
@@ -93,13 +88,24 @@
         LEFT JOIN article_tag ON article_tag_r.articleTagId=article_tag.articleTagId;
     </select>
 
-    <update id="updateArticle" parameterType="com.lrowy.pojo.article.Article">
-        UPDATE article SET creatorId=#{creatorId},articleCategoryId=#{articleCategoryId},title=#{title},content=#{content},description=#{description},template=#{template},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},createDate=#{createDate},updateDate=#{updateDate} where articleId=#{articleId};
+    <update id="updateArticleInfo" parameterType="com.lrowy.pojo.article.Article">
+        UPDATE article SET creatorId=#{creatorId},articleCategoryId=#{articleCategoryId},title=#{title},description=#{description},template=#{template},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},createDate=#{createDate},updateDate=#{updateDate} WHERE articleId=#{articleId};
+    </update>
+
+    <update id="updateArticleContent" parameterType="com.lrowy.pojo.article.Article">
+        UPDATE article SET content=#{content},updateDate=#{updateDate} WHERE articleId=#{articleId};
     </update>
 
     <delete id="deleteArticle" parameterType="java.lang.Integer">
         DELETE FROM article WHERE articleId=#{articleId};
     </delete>
+
+    <insert id="addTagWithArticle">
+        INSERT INTO article_tag_r (articleId,articleTagId) VALUES
+        <foreach collection="tags" item="item" separator=",">
+            (#{articleId},#{item})
+        </foreach>
+    </insert>
 
     <delete id="deleteTagWithArticle" parameterType="java.lang.Integer">
         DELETE FROM article_tag_r WHERE articleId=#{articleId} AND articleTagId=#{articleTagId};

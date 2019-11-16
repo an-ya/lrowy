@@ -14,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -84,17 +82,26 @@ public class ArticleController extends BaseController {
 
     @RequestMapping("/article/add")
     @ResponseBody
-    public BaseResponse<Article> articleCategoryAdd(@ModelAttribute Article article) {
+    public BaseResponse<Article> articleAdd(@ModelAttribute Article article) {
         articleDao.saveArticle(article);
         BaseResponse<Article> br = new BaseResponse<>();
         br.setResult(article);
         return br;
     }
 
-    @RequestMapping("/article/update")
+    @RequestMapping("/article/update/info")
     @ResponseBody
-    public BaseResponse<Article> articleCategoryUpdate(@ModelAttribute Article article) {
-        articleDao.updateArticle(article);
+    public BaseResponse<Article> articleUpdateInfo(@ModelAttribute Article article) {
+        articleDao.updateArticleInfo(article);
+        BaseResponse<Article> br = new BaseResponse<>();
+        br.setResult(article);
+        return br;
+    }
+
+    @RequestMapping("/article/update/content")
+    @ResponseBody
+    public BaseResponse<Article> articleUpdateContent(@ModelAttribute Article article) {
+        articleDao.updateArticleContent(article);
         BaseResponse<Article> br = new BaseResponse<>();
         br.setResult(article);
         return br;
@@ -105,6 +112,18 @@ public class ArticleController extends BaseController {
     public BaseResponse<String> deleteTagWithArticle(int articleId, int articleTagId) {
         articleDao.deleteTagWithArticle(articleId, articleTagId);
         return new BaseResponse<>();
+    }
+
+    @RequestMapping("/article/tag/add")
+    @ResponseBody
+    public BaseResponse<Article> addTagWithArticle(int articleId, @RequestParam(value = "tags[]", required = false) int[] tags) {
+        if (tags != null) {
+            articleDao.addTagWithArticle(articleId, tags);
+        }
+        Article article = articleDao.findArticle(articleId);
+        BaseResponse<Article> br = new BaseResponse<>();
+        br.setResult(article);
+        return br;
     }
 
     @RequestMapping("/articleCategory/add")

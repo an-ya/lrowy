@@ -101,7 +101,7 @@
         }
 
         .article-list .article-active {
-            border-left: 2px solid #2979ff;
+            border-right: 2px solid #2979ff;
         }
 
         .article-list .article .t {
@@ -132,6 +132,22 @@
         .article-form .tag {
             margin: 8px 0 8px 8px;
         }
+
+        .article-form .plus {
+            margin-left: 6px;
+            cursor: pointer;
+        }
+
+        .article-form .layui-form-switch {
+            box-sizing: content-box;
+            margin-left: 0;
+        }
+
+        /*.article-form .layui-form-checked[lay-skin=primary] i {*/
+        /*    border-color: rgba(41, 121, 255, .24)!important;*/
+        /*    background-color: rgba(41, 121, 255, .24);*/
+        /*    color: #2979ff;*/
+        /*}*/
 
         .page-list {
             font-size: 0;
@@ -293,7 +309,7 @@
         </li>
         <li th:if="${user == null}" class="header-item dropdown-content">
             <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>
-            <div class="dropdown hidden">
+            <div class="dropdown hidden fixed">
                 <ul class="dropdown-menu">
                     <li id="login" class="dropdown-item">登录</li>
                     <li  class="dropdown-item">注册</li>
@@ -310,7 +326,7 @@
     <div class="sidebar-inner">
         <div class="h1">标签<img src="images/Spinner-1s-120px.gif" style="display: none;"/></div>
         <div class="tags">
-            <div th:each="tag : ${tags}" class="tag-item" th:text="${tag.name}" th:attr="data-id=${tag.articleTagId}"></div>
+            <div th:each="tag : ${tags}" class="tag-item" th:text="${tag.name}" th:attr="data-id=${tag.articleTagId},data-name=${tag.name}"></div>
         </div>
         <div class="article-list">
 <!--            <div th:each="article : ${articles}" class="article">-->
@@ -351,7 +367,7 @@
                 <label class="layui-form-label">分类</label>
                 <div class="layui-input-block">
                     <select name="articleCategoryId" lay-verify="required">
-                        <option value=""></option>
+                        <option value="0">未设置</option>
                         <option th:each="a : ${articleCategoryList}" th:value="${a.articleCategoryId}" th:text="${a.name}"></option>
                     </select>
                 </div>
@@ -388,7 +404,7 @@
                 </div>
             </div>
             <div class="layui-form-item">
-                <label class="layui-form-label">标签</label>
+                <label class="layui-form-label">标签<i class="iconfont plus" onclick="addTagEvent()">&#xe726;</i></label>
                 <div class="layui-input-block" name="tags">
 <!--                    <span class="tag">mysql<i class="iconfont" data-id="1">&#xe601;</i></span>-->
 <!--                    <span class="tag">js<i class="iconfont" data-id="2">&#xe601;</i></span>-->
@@ -404,6 +420,11 @@
                 <label class="layui-form-label">更新日期</label>
                 <div class="layui-input-block">
                     <input type="text" id="updateDate" name="updateDate" value="" class="layui-input"/>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    自动修改更新日期：<input type="checkbox" name="autoUpdateDate" lay-skin="switch" lay-text="ON|OFF">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -439,7 +460,8 @@
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script src="/ckeditor-v4.12.1/ckeditor.js"></script>
-<script src="/layui-v2.5.4/layui.js"></script>
+<script src="/layui-v2.5.4//layui.all.js"></script>
+<script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer', 'form', 'laydate']);</script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/ivu-message.js}"></script>

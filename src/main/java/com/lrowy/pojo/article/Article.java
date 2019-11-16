@@ -24,7 +24,6 @@ public class Article {
         this.content = "";
         this.description = "";
         this.template = "";
-        this.hiddenFlag = 1;
         this.createDate = now;
         this.updateDate = now;
     }
