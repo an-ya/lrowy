@@ -17,16 +17,17 @@ code {
 pre {
     border-radius: 2px;
     position: relative;
+    overflow-x: auto;
 }
 pre code {
-    overflow-x: auto;
     color: #525252;
     white-space: pre;
-    padding: 1.2em 1.4em;
+    padding: 1.2em 1.8em;
+    margin: 0;
     /*font-size: 0.9rem;*/
     /*line-height: 1.6rem;*/
     line-height: 26px;
-    display: block;
+    display: inline-block;
 }
 pre code .hljs-tag,
 pre code .hljs-tag pre code .hljs-title,
@@ -149,99 +150,99 @@ pre code.hljs.language-xml::before {
     height: 15px;
     font-weight: 600;
 }
-pre code.hljs.language-apache::before {
-    content: "Apache";
-}
-pre code.hljs.language-bash::before {
-    content: "Bash";
-}
-pre code.hljs.language-coffeescript::before {
-    content: "CoffeeScript";
-}
-pre code.hljs.language-cpp::before {
-    content: "C++";
-}
-pre code.hljs.language-c::before {
-    content: "C";
-}
-pre code.hljs.language-cs::before {
-    content: "C#";
-}
-pre code.hljs.language-css::before {
-    content: "CSS";
-}
-pre code.hljs.language-dockerfile::before {
-    content: "Dockerfile";
-}
-pre code.hljs.language-diff::before {
-    content: "Diff";
-}
-pre code.hljs.language-glsl::before {
-    content: 'GLSL';
-}
-pre code.hljs.language-golang::before {
-    content: "Golang";
-}
-pre code.hljs.language-html::before {
-    content: "HTML";
-}
-pre code.hljs.language-http::before {
-    content: "HTTP";
-}
-pre code.hljs.language-ini::before {
-    content: "INI";
-}
-pre code.hljs.language-java::before {
-    content: "Java";
-}
-pre code.hljs.language-javascript::before {
-    content: "JS";
-}
-pre code.hljs.language-json::before {
-    content: "JSON";
-}
-pre code.hljs.language-makefile::before {
-    content: "Makefile";
-}
-pre code.hljs.language-markdown::before {
-    content: "Markdown";
-}
-pre code.hljs.language-nginx::before {
-    content: "Nginx";
-}
-pre code.hljs.language-objectivec::before {
-    content: "Objective-C";
-}
-pre code.hljs.language-perl::before {
-    content: "Perl";
-}
-pre code.hljs.language-php::before {
-    content: "PHP";
-}
-pre code.hljs.language-python::before {
-    content: "Python";
-}
-pre code.hljs.language-ruby::before {
-    content: "Ruby";
-}
-pre code.hljs.language-sql::before {
-    content: "SQL";
-}
-pre code.hljs.language-shell::before {
-    content: "Shell";
-}
-pre code.hljs.language-typescript::before {
-    content: "TypeScript";
-}
-pre code.hljs.language-vbscript::before {
-    content: "VBScript";
-}
-pre code.hljs.language-verilog::before {
-    content: "Verilog";
-}
-pre code.hljs.language-xhtml::before {
-    content: "XHTML";
-}
-pre code.hljs.language-xml::before {
-    content: "XML";
-}
+/*pre code.hljs.language-apache::before {*/
+/*    content: "Apache";*/
+/*}*/
+/*pre code.hljs.language-bash::before {*/
+/*    content: "Bash";*/
+/*}*/
+/*pre code.hljs.language-coffeescript::before {*/
+/*    content: "CoffeeScript";*/
+/*}*/
+/*pre code.hljs.language-cpp::before {*/
+/*    content: "C++";*/
+/*}*/
+/*pre code.hljs.language-c::before {*/
+/*    content: "C";*/
+/*}*/
+/*pre code.hljs.language-cs::before {*/
+/*    content: "C#";*/
+/*}*/
+/*pre code.hljs.language-css::before {*/
+/*    content: "CSS";*/
+/*}*/
+/*pre code.hljs.language-dockerfile::before {*/
+/*    content: "Dockerfile";*/
+/*}*/
+/*pre code.hljs.language-diff::before {*/
+/*    content: "Diff";*/
+/*}*/
+/*pre code.hljs.language-glsl::before {*/
+/*    content: 'GLSL';*/
+/*}*/
+/*pre code.hljs.language-golang::before {*/
+/*    content: "Golang";*/
+/*}*/
+/*pre code.hljs.language-html::before {*/
+/*    content: "HTML";*/
+/*}*/
+/*pre code.hljs.language-http::before {*/
+/*    content: "HTTP";*/
+/*}*/
+/*pre code.hljs.language-ini::before {*/
+/*    content: "INI";*/
+/*}*/
+/*pre code.hljs.language-java::before {*/
+/*    content: "Java";*/
+/*}*/
+/*pre code.hljs.language-javascript::before {*/
+/*    content: "JS";*/
+/*}*/
+/*pre code.hljs.language-json::before {*/
+/*    content: "JSON";*/
+/*}*/
+/*pre code.hljs.language-makefile::before {*/
+/*    content: "Makefile";*/
+/*}*/
+/*pre code.hljs.language-markdown::before {*/
+/*    content: "Markdown";*/
+/*}*/
+/*pre code.hljs.language-nginx::before {*/
+/*    content: "Nginx";*/
+/*}*/
+/*pre code.hljs.language-objectivec::before {*/
+/*    content: "Objective-C";*/
+/*}*/
+/*pre code.hljs.language-perl::before {*/
+/*    content: "Perl";*/
+/*}*/
+/*pre code.hljs.language-php::before {*/
+/*    content: "PHP";*/
+/*}*/
+/*pre code.hljs.language-python::before {*/
+/*    content: "Python";*/
+/*}*/
+/*pre code.hljs.language-ruby::before {*/
+/*    content: "Ruby";*/
+/*}*/
+/*pre code.hljs.language-sql::before {*/
+/*    content: "SQL";*/
+/*}*/
+/*pre code.hljs.language-shell::before {*/
+/*    content: "Shell";*/
+/*}*/
+/*pre code.hljs.language-typescript::before {*/
+/*    content: "TypeScript";*/
+/*}*/
+/*pre code.hljs.language-vbscript::before {*/
+/*    content: "VBScript";*/
+/*}*/
+/*pre code.hljs.language-verilog::before {*/
+/*    content: "Verilog";*/
+/*}*/
+/*pre code.hljs.language-xhtml::before {*/
+/*    content: "XHTML";*/
+/*}*/
+/*pre code.hljs.language-xml::before {*/
+/*    content: "XML";*/
+/*}*/

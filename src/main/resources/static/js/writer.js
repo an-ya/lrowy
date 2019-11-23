@@ -1,4 +1,4 @@
-var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [], currentTags = [], pageNo = 1, pageSize = 4, totalCount;
+var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash, type = 0, articleId = 0, articleFormBtn = $('#article-form-btn'), tags = [], currentTags = [], pageNo = 1, pageSize = 4, totalCount, autoUpdateDate = false;
 var form = layui.form, laydate = layui.laydate;
 
 if (hash === '') {
@@ -27,6 +27,7 @@ function getArticle(id) {
                 window.location.hash = '#/' + id;
                 articleId = id;
                 type = 2;
+                $('.article-info').show();
                 articleFormBtn.text('修改文章');
                 editor.setData(data.result.content);
                 setForm($('.article-form'), data.result, '');
@@ -96,7 +97,7 @@ function iframeForward () {
 }
 
 function iframeReset () {
-    iframeGo('/article/' + articleId);
+    if (articleId !== 0) iframeGo('/article/' + articleId);
 }
 
 function setSize (vw, vh, ev) {
@@ -382,7 +383,9 @@ editor.addCommand('saveContent', {
         if (type === 1) {
             saveArticle(edt);
         } else if (type === 2) {
-            updateArticle({articleId: articleId, content: edt.getData()});
+            var data = {articleId: articleId, content: edt.getData()};
+            if (autoUpdateDate) data.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+            updateArticle(data);
         }
     }
 });
@@ -445,12 +448,16 @@ $tagItem.on('mousedown touchstart', function () {
 laydate.render({elem: '#createDate', type: 'datetime'});
 laydate.render({elem: '#updateDate', type: 'datetime'});
 
+form.on('switch(autoUpdateDate)', function(data) {
+    autoUpdateDate = data.othis.hasClass('layui-form-onswitch');
+});
+
 form.on('submit', function (data) {
     if (type === 1) {
         saveArticle(data.field);
     } else if (type === 2) {
         var field = data.field;
-        if (data.field.autoUpdateDate === 'on') field.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+        if (autoUpdateDate) field.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
         updateArticle(field);
     }
 

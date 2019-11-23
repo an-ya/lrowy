@@ -89,11 +89,11 @@
     </select>
 
     <update id="updateArticleInfo" parameterType="com.lrowy.pojo.article.Article">
-        UPDATE article SET creatorId=#{creatorId},articleCategoryId=#{articleCategoryId},title=#{title},description=#{description},template=#{template},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},createDate=#{createDate},updateDate=#{updateDate} WHERE articleId=#{articleId};
+        UPDATE article SET creatorId=#{creatorId},articleCategoryId=#{articleCategoryId},title=#{title},description=#{description},template=#{template},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},createDate=#{createDate}<if test="updateDate != null">,updateDate=#{updateDate}</if> WHERE articleId=#{articleId};
     </update>
 
     <update id="updateArticleContent" parameterType="com.lrowy.pojo.article.Article">
-        UPDATE article SET content=#{content},updateDate=#{updateDate} WHERE articleId=#{articleId};
+        UPDATE article SET content=#{content}<if test="updateDate != null">,updateDate=#{updateDate}</if> WHERE articleId=#{articleId};
     </update>
 
     <delete id="deleteArticle" parameterType="java.lang.Integer">

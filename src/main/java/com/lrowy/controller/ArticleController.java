@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -83,6 +84,9 @@ public class ArticleController extends BaseController {
     @RequestMapping("/article/add")
     @ResponseBody
     public BaseResponse<Article> articleAdd(@ModelAttribute Article article) {
+        Date date = new Date();
+        article.setCreateDate(date);
+        article.setUpdateDate(date);
         articleDao.saveArticle(article);
         BaseResponse<Article> br = new BaseResponse<>();
         br.setResult(article);
@@ -94,6 +98,7 @@ public class ArticleController extends BaseController {
     public BaseResponse<Article> articleUpdateInfo(@ModelAttribute Article article) {
         articleDao.updateArticleInfo(article);
         BaseResponse<Article> br = new BaseResponse<>();
+        br.setResult(articleDao.findArticle(article.getArticleId()));
         br.setResult(article);
         return br;
     }
@@ -103,7 +108,7 @@ public class ArticleController extends BaseController {
     public BaseResponse<Article> articleUpdateContent(@ModelAttribute Article article) {
         articleDao.updateArticleContent(article);
         BaseResponse<Article> br = new BaseResponse<>();
-        br.setResult(article);
+        br.setResult(articleDao.findArticle(article.getArticleId()));
         return br;
     }
 

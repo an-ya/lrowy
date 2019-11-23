@@ -1,14 +1,14 @@
 @font-face {
     font-family: 'iconfont';  /* project id 1286797 */
-    src: url('//at.alicdn.com/t/font_1286797_19jun2j6etzi.eot');
-    src: url('//at.alicdn.com/t/font_1286797_19jun2j6etzi.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_1286797_19jun2j6etzi.woff2') format('woff2'),
-    url('//at.alicdn.com/t/font_1286797_19jun2j6etzi.woff') format('woff'),
-    url('//at.alicdn.com/t/font_1286797_19jun2j6etzi.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_1286797_19jun2j6etzi.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.eot');
+    src: url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.svg#iconfont') format('svg');
 }
 
-.iconfont{
+.iconfont {
     font-family: "iconfont", sans-serif;
     font-size: 14px;
     font-style: normal;
@@ -47,11 +47,6 @@ html {
     font-size: 20px;
 }
 
-p {
-    margin: 0;
-    padding: 1em 0;
-}
-
 body {
     margin: 0;
     color: #304455;
@@ -59,6 +54,21 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #fff;
+}
+
+p {
+    margin: 0;
+    padding: 1em 0;
+}
+
+a:link, a:active, a:visited {
+    color: #304455;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #2979ff;
+    text-decoration: none;
 }
 
 .header {
@@ -84,6 +94,7 @@ body {
     width: 100%;
     height: 100%;
     margin: 0;
+    padding: 0;
 }
 
 .header-menu .header-item {
@@ -206,6 +217,8 @@ body {
 
 .dropdown .dropdown-menu {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 .dropdown .dropdown-menu .dropdown-item {
@@ -214,6 +227,7 @@ body {
     color: #515a6e;
     white-space: nowrap;
     cursor: pointer;
+    list-style: none;
     -webkit-transition: background .2s ease-in-out;
     transition: background .2s ease-in-out;
 }
@@ -260,7 +274,7 @@ body {
 
 .sidebar-inner {
     width: 14rem;
-    padding: 50px 0 20px 0;
+    padding: 60px 0 20px 0;
 }
 
 .main {
@@ -300,6 +314,10 @@ body {
 
     .header {
         height: 50px;
+    }
+
+    .sidebar-inner {
+        padding: 50px 0 20px 0;
     }
 
     .main {

@@ -19,13 +19,10 @@ public class Article {
     private List<ArticleTag> tags;
 
     public Article() {
-        Date now = new Date();
         this.title = "";
         this.content = "";
         this.description = "";
         this.template = "";
-        this.createDate = now;
-        this.updateDate = now;
     }
 
     public int getArticleId() {
