@@ -41,10 +41,15 @@
     </div>
 </div>
 <div class="main">
+    <div class="bookmark-category-container swiper-container">
+        <div class="swiper-wrapper">
+            <div th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:class="'swiper-slide bookmark-category-item' + ${i.index == 0 ? ' bookmark-category-item-active' : ''}" th:text="${b.name}" th:data-cate-id="${b.bookmarkCategoryId}"></div>
+        </div>
+    </div>
     <div class="shortcut-container swiper-container">
         <div class="swiper-wrapper">
             <div th:each="s : ${bookmarkResult.shortcuts}" class="swiper-slide shortcut" th:data-id="${s.bookmarkId}" th:data-cate-id="${s.bookmarkCategoryId}">
-                <div class="favicon-blur" th:style="'background-image:url(' + ${s.favicon.faviconBlurUrl} + ');'"></div>
+<!--                <div class="favicon-blur" th:style="'background-image:url(' + ${s.favicon.faviconBlurUrl} + ');'"></div>-->
                 <img class="favicon-png" th:src="${s.favicon.faviconUrl}">
                 <span class="google-front" th:text="${s.title}"></span>
                 <div class="dropdown-content">
@@ -59,11 +64,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="bookmark-category-container swiper-container">
-        <div class="swiper-wrapper">
-            <div th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:class="'swiper-slide bookmark-category-item google-front' + ${i.index == 0 ? ' bookmark-category-item-active' : ''}" th:text="${b.name}" th:data-cate-id="${b.bookmarkCategoryId}"></div>
         </div>
     </div>
     <div class="bookmark-list">

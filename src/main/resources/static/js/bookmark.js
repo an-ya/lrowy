@@ -10,7 +10,6 @@ if (vw < 900) {
 var s = new Swiper('.shortcut-container',{
     grabCursor: true,
     mousewheel: true,
-    centeredSlides: true,
     slidesPerView: 'auto',
     on: {
         slideChangeTransitionStart: function () {
@@ -27,7 +26,8 @@ var s = new Swiper('.shortcut-container',{
 
 var c = new Swiper('.bookmark-category-container', {
     mousewheel: true,
-    slidesPerView: 5,
+    centeredSlides: true,
+    slidesPerView: 'auto',
     on: {
         tap: function () {
             var slide = this.slides[this.clickedIndex];

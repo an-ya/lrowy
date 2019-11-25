@@ -1,6 +1,8 @@
 .shortcut-container {
-    height: 140px;
-    margin: 20px 20px;
+    height: 160px;
+    padding: 20px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
 }
 
 .shortcut {
@@ -9,19 +11,15 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 140px;
-    width: 140px;
+    height: 120px;
+    width: 120px;
+    border-right: 1px solid #eee;
     overflow: hidden;
     opacity: 1;
-    -webkit-transform: scale(.8);
-    transform: scale(.8);
-    -webkit-transition: .3s;
-    transition: .3s;
 }
 
-.shortcut.swiper-slide-active {
-    -webkit-transform: scale(1);
-    transform: scale(1);
+.shortcut:last-child {
+    border: none;
 }
 
 .shortcut .favicon-blur {
@@ -39,16 +37,16 @@
 .shortcut .favicon-png {
     width: 36px;
     height: 36px;
+    padding: 10px;
+    background: #f8f9fa;
 }
 
 .shortcut span {
     display: block;
     width: 116px;
     margin-top: 12px;
-    color: #fff;
     font-size: 18px;
     text-align: center;
-    text-shadow: rgba(0, 0, 0, .3) 1px 1px 2px;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

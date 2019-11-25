@@ -59,3 +59,12 @@ CREATE TABLE article_tag_r (
   articleTagId int(10) NOT NULL,
   PRIMARY KEY (articleId,articleTagId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE user (
+  userId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  isSuperUser tinyint(1) NOT NULL,
+  email varchar(128),
+  password varchar(128),
+  name varchar(32),
+  info varchar(128),
+  avatar varchar(128)
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8mb4;
