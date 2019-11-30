@@ -8,6 +8,7 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/article.css}">
+    <link rel="stylesheet" th:href="@{/css/comment.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
     <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=20191115">
@@ -15,23 +16,7 @@
     <script src="//at.alicdn.com/t/font_1286797_bzbcblwzlg.js"></script>
 </head>
 <body>
-<div class="header">
-    <span class="logo google-front">Anya</span>
-    <ul class="header-menu">
-<!--        <li th:if="${user != null}" class="header-item">-->
-<!--            <button class="menu-button"><span>Menu</span></button>-->
-<!--        </li>-->
-<!--        <li th:if="${user == null}" class="header-item dropdown-content">-->
-<!--            <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>-->
-<!--            <div class="dropdown hidden fixed">-->
-<!--                <ul class="dropdown-menu">-->
-<!--                    <li id="login" class="dropdown-item">登录</li>-->
-<!--                    <li class="dropdown-item">注册</li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </li>-->
-    </ul>
-</div>
+<div class="header"><span class="logo google-front">Anya</span><ul class="header-menu"></ul></div>
 <div class="header-space"></div>
 <div class="sidebar">
     <div class="sidebar-inner">
@@ -105,9 +90,46 @@
         <div class="article-wrapper">
             <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
         </div>
+        <div class="comment-list">
+            <div class="comment">
+                <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
+                <span class="comment-nickname">Anya</span>
+                <div class="comment-content">
+                    <p>这是评论</p>
+                    <p>这是评论</p>
+                </div>
+                <div class="comment-info">
+                    <a class="comment-reply" href="javascript:void(0);">回复</a>
+                    <span class="comment-time">2019.11.28</span>
+                </div>
+            </div>
+            <div class="comment">
+                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
+                <span class="comment-nickname">Anya</span>
+                <div class="comment-content">
+                    <p>这是评论</p>
+                    <p>这是评论</p>
+                </div>
+                <div class="comment-info">
+                    <a class="comment-reply" href="javascript:void(0);">回复</a>
+                    <span class="comment-time">2019.11.28</span>
+                </div>
+            </div>
+            <div class="comment">
+                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
+                <span class="comment-nickname">Anya</span>
+                <div class="comment-content">
+                    <p>这是评论</p>
+                    <p>这是评论</p>
+                </div>
+                <div class="comment-info">
+                    <a class="comment-reply" href="javascript:void(0);">回复</a>
+                    <span class="comment-time">2019.11.28</span>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="right-side">
-<!--        <img style="width: 44px;height: 44px;border-radius: 50%;" src="https://www.lrowy.com//img/user/default.png"/>-->
         <div class="panel">
             <a class="btn-item" href="/index" target="_blank">
                 <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -174,6 +196,12 @@
                 <path d="M896 254.4H304c-12.8 0-22.4-9.6-22.4-22.4s9.6-22.4 22.4-22.4h592c12.8 0 22.4 9.6 22.4 22.4s-9.6 22.4-22.4 22.4zM768 520H304c-12.8 0-22.4-9.6-22.4-22.4s9.6-22.4 22.4-22.4h464c12.8 0 22.4 9.6 22.4 22.4s-9.6 22.4-22.4 22.4zM640 776H304c-12.8 0-22.4-9.6-22.4-22.4s9.6-22.4 22.4-22.4h336c12.8 0 22.4 9.6 22.4 22.4s-9.6 22.4-22.4 22.4zM155.2 321.6c-19.2 0-36.8-6.4-51.2-17.6-35.2-28.8-40-80-12.8-115.2 14.4-17.6 33.6-27.2 54.4-30.4 22.4-1.6 43.2 3.2 59.2 17.6 35.2 28.8 40 80 12.8 115.2-14.4 17.6-33.6 27.2-54.4 30.4h-8z m0-118.4h-4.8c-9.6 1.6-19.2 6.4-24 12.8-12.8 16-9.6 38.4 4.8 51.2 8 6.4 17.6 9.6 27.2 8 9.6-1.6 19.2-6.4 24-12.8 12.8-16 9.6-38.4-4.8-51.2-6.4-4.8-14.4-8-22.4-8zM155.2 833.6c-19.2 0-36.8-6.4-51.2-17.6-17.6-14.4-27.2-33.6-30.4-54.4-1.6-22.4 3.2-43.2 17.6-59.2 28.8-35.2 80-40 115.2-12.8 35.2 28.8 40 80 12.8 115.2-14.4 17.6-33.6 27.2-54.4 30.4-3.2-1.6-6.4-1.6-9.6-1.6z m0-118.4c-11.2 0-20.8 4.8-28.8 14.4-6.4 8-9.6 17.6-8 27.2 1.6 9.6 6.4 19.2 12.8 24s17.6 9.6 27.2 8c9.6-1.6 19.2-6.4 24-12.8 12.8-16 9.6-38.4-4.8-51.2-6.4-8-14.4-9.6-22.4-9.6zM155.2 577.6c-19.2 0-36.8-6.4-51.2-17.6-17.6-14.4-27.2-33.6-30.4-54.4-1.6-22.4 3.2-43.2 17.6-59.2 14.4-17.6 33.6-27.2 54.4-30.4 22.4-1.6 43.2 3.2 59.2 17.6 35.2 28.8 40 80 12.8 115.2-14.4 17.6-33.6 27.2-54.4 30.4-1.6-1.6-4.8-1.6-8-1.6z m0-118.4h-4.8c-9.6 1.6-19.2 6.4-24 12.8-6.4 8-9.6 17.6-8 27.2 1.6 9.6 6.4 19.2 12.8 24 8 6.4 17.6 9.6 27.2 8 9.6-1.6 19.2-6.4 24-12.8 12.8-16 9.6-38.4-4.8-51.2-6.4-4.8-14.4-8-22.4-8z" fill="#103E26"></path>
             </svg>
         </a>
+    </div>
+</div>
+<div class="footer">
+    <div class="footer-container">
+        <p><a href="http://sc.beian.miit.gov.cn">蜀ICP备18023259号-1</a></p>
+        <p>Copyright © 2018 www.lrowy.com All Rights Reserved</p>
     </div>
 </div>
 <script>hljs.initHighlightingOnLoad();</script>
@@ -331,6 +359,13 @@
 
     function scrollEvent () {
         scrollTop = $(this).scrollTop();
+
+        if (scrollTop > $('.footer').offset().top - $(window).height()) {
+            $('.header').addClass('hide');
+        } else {
+            $('.header').removeClass('hide');
+        }
+
         if (isScrolling) return;
         if (scrollCount > 0) {scrollCount--;return;}
 

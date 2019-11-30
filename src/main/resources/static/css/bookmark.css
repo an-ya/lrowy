@@ -1,48 +1,41 @@
-.header {
-    background: #fafafa;
-    box-shadow: none;
+.left-side {
+    width: 260px;
+    -webkit-transition: .3s ease;
+    transition: .3s ease;
 }
 
-.header-menu {
-    width: 940px;
-    margin: 0 auto;
-    border-bottom: 1px solid #eee;
+.right-side {
+    width: 680px;
 }
 
-.main {
-    width: 900px;
-    margin: 0 auto;
-    background-color: #fff;
+.float-side {
+    display: block;
 }
 
-.bookmark-list {
-
-}
-
-.bookmark-list .item {
+.bookmark-item {
     display: flex;
     align-items: center;
-    height: 50px;
+    height: 52px;
     padding-left: 16px;
     -webkit-transition: .3s;
     transition: .3s;
 }
 
-.bookmark-list .item.hidden {
+.bookmark-item.hidden {
     opacity: 0;
     visibility: hidden;
     -webkit-transform: translateX(-20px);
     transform: translateX(-20px);
 }
 
-.bookmark-list .item img {
+.bookmark-item img {
     flex-shrink: 0;
     width: 16px;
     height: 16px;
     margin-right: 16px;
 }
 
-.bookmark-list .item span {
+.bookmark-item span {
     flex-grow: 1;
     line-height: 48px;
     overflow: hidden;
@@ -50,13 +43,13 @@
     white-space: nowrap;
 }
 
-.bookmark-list .item .dropdown-content {
+.bookmark-item .dropdown-content {
     flex-shrink: 0;
     width: 48px;
     height: 100%;
 }
 
-.bookmark-list .item .dropdown-content .dropdown-trigger {
+.bookmark-item .dropdown-content .dropdown-trigger {
     width: 100%;
     height: 100%;
     display: flex;
@@ -66,7 +59,7 @@
     cursor: pointer;
 }
 
-.bookmark-list .item .dropdown-content .dropdown {
+.bookmark-item .dropdown-content .dropdown {
     margin-right: 16px;
 }
 
@@ -84,41 +77,8 @@
     cursor: pointer;
 }
 
-.bookmark-category-item::before {
-    content: '\e600';
-    position: absolute;
-    left: 10%;
-    top: 2px;
-    font-family: "iconfont", sans-serif;
-    font-weight: bold;
-    opacity: 0;
-    -webkit-transition: .3s;
-    transition: .3s;
-}
-
-.bookmark-category-item::after {
-    content: '\e60d';
-    position: absolute;
-    right: 10%;
-    top: 2px;
-    font-family: "iconfont", sans-serif;
-    font-weight: bold;
-    opacity: 0;
-    -webkit-transition: .3s;
-    transition: .3s;
-}
-
-.bookmark-category-item-active::before {
-    left: 15%;
-    opacity: 1;
-    transform: scale(1);
-}
-
-.bookmark-category-item-active::after {
-    right: 15%;
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
+.bookmark-category-item-active {
+    color: #2979ff;
 }
 
 .bookmark-form {
@@ -152,12 +112,40 @@
     margin-right: 13px;
 }
 
-@media screen and (max-width: 900px) {
-    .main {
-        width: 100%;
+.shortcut {
+    padding: 8px 15px;
+}
+
+.shortcut .dropdown-trigger {
+    display: flex;
+    align-items: center;
+}
+
+.shortcut .dropdown-trigger img {
+    width: 36px;
+    height: 36px;
+    padding: 10px;
+    background: #f8f9fa;
+}
+
+.shortcut .dropdown-trigger span {
+    flex-grow: 1;
+    display: block;
+    margin-left: 15px;
+    text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 954px) {
+    .right-side {
+        display: block;
     }
 
-    .bookmark-category-item {
-        font-size: 16px;
+    .left-side {
+        width: 66px;
+        padding: 0;
+        border-right: 1px solid #eee;
     }
 }

@@ -1,0 +1,53 @@
+.comment-list {
+    padding: 8px 15px;
+}
+
+.comment {
+    position: relative;
+    padding: 8px 0 8px 44px;
+}
+
+.comment:first-child {
+    border-top: 1px solid #eee;
+}
+
+.comment-avatar {
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+}
+
+.comment-nickname {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+.comment-content {
+    line-height: 1.6;
+    word-break: break-all;
+}
+
+.comment-content p {
+    margin: 0;
+    padding: 0;
+}
+
+.comment-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+    line-height: 30px;
+}
+
+.comment-reply {
+
+}
+
+.comment-time {
+    color: #8a8a8a;
+}

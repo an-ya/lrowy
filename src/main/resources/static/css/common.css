@@ -58,7 +58,7 @@ body {
 
 p {
     margin: 0;
-    padding: 1em 0;
+    padding: 0;
 }
 
 a:link, a:active, a:visited {
@@ -77,9 +77,15 @@ a:hover {
     left: 0;
     width: 100%;
     height: 60px;
-    background-color: #fff;
-    box-shadow: 0 0 2px rgba(0,0,0,0.25);
+    opacity: 1;
+    background: #fafafa;
+    -webkit-transition: .3s ease;
+    transition: .3s ease;
     z-index: 1000;
+}
+
+.header.hide {
+    opacity: 0;
 }
 
 .header-space {
@@ -91,10 +97,18 @@ a:hover {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    width: 100%;
+    width: 940px;
     height: 100%;
-    margin: 0;
     padding: 0;
+    margin: 0 auto;
+    border-bottom: 1px solid #eee;
+    -webkit-transition: .3s ease;
+    transition: .3s ease;
+}
+
+.header.hide .header-menu {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
 }
 
 .header-menu .header-item {
@@ -197,6 +211,7 @@ a:hover {
     border: none;
     outline: none;
     background: none;
+    cursor: pointer;
 }
 
 .dropdown {
@@ -246,11 +261,11 @@ a:hover {
 
 .sidebar {
     position: fixed;
-    top: 0;
+    top: 60px;
     left: 0;
     bottom: 0;
-    height: 100vh;
-    box-shadow: 0 0 2px rgba(0,0,0,0.25);
+    height: calc(100% - 60px);
+    padding: 1px 0;
     background: #fff;
     -webkit-transition: all 0.4s cubic-bezier(0.4, 0, 0, 1);
     transition: all 0.4s cubic-bezier(0.4, 0, 0, 1);
@@ -263,6 +278,15 @@ a:hover {
     z-index: 1020;
 }
 
+.sidebar:after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    bottom: 15px;
+    right: 0;
+    border-right: 1px solid #eee;
+}
+
 .sidebar::-webkit-scrollbar {
     display: none;
 }
@@ -273,12 +297,38 @@ a:hover {
 }
 
 .sidebar-inner {
-    width: 14rem;
-    padding: 60px 0 20px 0;
+    width: 260px;
 }
 
 .main {
-    padding-top: 60px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 940px;
+    padding: 0;
+    margin: 24px auto 24px auto;
+}
+
+.left-side {
+    width: 680px;
+    border-right: 1px solid #eee;
+}
+
+.right-side {
+    width: 260px;
+    padding: 0 15px;
+}
+
+.right-side-copy {
+    height: 0;
+    overflow: hidden;
+}
+
+.float-side {
+    position: fixed;
+    display: none;
+    top: 84px;
+    right: 0;
 }
 
 .h1 {
@@ -307,7 +357,86 @@ a:hover {
     white-space: nowrap;
 }
 
-@media screen and (max-width: 900px) {
+.clear:after {
+    content: '\0020';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.btn-item {
+    display: flex;
+    align-items: center;
+    margin: 4px 0;
+}
+
+.btn-item:hover {
+    color: #304455;
+    text-decoration: underline;
+}
+
+.btn-item .icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 12px;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+.btn-item .mark {
+    fill: #cad9f3;
+    -webkit-transition: .3s ease;
+    transition: .3s ease;
+}
+
+.btn-item:hover .mark {
+    fill: #a5e8bb;
+}
+
+.menu-active .mark {
+    fill: #a5e8bb;
+}
+
+.md-ripple-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-clip: padding-box;
+    pointer-events: none;
+}
+
+.md-ripple-container svg {
+    position: absolute;
+    fill: rgba(56, 103, 214, .12);
+    -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.footer {
+    height: 300px;
+    background: #fafafa;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 940px;
+    margin: 0 auto;
+    border-top: 1px solid #eee;
+}
+
+.footer-container p {
+    line-height: 26px;
+}
+
+@media screen and (max-width: 954px) {
     html {
         font-size: 16px;
     }
@@ -316,11 +445,46 @@ a:hover {
         height: 50px;
     }
 
+    .header-menu {
+        width: 100%;
+    }
+
+    .sidebar {
+        top: 50px;
+        height: calc(100% - 50px);
+    }
+
     .sidebar-inner {
-        padding: 50px 0 20px 0;
+        width: 220px;
     }
 
     .main {
-        padding-top: 50px;
+        width: 100%;
+    }
+
+    .left-side {
+        border: none;
+    }
+
+    .right-side {
+        display: none;
+    }
+
+    .right-side-copy {
+        height: auto;
+    }
+
+    .float-side {
+        display: block;
+    }
+
+    .footer-container {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 694px) {
+    .left-side {
+        width: 100%;
     }
 }
