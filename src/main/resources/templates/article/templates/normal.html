@@ -90,44 +90,43 @@
         <div class="article-wrapper">
             <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
         </div>
+        <div class="comment-title">评论</div>
         <div class="comment-list">
             <div class="comment">
+                <span class="comment-nickname">Anya</span>
+                <div class="comment-content">
+                    <p>这是评论</p>
+                </div>
+                <div class="comment-info">
+                    <a class="comment-reply" href="javascript:void(0);">回复</a>
+                    <span class="comment-time">2019.11.28</span>
+                </div>
                 <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
-                <span class="comment-nickname">Anya</span>
-                <div class="comment-content">
-                    <p>这是评论</p>
-                    <p>这是评论</p>
-                </div>
-                <div class="comment-info">
-                    <a class="comment-reply" href="javascript:void(0);">回复</a>
-                    <span class="comment-time">2019.11.28</span>
-                </div>
             </div>
             <div class="comment">
-                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
                 <span class="comment-nickname">Anya</span>
                 <div class="comment-content">
-                    <p>这是评论</p>
                     <p>这是评论</p>
                 </div>
                 <div class="comment-info">
                     <a class="comment-reply" href="javascript:void(0);">回复</a>
                     <span class="comment-time">2019.11.28</span>
                 </div>
+                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
             </div>
             <div class="comment">
-                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
                 <span class="comment-nickname">Anya</span>
                 <div class="comment-content">
-                    <p>这是评论</p>
                     <p>这是评论</p>
                 </div>
                 <div class="comment-info">
                     <a class="comment-reply" href="javascript:void(0);">回复</a>
                     <span class="comment-time">2019.11.28</span>
                 </div>
+                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
             </div>
         </div>
+        <textarea id="editor"></textarea>
     </div>
     <div class="right-side">
         <div class="panel">
@@ -200,14 +199,15 @@
 </div>
 <div class="footer">
     <div class="footer-container">
-        <p><a href="http://sc.beian.miit.gov.cn">蜀ICP备18023259号-1</a></p>
-        <p>Copyright © 2018 www.lrowy.com All Rights Reserved</p>
+        <p><a href="http://beian.miit.gov.cn">蜀ICP备18023259号-1</a></p>
+        <p>Copyright © 2019 www.lrowy.com All Rights Reserved</p>
     </div>
 </div>
 <script>hljs.initHighlightingOnLoad();</script>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
+<script src="/ckeditor-v4.12.1/ckeditor.js"></script>
 <script src="/layui-v2.5.4//layui.all.js"></script>
 <script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer']);</script>
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
@@ -408,6 +408,10 @@
             pageTo('##');
         }
     }
+
+    editor = CKEDITOR.replace( 'editor', {
+        customConfig: './config-simple.js?t=46587'
+    });
 
     setResize();
     $(window).resize(setResize);

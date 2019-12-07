@@ -1,10 +1,17 @@
+.comment-title {
+    padding: 8px 25px;
+    margin-top: 24px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
 .comment-list {
     padding: 8px 15px;
 }
 
 .comment {
     position: relative;
-    padding: 8px 0 8px 44px;
+    padding: .5em 44px .5em 25px;
 }
 
 .comment:first-child {

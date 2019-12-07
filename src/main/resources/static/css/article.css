@@ -171,3 +171,31 @@
     width: 25px;
     height: 25px;
 }
+
+.cke_1 {
+    border: none!important;
+}
+
+.cke_top {
+    padding: 6px 15px 2px!important;
+    border: none!important;
+}
+
+.cke_bottom {
+    border-top: 0!important;
+    background: transparent!important;
+}
+
+.cke_path {
+    display: none;
+}
+
+.cke_resizer {
+    opacity: 0;
+    -webkit-transition: .3s ease!important;
+    transition: .3s ease!important;
+}
+
+.cke_bottom:hover .cke_resizer {
+    opacity: 1;
+}

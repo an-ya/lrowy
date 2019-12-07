@@ -13,7 +13,6 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'forms', groups: [ 'forms' ] },
         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
         { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-        { name: 'links', groups: [ 'links' ] },
         '/',
         '/',
         { name: 'styles', groups: [ 'styles' ] },
@@ -21,12 +20,12 @@ CKEDITOR.editorConfig = function( config ) {
         { name: 'insert', groups: [ 'insert' ] },
         { name: 'tools', groups: [ 'tools' ] },
         { name: 'others', groups: [ 'others' ] },
+        { name: 'links', groups: [ 'links' ] },
         { name: 'about', groups: [ 'about' ] }
     ];
 
     config.removeButtons = 'Save,Templates,Source,NewPage,Preview,Print,Cut,Copy,Paste,PasteText,PasteFromWord,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,HorizontalRule,PageBreak,Iframe,Maximize,ShowBlocks,About';
 
-    config.removeButtons = 'save,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,About';
     config.removePlugins = 'easyimage,cloudservices,image';
     config.extraPlugins = 'codesnippet,image2,mathjax,resize';
     config.codeSnippet_theme = 'vue';
