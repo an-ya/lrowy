@@ -15,19 +15,20 @@ code {
 }
 
 pre {
-    border-radius: 2px;
     position: relative;
-    overflow-x: auto;
+    border-radius: 2px;
 }
 pre code {
+    display: block;
+    padding: 1.2em 1.8em;
     color: #525252;
     white-space: pre;
-    padding: 1.2em 1.8em;
-    margin: 0;
     /*font-size: 0.9rem;*/
     /*line-height: 1.6rem;*/
     line-height: 26px;
-    display: inline-block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style: none;
 }
 pre code .hljs-tag,
 pre code .hljs-tag pre code .hljs-title,

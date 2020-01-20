@@ -173,7 +173,13 @@
 }
 
 .cke_1 {
+    margin-top: 24px!important;
     border: none!important;
+}
+
+.cke_float {
+    border: 1px solid #eee!important;
+    border-bottom: 0!important;
 }
 
 .cke_top {

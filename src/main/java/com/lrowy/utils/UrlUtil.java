@@ -2,14 +2,24 @@ package com.lrowy.utils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class UrlUtil {
     private final static Set<String> PublicSuffixSet = new HashSet<String>(Arrays.asList(new String("com|org|net|gov|edu|co|tv|mobi|info|asia|xxx|onion|cn|com.cn|edu.cn|gov.cn|net.cn|org.cn|jp|kr|tw|com.hk|hk|com.hk|org.hk|se|com.se|org.se").split("\\|")));
     private static Pattern IP_PATTERN = Pattern.compile("(\\d{1,3}\\.){3}(\\d{1,3})");
+
+    public static Map<String, Object> parse(String paramsString) {
+        Map<String, Object> result = new HashMap<>();
+        if (paramsString != null && !paramsString.trim().equals("")) {
+            String[] params = paramsString.split("&");
+            for (String param : params) {
+                String[] keyValue = param.split("=");
+                result.put(keyValue[0], keyValue[1]);
+            }
+        }
+        return result;
+    }
 
     public static String getBaseUrl(String url) throws MalformedURLException {
         URL u = new URL(url);

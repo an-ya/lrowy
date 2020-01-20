@@ -6,35 +6,51 @@
 }
 
 .comment-list {
-    padding: 8px 15px;
+    padding: 8px 0 8px 15px;
 }
 
 .comment {
     position: relative;
-    padding: .5em 44px .5em 25px;
+    padding: .5em 0 0 54px;
 }
 
-.comment:first-child {
-    border-top: 1px solid #eee;
+.comment:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 54px;
+    right: 0;
+    height: 1px;
+    background-color: rgba(0,0,0,.1);
+    -webkit-transform: translateY(-50%) scaleY(.5);
+    transform: translateY(-50%) scaleY(.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
 }
 
 .comment-avatar {
     position: absolute;
     top: 8px;
-    left: 0;
+    left: 10px;
     width: 34px;
     height: 34px;
-    border-radius: 50%;
+    border-radius: 4px;
+}
+
+.comment-at {
+    color: #2979ff;
+    line-height: 1;
 }
 
 .comment-nickname {
-    display: block;
     font-size: 16px;
     font-weight: bold;
     line-height: 20px;
 }
 
 .comment-content {
+    margin-top: 3px;
     line-height: 1.6;
     word-break: break-all;
 }
@@ -46,15 +62,75 @@
 
 .comment-info {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
     margin-top: 3px;
-    line-height: 30px;
 }
 
-.comment-reply {
+.comment-reply-btn {
+    margin-right: 8px;
+}
 
+.comment-reply-btn i {
+    margin-right: 6px;
+    font-size: 16px;
 }
 
 .comment-time {
     color: #8a8a8a;
+}
+
+.comment-reply {
+    background: #fafafa;
+}
+
+.comment-reply .comment {
+    padding: .5em 0 0 44px;
+}
+
+.comment-reply .comment:after {
+    left: 44px;
+}
+
+.comment-reply .comment-avatar {
+    width: 24px;
+    height: 24px;
+}
+
+.comment-reply .comment-nickname {
+    font-size: 14px;
+}
+
+.comment-reply .comment-reply-editor {
+    min-height: 54px;
+    padding: 4px;
+    margin-left: 44px;
+    background: #f8f8f8;
+    border-top: 1px solid #eee;
+    outline: none;
+}
+
+.twinkle {
+    -webkit-animation-timing-function: ease;
+    animation-timing-function: ease;
+    -webkit-animation-duration: .6s;
+    animation-duration: .6s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+    -webkit-animation-play-state: running;
+    animation-play-state: running;
+    -webkit-animation-name: Twinkle;
+    animation-name: Twinkle;
+}
+
+@-webkit-keyframes Twinkle {
+    0% {
+        background: rgba(41, 121, 255, 0);
+    }
+    50% {
+        background: rgba(41, 121, 255, .12);
+    }
+    100% {
+        background: rgba(41, 121, 255, 0);
+    }
 }

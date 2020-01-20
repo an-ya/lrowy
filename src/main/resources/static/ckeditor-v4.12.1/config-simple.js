@@ -2,33 +2,33 @@
  * 简单版配置
  */
 
-CKEDITOR.editorConfig = function( config ) {
+CKEDITOR.editorConfigCustom = function( config ) {
     config.baseHref = '/';//设置基础路径，加载样式文件时有用
     config.language = 'zh-cn';//设置语言为中文
 
     config.toolbarGroups = [
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
+        { name: 'colors', groups: [ 'colors' ] },
         { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
         { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
         { name: 'forms', groups: [ 'forms' ] },
-        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
         { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
         '/',
-        '/',
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
         { name: 'styles', groups: [ 'styles' ] },
-        { name: 'colors', groups: [ 'colors' ] },
+        { name: 'links', groups: [ 'links' ] },
         { name: 'insert', groups: [ 'insert' ] },
+        '/',
         { name: 'tools', groups: [ 'tools' ] },
         { name: 'others', groups: [ 'others' ] },
-        { name: 'links', groups: [ 'links' ] },
         { name: 'about', groups: [ 'about' ] }
     ];
 
-    config.removeButtons = 'Save,Templates,Source,NewPage,Preview,Print,Cut,Copy,Paste,PasteText,PasteFromWord,Replace,Find,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,BidiLtr,BidiRtl,Language,Anchor,Flash,HorizontalRule,PageBreak,Iframe,Maximize,ShowBlocks,About';
-
+    config.removeButtons = 'Format,Font,FontSize,NumberedList,Outdent,Blockquote,JustifyLeft,BidiLtr,Form,Scayt,SelectAll,Find,Cut,Source,Templates,Flash,HorizontalRule,Smiley,PageBreak,Iframe,Maximize,ShowBlocks,About,Save,Print,Preview,NewPage,Copy,Paste,PasteText,PasteFromWord,Replace,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,BulletedList,Indent,CreateDiv,JustifyCenter,JustifyRight,JustifyBlock,BidiRtl,Language,Anchor';
     config.removePlugins = 'easyimage,cloudservices,image';
-    config.extraPlugins = 'codesnippet,image2,mathjax,resize';
-    config.codeSnippet_theme = 'vue';
+    config.extraPlugins = 'codesnippet,image2,mathjax,resize,confighelper';
+
+    config.image_previewText = ' ';
 
     config.mathJaxClass = 'mjx';
     config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
@@ -36,6 +36,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.filebrowserBrowseUrl = '/browser/browse.php';
     config.filebrowserUploadUrl = '/uploader/upload.php';
 
+    config.codeSnippet_theme = 'vue';
     config.codeSnippet_languages = {
         apache: 'Apache',
         bash: 'Bash',
@@ -69,7 +70,4 @@ CKEDITOR.editorConfig = function( config ) {
         xhtml: 'XHTML',
         xml: 'XML'
     };
-
-    config.image_previewText = ' ';
-    config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';//设置公式插件的库
 };

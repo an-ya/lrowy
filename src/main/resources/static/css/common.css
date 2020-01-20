@@ -1,11 +1,11 @@
 @font-face {
     font-family: 'iconfont';  /* project id 1286797 */
-    src: url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.eot');
-    src: url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.woff2') format('woff2'),
-    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.woff') format('woff'),
-    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_1286797_ji7r02t5a0p.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_1286797_7659xca54nw.eot');
+    src: url('//at.alicdn.com/t/font_1286797_7659xca54nw.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1286797_7659xca54nw.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1286797_7659xca54nw.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1286797_7659xca54nw.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1286797_7659xca54nw.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -17,7 +17,7 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
-.google-front {
+.custom-font1 {
     font-family: 'ZCOOL XiaoWei', Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
 }
 

@@ -11,12 +11,12 @@
     <link rel="stylesheet" th:href="@{/css/comment.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
-    <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=20191115">
+    <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=201911013">
     <script src="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <script src="//at.alicdn.com/t/font_1286797_bzbcblwzlg.js"></script>
 </head>
 <body>
-<div class="header"><span class="logo google-front">Anya</span><ul class="header-menu"></ul></div>
+<div class="header"><span class="logo custom-font1">Anya</span><ul class="header-menu"></ul></div>
 <div class="header-space"></div>
 <div class="sidebar">
     <div class="sidebar-inner">
@@ -92,40 +92,66 @@
         </div>
         <div class="comment-title">评论</div>
         <div class="comment-list">
-            <div class="comment">
-                <span class="comment-nickname">Anya</span>
-                <div class="comment-content">
-                    <p>这是评论</p>
-                </div>
-                <div class="comment-info">
-                    <a class="comment-reply" href="javascript:void(0);">回复</a>
-                    <span class="comment-time">2019.11.28</span>
-                </div>
+            <div class="comment" id="10001">
                 <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
-            </div>
-            <div class="comment">
-                <span class="comment-nickname">Anya</span>
+                <div class="comment-nickname">Anya</div>
                 <div class="comment-content">
                     <p>这是评论</p>
                 </div>
                 <div class="comment-info">
-                    <a class="comment-reply" href="javascript:void(0);">回复</a>
+                    <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
                     <span class="comment-time">2019.11.28</span>
                 </div>
-                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
+                <div class="comment-reply">
+                    <div class="comment" id="100010">
+                        <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
+                        <div class="comment-nickname">Anya</div>
+                        <div class="comment-content">
+                            <p>这是评论</p>
+                        </div>
+                        <div class="comment-info">
+                            <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                            <span class="comment-time">2019.11.28</span>
+                        </div>
+                    </div>
+                    <div class="comment" id="100011">
+                        <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
+                        <div class="comment-nickname">Anya</div>
+                        <div class="comment-content">
+                            <p>这是评论</p>
+                        </div>
+                        <div class="comment-info">
+                            <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                            <span class="comment-time">2019.11.28</span>
+                        </div>
+                    </div>
+<!--                    <div id="reply-editor1" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="10001"></div>-->
+                </div>
             </div>
-            <div class="comment">
-                <span class="comment-nickname">Anya</span>
+            <div class="comment" id="10002">
+                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
+                <div class="comment-nickname">Anya</div>
                 <div class="comment-content">
                     <p>这是评论</p>
                 </div>
                 <div class="comment-info">
-                    <a class="comment-reply" href="javascript:void(0);">回复</a>
+                    <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
                     <span class="comment-time">2019.11.28</span>
                 </div>
+            </div>
+            <div class="comment" id="10003">
                 <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
+                <div class="comment-nickname">Anya</div>
+                <div class="comment-content">
+                    <p>这是评论</p>
+                </div>
+                <div class="comment-info">
+                    <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                    <span class="comment-time">2019.11.28</span>
+                </div>
             </div>
         </div>
+        <a href="https://github.com/login/oauth/authorize?client_id=2aa8575f003ba2c492cc&scope=user:email&redirect_uri=http://localhost:8080/oauth">github</a>
         <textarea id="editor"></textarea>
     </div>
     <div class="right-side">
@@ -208,6 +234,7 @@
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script src="/ckeditor-v4.12.1/ckeditor.js"></script>
+<script src="/ckeditor-v4.12.1/config-simple.js?t=46592"></script>
 <script src="/layui-v2.5.4//layui.all.js"></script>
 <script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer']);</script>
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
@@ -409,8 +436,63 @@
         }
     }
 
-    editor = CKEDITOR.replace( 'editor', {
-        customConfig: './config-simple.js?t=46587'
+    function editorFocus(ev) {
+        var $editor = $(ev.editor.element.$);
+        var $comment = $('#' + $editor.data('commentId'));
+        var $nick = $comment.children().eq(1);
+        $('.comment-at').remove();
+        $nick.prepend('<span class="comment-at custom-font1">@ </span>');
+    }
+
+    var config = { placeholder: '从这里开始写正文' };
+    CKEDITOR.editorConfigCustom(config);
+    var editor = CKEDITOR.replace('editor', config);
+
+    CKEDITOR.disableAutoInline = true;
+    // var editor1 = CKEDITOR.inline('reply-editor1', config);
+    // editor1.on('focus', editorFocus);
+
+    $('.comment-reply-btn').click(function () {
+        var $comment = $(this).parent().parent(), $parent = $comment.parent();
+        var editor, editorId, commentId = $comment.attr('id'), $editor;
+        if ($parent.hasClass('comment-reply')) {
+            $editor = $parent.find('.comment-reply-editor');
+            if ($editor.length > 0) {
+                editorId = $editor.attr('id');
+                $editor.data('commentId', commentId);
+            } else {
+                editorId = 'reply-editor' + $comment.attr('id');
+                $parent.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="' + commentId + '"></div></div>');
+                editor = CKEDITOR.inline(editorId, config);
+                editor.on('focus', editorFocus);
+            }
+        } else if ($parent.hasClass('comment-list')) {
+            $editor = $comment.find('.comment-reply-editor');
+            if ($editor.length > 0) {
+                editorId = $editor.attr('id');
+                $editor.data('commentId', commentId);
+            } else {
+                editorId = 'reply-editor' + $comment.attr('id');
+                var $reply = $comment.find('.comment-reply');
+                if ($reply.length > 0) {
+                    $reply.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="' + commentId + '"></div></div>');
+                } else {
+                    $comment.append('<div class="comment-reply"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="' + commentId + '"></div></div>');
+                }
+                editor = CKEDITOR.inline(editorId, config);
+                editor.on('focus', editorFocus);
+            }
+        }
+
+        $comment.addClass('twinkle');
+        setTimeout(function () {
+            $comment.removeClass('twinkle');
+            if (editorId) {
+                if (!editor) editor = CKEDITOR.instances[editorId];
+                editor.focus();
+                editor.placeholder = '回复123156';
+            }
+        }, 600);
     });
 
     setResize();
@@ -424,7 +506,7 @@
         });
         setImages();
         setDirectory();
-        setCodeScroll();
+        // setCodeScroll();
         pageTo(bash);
     });
 </script>

@@ -30,7 +30,8 @@ CKEDITOR.editorConfig = function( config ) {
     config.removeButtons = 'save,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,About';
     config.removePlugins = 'easyimage,cloudservices,image';
     config.extraPlugins = 'codesnippet,image2,markdown,mathjax,resize';
-    config.codeSnippet_theme = 'vue';
+
+    config.image_previewText = ' ';
 
     config.mathJaxClass = 'mjx';
     config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
@@ -38,6 +39,7 @@ CKEDITOR.editorConfig = function( config ) {
     config.filebrowserBrowseUrl = '/browser/browse.php';
     config.filebrowserUploadUrl = '/uploader/upload.php';
 
+    config.codeSnippet_theme = 'vue';
     config.codeSnippet_languages = {
         apache: 'Apache',
         bash: 'Bash',
@@ -71,7 +73,4 @@ CKEDITOR.editorConfig = function( config ) {
         xhtml: 'XHTML',
         xml: 'XML'
     };
-
-    config.image_previewText = ' ';
-    config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML';//设置公式插件的库
 };
