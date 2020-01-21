@@ -61,4 +61,11 @@ http.connectionRequestTimeout=500
 http.socketTimeout=10000
 # 提交请求前测试连接是否可用
 http.staleConnectionCheckEnabled=true
+
+# github oauth
+github.oauth.clientId=github oauth的appid
+github.oauth.clientSecret=github oauth秘钥
+
+# google reCaptcha secret
+google.reCaptcha.secret=google reCaptcha秘钥
 ```

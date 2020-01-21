@@ -1,6 +1,6 @@
 package com.lrowy.controller;
 
-import com.lrowy.pojo.User;
+import com.lrowy.pojo.user.User;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Random;
 
 @Controller
 public class BaseController {
@@ -44,5 +45,16 @@ public class BaseController {
 
     protected void userLogout() {
         getSession().removeAttribute("login");
+    }
+
+    protected String getCaptcha () {
+        String sources = "0123456789";
+        Random rand = new Random();
+        StringBuilder flag = new StringBuilder();
+        for (int j = 0; j < 6; j++)
+        {
+            flag.append(sources.charAt(rand.nextInt(9)));
+        }
+        return flag.toString();
     }
 }

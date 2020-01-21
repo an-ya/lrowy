@@ -1,7 +1,7 @@
 package com.lrowy.controller;
 
 import com.lrowy.dao.BookmarkDao;
-import com.lrowy.pojo.User;
+import com.lrowy.pojo.user.User;
 import com.lrowy.pojo.bookmark.Bookmark;
 import com.lrowy.pojo.bookmark.BookmarkResult;
 import com.lrowy.pojo.common.enums.SystemConstant;

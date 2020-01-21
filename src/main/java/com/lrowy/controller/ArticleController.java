@@ -1,7 +1,7 @@
 package com.lrowy.controller;
 
 import com.lrowy.dao.ArticleDao;
-import com.lrowy.pojo.User;
+import com.lrowy.pojo.user.User;
 
 import com.lrowy.pojo.article.Article;
 import com.lrowy.pojo.article.ArticleCategory;

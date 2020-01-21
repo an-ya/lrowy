@@ -124,19 +124,35 @@
             position: relative;
         }
 
+        .form .item {
+            display: flex;
+            align-items: stretch;
+            margin-bottom: 20px;
+            border: 1px solid #e9e9e9;
+        }
+
         .form label {
             display: none;
         }
 
         .form input {
+            flex-grow: 1;
             width: 100%;
             height: 40px;
             padding-left: 15px;
-            margin-bottom: 20px;
             line-height: 40px;
             background-color: #fff;
-            border: 1px solid #e9e9e9;
+            border: 0;
             outline: 0;
+        }
+
+        .form button {
+            flex-shrink: 0;
+            padding: 0 10px;
+            color: #d9d9d9;
+            border: 0;
+            outline: 0;
+            background: #fff;
         }
 
         .btn {
@@ -203,16 +219,19 @@
     <!--        <span class="step">3</span>-->
     <!--    </div>-->
     <div class="form">
-        <!--        <label for="account">账号</label>-->
-        <!--        <input id="account" value="" placeholder="账号"/>-->
-        <!--        <label for="password">密码</label>-->
-        <!--        <input id="password" value="" placeholder="密码"/>-->
-        <label for="email">邮箱</label>
-        <input id="email" value="" placeholder="邮箱"/>
-        <label for="password">密码</label>
-        <input id="password" value="" placeholder="密码"/>
-        <label for="password2">密码</label>
-        <input id="password2" value="" placeholder="重复密码"/>
+        <div class="item">
+            <label for="email">邮箱</label>
+            <input id="email" value="" placeholder="邮箱"/>
+        </div>
+        <div class="item">
+            <label for="password">密码</label>
+            <input id="password" value="" placeholder="密码"/>
+        </div>
+        <div class="item">
+            <label for="captcha">密码</label>
+            <input id="captcha" value="" placeholder="验证码"/>
+            <button onclick="getCaptcha()">发送</button>
+        </div>
     </div>
     <div class="btn">
         <button class="login">登录</button>
@@ -223,13 +242,6 @@
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script src="https://www.recaptcha.net/recaptcha/api.js?render=6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti&hl=zh-CN async defer"></script>
-<script>
-    grecaptcha.ready(function () {
-        grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'homepage' }).then(function (token) {
-            console.log(token)
-        });
-    });
-</script>
 <script>
     var $inputEmail = $('#email');
     $inputEmail.bind('input propertychange', _.debounce(function () {
@@ -268,7 +280,7 @@
         console.log($inputEmail.val());
     }, 300));
 
-    function logon() {
+    function logon () {
         $.ajax({
             url: '/logon',
             type: 'post',
@@ -278,6 +290,27 @@
             success: function (data) {
                 console.log(data);
             }
+        });
+    }
+
+    function getGoogleReCaptchaToken(success) {
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'captcha' }).then(function (token) {
+                success(token);
+            });
+        });
+    }
+
+    function getCaptcha () {
+        getGoogleReCaptchaToken(function (token) {
+            $.ajax({
+                url: '/getCaptcha',
+                type: 'post',
+                data: { token: token },
+                success: function (data) {
+                    console.log(data);
+                }
+            });
         });
     }
 </script>

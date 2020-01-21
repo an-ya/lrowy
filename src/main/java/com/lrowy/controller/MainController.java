@@ -1,10 +1,13 @@
 package com.lrowy.controller;
 
-import com.lrowy.pojo.User;
+import com.lrowy.pojo.common.captcha.Captcha;
+import com.lrowy.pojo.user.User;
 import com.lrowy.pojo.common.response.BaseResponse;
 
 import com.lrowy.service.EmailService;
+import com.lrowy.service.GoogleReCaptchaVerifyService;
 import com.lrowy.service.OAuthService;
+import com.lrowy.utils.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MainController extends BaseController {
@@ -21,6 +25,8 @@ public class MainController extends BaseController {
     private OAuthService oAuthService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private GoogleReCaptchaVerifyService googleReCaptchaVerifyService;
 
     @RequestMapping("/")
     public String i() {
@@ -86,5 +92,22 @@ public class MainController extends BaseController {
     public String oauth(String code) {
         oAuthService.getUserInfo(code);
         return "redirect:/";
+    }
+
+    @RequestMapping(value = "/getCaptcha", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<Captcha> getCaptcha(HttpServletRequest request, String token) {
+        BaseResponse<Captcha> br = new BaseResponse<>();
+        Captcha captcha = new Captcha();
+        captcha.setIp(IpUtil.getIpAddr(request));
+        captcha.setCode(getCaptcha());
+        try {
+            String result = googleReCaptchaVerifyService.verify(token, captcha);
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        br.setResult(captcha);
+        return br;
     }
 }

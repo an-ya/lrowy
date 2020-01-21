@@ -10,7 +10,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import java.util.Date;
 
-public class JwtUtils {
+public class JwtUtil {
     public static String createJWT(String id, String subject, long ttlMillis) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long nowMillis = System.currentTimeMillis();

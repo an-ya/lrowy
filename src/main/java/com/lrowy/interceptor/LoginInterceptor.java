@@ -1,6 +1,6 @@
 package com.lrowy.interceptor;
 
-import com.lrowy.utils.JwtUtils;
+import com.lrowy.utils.JwtUtil;
 import com.lrowy.pojo.common.response.BaseResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,7 +13,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        String token = request.getHeader("x-access-token");
-//        BaseResponse br = JwtUtils.validateJWT(token);
+//        BaseResponse br = JwtUtil.validateJWT(token);
 //        System.out.println(token);
 //        System.out.println(br.getMsg());
         return true;
