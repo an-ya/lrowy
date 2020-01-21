@@ -2,7 +2,7 @@
 [Anya的小站](https://www.lrowy.com)
 # 配置
 在src/main/resources目录下添加配置文件application.properties
-```
+```properties
 # port
 server.port=80
 
