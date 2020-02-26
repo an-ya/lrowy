@@ -1,8 +1,5 @@
 package com.lrowy.interceptor;
 
-import com.lrowy.utils.JwtUtils;
-import com.lrowy.pojo.common.response.BaseResponse;
-
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

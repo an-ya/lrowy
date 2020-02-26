@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lrowy.dao.EmailDao">
+    <resultMap id="email" type="com.lrowy.pojo.email.Email">
+        <id column="emailId" property="emailId"/>
+        <result column="content" property="content"/>
+        <result column="subject" property="subject"/>
+        <result column="sendType" property="sendType"/>
+        <result column="sendFrom" property="sendFrom"/>
+        <result column="sendTo" property="sendTo"/>
+        <result column="sendDate" property="sendDate"/>
+    </resultMap>
+
+    <insert id="saveEmail" parameterType="com.lrowy.pojo.email.Email">
+        <selectKey keyProperty="emailId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO email (content,subject,sendType,sendFrom,sendTo,sendDate) VALUE (#{content},#{subject},#{sendType},#{sendFrom},#{sendDate});
+    </insert>
+
+    <select id="findEmail" resultMap="email">
+        SELECT * FROM email WHERE emailId=#{emailId};
+    </select>
+
+    <select id="findEmailById" resultMap="email">
+        SELECT * FROM email WHERE emailId=#{emailId};
+    </select>
+</mapper>

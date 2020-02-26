@@ -14,7 +14,6 @@ spring.jackson.time-zone=Asia/Shanghai
 server.servlet.session.timeout=604800
 
 # upload path
-# 保存的图片路径
 web.upload-path=D:/lrowy.com/images/
 
 # thymeleaf
@@ -38,7 +37,7 @@ spring.datasource.url=jdbc:mysql://数据库ip:数据库port/数据库名?useUni
 mybatis.mapper-locations=classpath:com/lrowy/mapper/*Mapper.xml
 mybatis.configuration.call-setters-on-nulls=true
 
-# JavaMailSender 邮件发送的配置
+# JavaMailSender
 spring.mail.host=smtp.163.com或smtp.qq.com
 spring.mail.port=25或465
 spring.mail.username=邮箱的账号
@@ -61,4 +60,11 @@ http.connectionRequestTimeout=500
 http.socketTimeout=10000
 # 提交请求前测试连接是否可用
 http.staleConnectionCheckEnabled=true
+
+# github oauth
+github.oauth.clientId=github oauth appid
+github.oauth.clientSecret=github oauth 密钥
+
+# token
+token.secret=token密钥
 ```

@@ -72,7 +72,6 @@
 
         .top .scroll {
             height: 20px;
-            font-size: 20px;
             line-height: 20px;
             -webkit-transition: .3s;
             transition: .3s;
@@ -87,7 +86,7 @@
         .top .title {
             display: block;
             height: 20px;
-            font-size: 20px;
+            font-size: 16px;
             -webkit-transition: .3s;
             transition: .3s;
             overflow: hidden;
@@ -222,14 +221,14 @@
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
-<script src="https://www.recaptcha.net/recaptcha/api.js?render=6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti&hl=zh-CN async defer"></script>
-<script>
-    grecaptcha.ready(function () {
-        grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'homepage' }).then(function (token) {
-            console.log(token)
-        });
-    });
-</script>
+<!--<script src="https://www.recaptcha.net/recaptcha/api.js?render=6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti&hl=zh-CN async defer"></script>-->
+<!--<script>-->
+<!--    grecaptcha.ready(function () {-->
+<!--        grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'homepage' }).then(function (token) {-->
+<!--            console.log(token)-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 <script>
     var $inputEmail = $('#email');
     $inputEmail.bind('input propertychange', _.debounce(function () {
