@@ -71,10 +71,10 @@
                             top = offsetTop + $(this).height();
                         }
 
-                        if ($(this).offset().left - (140 - $(this).width()) <= 0) {
+                        if ($(this).offset().left - (140 - $(this).outerWidth()) <= 0) {
                             left = $(this).offset().left;
                         } else {
-                            left = $(this).offset().left - (140 - $(this).width());
+                            left = $(this).offset().left - (140 - $(this).outerWidth());
                         }
 
                         if (left < 10) left = 10;

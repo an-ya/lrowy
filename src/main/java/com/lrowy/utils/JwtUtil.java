@@ -7,10 +7,14 @@ import io.jsonwebtoken.*;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
 
 public class JwtUtil {
+    @Value("${token.secret}")
+    private static String tokenSecret;
+
     public static String createJWT(String id, String subject, long ttlMillis) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         long nowMillis = System.currentTimeMillis();
@@ -48,8 +52,7 @@ public class JwtUtil {
     }
 
     private static SecretKey generalKey() {
-        String stringKey = SystemConstant.JWT_SECERT.getCode();
-        byte[] encodedKey = Base64.decodeBase64(stringKey);
+        byte[] encodedKey = Base64.decodeBase64(tokenSecret);
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
     }
 

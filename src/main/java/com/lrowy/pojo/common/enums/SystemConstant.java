@@ -9,7 +9,6 @@ public enum SystemConstant {
     PARAMS_INVALID("005", "请求无效"),
     MKDIR_ERROR("101", "文件夹创建失败"),
     DELETEFILE_ERROR("102", "删除文件失败"),
-    JWT_SECERT("@#$%^&*()OPG#$%^&*(HG", "token秘钥"),
     JWT_ERRCODE_EXPIRE("201", "token失效"),
     JWT_ERRCODE_FAIL("202", "token验证失败");
 

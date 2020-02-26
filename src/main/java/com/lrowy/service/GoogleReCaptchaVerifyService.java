@@ -21,7 +21,7 @@ public class GoogleReCaptchaVerifyService {
         params.put("secret", secret);
         params.put("response", token);
         params.put("remoteip", captcha.getIp());
-        HttpResult hr = httpAPIService.doPost("https://www.google.com/recaptcha/api/siteverify", params);
+        HttpResult hr = httpAPIService.doPost("https://www.recaptcha.net/recaptcha/api/siteverify", params);
         return hr.getEntityString();
     }
 }

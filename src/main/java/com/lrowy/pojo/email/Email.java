@@ -1,5 +1,7 @@
 package com.lrowy.pojo.email;
 
+import java.util.Date;
+
 public class Email {
     private int emailId;
     private String content;
@@ -7,7 +9,7 @@ public class Email {
     private String sendType;
     private String sendFrom;
     private String sendTo;
-    private String sendDate;
+    private Date sendDate;
 
     public int getEmailId() {
         return emailId;
@@ -57,11 +59,11 @@ public class Email {
         this.sendTo = sendTo;
     }
 
-    public String getSendDate() {
+    public Date getSendDate() {
         return sendDate;
     }
 
-    public void setSendDate(String sendDate) {
+    public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
     }
 }
