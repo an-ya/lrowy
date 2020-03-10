@@ -5,6 +5,7 @@
         <id column="captchaId" property="captchaId"/>
         <result column="sendId" property="sendId"/>
         <result column="sendMode" property="sendMode"/>
+        <result column="sendTarget" property="sendTarget"/>
         <result column="ip" property="ip"/>
         <result column="code" property="code"/>
         <result column="createDate" property="createDate"/>
@@ -14,14 +15,10 @@
         <selectKey keyProperty="captchaId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO captcha (sendId,sendMode,ip,code,createDate) VALUE (#{sendId},#{sendMode},#{ip},#{code},#{createDate});
+        INSERT INTO captcha (sendId,sendMode,sendTarget,ip,code,createDate) VALUE (#{sendId},#{sendMode},#{sendTarget},#{ip},#{code},#{createDate});
     </insert>
 
-    <select id="findCaptcha" resultMap="captcha">
-        SELECT * FROM captcha WHERE captchaId=#{captchaId};
-    </select>
-
-    <select id="findCaptchaById" resultMap="captcha">
-        SELECT * FROM captcha WHERE captchaId=#{captchaId};
+    <select id="findCaptchaByTarget" resultMap="captcha">
+        SELECT * FROM captcha WHERE sendTarget=#{sendTarget} ORDER BY createDate LIMIT 1;
     </select>
 </mapper>

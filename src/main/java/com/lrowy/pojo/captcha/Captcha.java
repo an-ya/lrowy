@@ -5,10 +5,21 @@ import java.util.Date;
 public class Captcha {
     private int captchaId;
     private int sendId;
+    private int timeout;
     private String sendMode;
+    private String sendTarget;
     private String ip;
     private String code;
     private Date createDate;
+
+    public Captcha () {
+        this.timeout = 3600;
+        this.createDate = new Date();
+    }
+
+    public boolean isExpired () {
+        return (new Date().getTime() - this.createDate.getTime()) / 1000 > this.timeout;
+    }
 
     public int getCaptchaId() {
         return captchaId;
@@ -32,6 +43,14 @@ public class Captcha {
 
     public void setSendMode(String sendMode) {
         this.sendMode = sendMode;
+    }
+
+    public String getSendTarget() {
+        return sendTarget;
+    }
+
+    public void setSendTarget(String sendTarget) {
+        this.sendTarget = sendTarget;
     }
 
     public String getIp() {

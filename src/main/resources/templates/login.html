@@ -7,6 +7,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
+    <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
     <style>
         html {
             height: 100%;
@@ -14,18 +16,18 @@
         }
 
         body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
             height: 100%;
             background-color: #fafafa;
         }
 
         .login-box {
             position: relative;
+            top: 50%;
+            margin: auto;
             width: 450px;
             padding: 0 25px;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
         }
 
         .top {
@@ -42,14 +44,9 @@
 
         .top .title {
             height: 20px;
+            font-size: 18px;
             white-space: nowrap;
-        }
-
-        .top .avatar {
-            flex-shrink: 0;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+            border-bottom: 1px solid #e9e9e9;
         }
 
         .form {
@@ -60,9 +57,17 @@
             position: relative;
             display: flex;
             align-items: stretch;
+            height: 42px;
             margin-bottom: 20px;
-            border: 1px solid #e9e9e9;
             background-color: #fff;
+            border: 1px solid #e9e9e9;
+            transition: .3s;
+        }
+
+        .form .item.hide {
+            height: 0;
+            opacity: 0;
+            margin-bottom: 0;
         }
 
         .form label {
@@ -86,7 +91,8 @@
 
         .form button {
             flex-shrink: 0;
-            padding: 0 10px;
+            height: 40px;
+            padding: 0 15px;
             border: 0;
             outline: 0;
             background-color: #fff;
@@ -103,19 +109,21 @@
             top: 0;
             right: 0;
             height: 100%;
-            padding: 0 10px;
+            padding: 0 15px;
             color: rgba(0,0,0,.3);
             line-height: 40px;
-            opacity: 0;
-            visibility: hidden;
             -webkit-transition: .3s;
             transition: .3s;
-           z-index: 10;
+            pointer-events: none;
+            z-index: 10;
         }
 
-        .form .tip.show {
-            opacity: 1;
-            visibility: visible;
+        .form .tip .loading {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            -webkit-transform: scale(1.5);
+            transform: scale(1.5);
         }
 
         .btn {
@@ -127,7 +135,7 @@
         }
 
         .btn button {
-            padding: 0 10px;
+            padding: 0 15px;
             color: rgba(0,0,0,.3);
             font-size: 14px;
             border: 0;
@@ -137,9 +145,8 @@
 
         .btn .divider {
             flex-shrink: 0;
-            margin: 0 10px;
             color: rgba(0,0,0,.3);
-            font-size: 17px;
+            font-size: 16px;
             cursor: default;
         }
 
@@ -186,8 +193,7 @@
 <body>
 <div class="login-box">
     <div class="top">
-        <span class="custom-font1 title">Lrowy</span>
-        <img class="avatar" src="/images/logo.png"/>
+        <span class="title custom-font1">Lrowy</span>
     </div>
     <div class="form">
         <div class="item">
@@ -199,16 +205,16 @@
             <label for="password">密码</label>
             <input id="password" value="" type="password" placeholder="密码"/>
         </div>
-<!--        <div class="item">-->
-<!--            <label for="captcha">密码</label>-->
-<!--            <input id="captcha" value="" placeholder="验证码"/>-->
-<!--            <button onclick="getCaptcha()">发送</button>-->
-<!--        </div>-->
+        <div class="item hide" id="captchaItem">
+            <label for="captcha">验证码</label>
+            <input id="captcha" value="" placeholder="验证码"/>
+            <button onclick="getCaptcha()">发送</button>
+        </div>
     </div>
     <div class="btn">
-        <button class="login">登录</button>
-        <span class="divider">/</span>
-        <button class="logon active" onclick="logon()">注册</button>
+        <button class="login active">登录</button>
+        <span class="divider">|</span>
+        <button class="logon active" >注册</button>
         <div class="other dropdown-content">
             <button class="dropdown-trigger active" title="其他"><i class="iconfont">&#xe645;</i></button>
             <div class="dropdown hidden">
@@ -225,28 +231,28 @@
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script th:src="@{/js/common-v2.js}"></script>
+<script th:src="@{/js/nvi-notice.js}"></script>
+<script th:src="@{/js/ivu-message.js}"></script>
 <script src="https://www.recaptcha.net/recaptcha/api.js?render=6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti&hl=zh-CN async defer"></script>
 <script>
     grecaptcha.ready(function () {
         grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'homepage' }).then(function (token) {
-            console.log(token)
+            // console.log(token)
         });
     });
 </script>
 <script>
-    var $inputEmail = $('#email');
-    $inputEmail.bind('input propertychange', _.debounce(function () {
-        var $t = $('.form .tip').eq(0);
-        if ($inputEmail.val() === '958938239@qq.com') {
-            $t.text('Anya');
-            $t.addClass('show');
-        } else {
-            $t.removeClass('show');
-            setTimeout(function () {
-                $t.text('');
-            }, 300);
-        }
-        console.log($inputEmail.val());
+    var $email = $('#email');
+    var $name = $('.form .tip').eq(0);
+    var emailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/;
+
+    var setUserName = _.throttle(function (email) {
+        $name.html(email);
+    }, 300);
+
+    $email.bind('input propertychange', _.debounce(function () {
+        var email = $email.val();
+        if (email && emailReg.test(email)) getUserByEmail(email);
     }, 300));
 
     function logon () {
@@ -262,23 +268,45 @@
         });
     }
 
-    function getGoogleReCaptchaToken(success) {
-        grecaptcha.ready(function () {
-            grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'captcha' }).then(function (token) {
-                success(token);
-            });
+    function getUserByEmail (email) {
+        setUserName('<img class="loading" src="images/loading.gif"/>');
+        $.ajax({
+            url: '/getUserByEmail',
+            type: 'post',
+            data: { email: email },
+            success: function (data) {
+                if (data.code === '000') {
+                    var name = data.result ? data.result.name : '';
+                    setUserName(name);
+                    if (data.result) {
+                        $('.login').addClass('active');
+                        $('.logon').removeClass('active');
+                        $('#captchaItem').addClass('hide');
+                    } else if (emailReg.test(email)) {
+                        $('.logon').addClass('active');
+                        $('.login').removeClass('active');
+                        $('#captchaItem').removeClass('hide');
+                    }
+                }
+            }
         });
     }
 
     function getCaptcha () {
-        getGoogleReCaptchaToken(function (token) {
-            $.ajax({
-                url: '/getCaptcha',
-                type: 'post',
-                data: { token: token },
-                success: function (data) {
-                    console.log(data);
-                }
+        grecaptcha.ready(function () {
+            grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'captcha' }).then(function (token) {
+                $.ajax({
+                    url: '/getCaptcha',
+                    type: 'post',
+                    data: { token: token, email: $email.val() },
+                    success: function (data) {
+                        if (data.code === '000') {
+                            message.open({ content: '成功发送验证码到邮箱' + data.result.sendTarget, duration: 3 });
+                        } else {
+                            notice.fail({ title: '发生错误', desc: data.msg });
+                        }
+                    }
+                });
             });
         });
     }

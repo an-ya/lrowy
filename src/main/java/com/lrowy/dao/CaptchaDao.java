@@ -4,5 +4,5 @@ import com.lrowy.pojo.captcha.Captcha;
 
 public interface CaptchaDao {
     public int saveCaptcha(Captcha captcha);
-    public Captcha findCaptcha(int captchaId);
+    public Captcha findCaptchaByTarget(String target);
 }

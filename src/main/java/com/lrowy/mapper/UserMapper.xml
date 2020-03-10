@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lrowy.dao.UserDao">
+    <resultMap id="user" type="com.lrowy.pojo.user.User">
+        <id column="userId" property="userId"/>
+        <result column="type" property="type"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="avatar" property="avatar"/>
+        <result column="website" property="website"/>
+        <result column="password" property="password"/>
+        <result column="description" property="description"/>
+        <result column="origin" property="origin"/>
+        <result column="originId" property="originId"/>
+    </resultMap>
+
+    <select id="findUserByEmail" resultMap="user">
+        SELECT * FROM user WHERE email=#{email};
+    </select>
+</mapper>

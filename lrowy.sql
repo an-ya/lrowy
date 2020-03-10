@@ -79,6 +79,15 @@ CREATE TABLE comment (
   date datetime NOT NULL,
   content text
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8mb4;
+CREATE TABLE captcha (
+  captchaId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  sendId int(10) NOT NULL,
+  sendMode varchar(32) NOT NULL,
+  sendTo varchar(32) NOT NULL,
+  ip varchar(32) NOT NULL,
+  code varchar(64) NOT NULL,
+  createDate datetime NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8mb4;
 CREATE TABLE email (
   emailId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   content text NOT NULL,

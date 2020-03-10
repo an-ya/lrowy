@@ -1,11 +1,15 @@
 package com.lrowy.controller;
 
-import com.lrowy.pojo.common.captcha.Captcha;
+import com.lrowy.dao.CaptchaDao;
+import com.lrowy.dao.UserDao;
+import com.lrowy.pojo.captcha.Captcha;
+import com.lrowy.pojo.captcha.ReCaptchaResponse;
+import com.lrowy.pojo.common.enums.SystemConstant;
 import com.lrowy.pojo.user.User;
 import com.lrowy.pojo.common.response.BaseResponse;
 
 import com.lrowy.service.EmailService;
-import com.lrowy.service.GoogleReCaptchaVerifyService;
+import com.lrowy.service.ReCaptchaService;
 import com.lrowy.service.OAuthService;
 import com.lrowy.utils.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +26,15 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class MainController extends BaseController {
     @Autowired
+    private UserDao userDao;
+    @Autowired
+    private CaptchaDao captchaDao;
+    @Autowired
     private OAuthService oAuthService;
     @Autowired
     private EmailService emailService;
     @Autowired
-    private GoogleReCaptchaVerifyService googleReCaptchaVerifyService;
+    private ReCaptchaService reCaptchaService;
 
     @RequestMapping("/")
     public String i() {
@@ -94,20 +102,40 @@ public class MainController extends BaseController {
         return "redirect:/";
     }
 
+    @RequestMapping(value = "/getUserByEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public BaseResponse<User> getUserByEmail(String email) {
+        BaseResponse<User> br = new BaseResponse<>();
+        if (email != null) {
+            User user = userDao.findUserByEmail(email);
+            br.setResult(user);
+        }
+        return br;
+    }
+
     @RequestMapping(value = "/getCaptcha", method = RequestMethod.POST)
     @ResponseBody
-    public BaseResponse<Captcha> getCaptcha(HttpServletRequest request, String token) {
+    public BaseResponse<Captcha> getCaptcha(HttpServletRequest request, String token, String email) {
         BaseResponse<Captcha> br = new BaseResponse<>();
-        Captcha captcha = new Captcha();
-        captcha.setIp(IpUtil.getIpAddr(request));
-        captcha.setCode(getCaptcha());
+        String ip = IpUtil.getIpAddr(request);
         try {
-            String result = googleReCaptchaVerifyService.verify(token, captcha);
-            System.out.println(result);
+            String content = reCaptchaService.verify(token, ip);
+            ReCaptchaResponse reCaptchaResponse = reCaptchaService.deserialize(content);
+            if (reCaptchaResponse.getScore() >= 0.5) {
+                Captcha captcha = new Captcha();
+                captcha.setIp(ip);
+                captcha.setCode(getCaptcha());
+                captcha.setSendId(1);
+                captcha.setSendMode("Email");
+                captcha.setSendTarget(email);
+                captchaDao.saveCaptcha(captcha);
+                br.setResult(captcha);
+            } else {
+                br.setInfo(SystemConstant.RECAPTCHA_AUTHENTICATION_FAIL);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        br.setResult(captcha);
         return br;
     }
 }

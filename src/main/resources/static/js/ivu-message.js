@@ -28,7 +28,7 @@
         },
         loading: function (params) {
             if (!params) params = {};
-            params.content = '<img src="images/Spinner-1s-120px.gif"/><span>loading . . .</span>';
+            params.content = '<img src="images/loading.gif"/><span>loading . . .</span>';
             return this.open(params);
         },
         close: function (e, success) {

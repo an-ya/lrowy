@@ -10,7 +10,8 @@ public enum SystemConstant {
     MKDIR_ERROR("101", "文件夹创建失败"),
     DELETEFILE_ERROR("102", "删除文件失败"),
     JWT_ERRCODE_EXPIRE("201", "token失效"),
-    JWT_ERRCODE_FAIL("202", "token验证失败");
+    JWT_ERRCODE_FAIL("202", "token验证失败"),
+    RECAPTCHA_AUTHENTICATION_FAIL("301", "reCAPTCHA人机验证失败");
 
     /** 枚举编号 */
     private String code;
