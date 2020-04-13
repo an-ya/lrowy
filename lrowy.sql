@@ -62,14 +62,14 @@ CREATE TABLE article_tag_r (
 CREATE TABLE user (
   userId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   type varchar(32) NOT NULL,
-  name varchar(32) NOT NULL,
+  name varchar(32),
   email varchar(128),
   avatar varchar(128),
   website varchar(128),
   password varchar(128),
   description varchar(128),
   origin varchar(32) NOT NULL,
-  originId varchar(64) NOT NULL
+  originId varchar(64)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8mb4;
 CREATE TABLE comment (
   commentId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,

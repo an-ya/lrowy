@@ -12,6 +12,10 @@ public class User {
     private String origin;
     private String originId;
 
+    public User() {
+
+    }
+
     public int getUserId() {
         return userId;
     }

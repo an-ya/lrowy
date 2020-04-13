@@ -14,6 +14,13 @@
         <result column="originId" property="originId"/>
     </resultMap>
 
+    <insert id="saveUser" parameterType="com.lrowy.pojo.user.User">
+        <selectKey keyProperty="userId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO user (userId,type,name,email,avatar,website,password,description,origin,originId) VALUE (#{userId},#{type},#{name},#{email},#{avatar},#{website},#{password},#{description},#{origin},#{originId});
+    </insert>
+
     <select id="findUserByEmail" resultMap="user">
         SELECT * FROM user WHERE email=#{email};
     </select>

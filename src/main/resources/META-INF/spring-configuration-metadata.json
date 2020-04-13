@@ -1,0 +1,76 @@
+{
+  "groups": [],
+  "properties": [
+    {
+      "name": "web.upload-path",
+      "type": "java.lang.String",
+      "description": "所有上传文件的基础路径，在windows上例如D:/images/."
+    },
+    {
+      "name": "password.salt",
+      "type": "java.lang.String",
+      "description": "MD5加密盐"
+    },
+    {
+      "name": "http.maxTotal",
+      "type": "java.lang.Integer",
+      "description": "httpclient最大连接数."
+    },
+    {
+      "name": "http.defaultMaxPerRoute",
+      "type": "java.lang.Integer",
+      "description": "httpclient并发数."
+    },
+    {
+      "name": "http.connectTimeout",
+      "type": "java.lang.Integer",
+      "description": "httpclient创建连接的最长时间."
+    },
+    {
+      "name": "http.connectionRequestTimeout",
+      "type": "java.lang.Integer",
+      "description": "httpclient从连接池中获取到连接的最长时间."
+    },
+    {
+      "name": "http.socketTimeout",
+      "type": "java.lang.Integer",
+      "description": "httpclient数据传输的最长时间."
+    },
+    {
+      "name": "http.staleConnectionCheckEnabled",
+      "type": "java.lang.Boolean",
+      "description": "httpclient提交请求前测试连接是否可用."
+    },
+    {
+      "name": "github.oauth.clientId",
+      "type": "java.lang.String",
+      "description": "github oauth id."
+    },
+    {
+      "name": "github.oauth.clientSecret",
+      "type": "java.lang.String",
+      "description": "github oauth 密钥."
+    },
+    {
+      "name": "captcha.ipDayLimit",
+      "type": "java.lang.Integer",
+      "description": "IP日发送验证码限制次数."
+    },
+    {
+      "name": "captcha.emailDayLimit",
+      "type": "java.lang.Integer",
+      "description": "邮箱日发送验证码限制次数."
+    },
+    {
+      "name": "google.reCaptcha.id",
+      "type": "java.lang.String",
+      "description": "google reCaptcha id."
+    },
+    {
+      "name": "google.reCaptcha.secret",
+      "type": "java.lang.String",
+      "description": "google reCaptcha 密钥."
+    }
+  ],
+  "hints": []
+}

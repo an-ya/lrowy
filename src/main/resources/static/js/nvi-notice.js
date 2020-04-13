@@ -1,7 +1,7 @@
 (function($, window) {
     window.notice = {
         dom: null,
-        string: ['<div class="notice"></div>', '<div class="notice-notice"><div class="notice-notice-content"><div class="notice-notice-content-wrapper"></div></div><div class="notice-notice-before"></div>'],
+        string: ['<div class="notice"></div>', '<div class="notice-notice"><div class="notice-notice-content"><div class="notice-notice-content-wrapper"></div><i class="iconfont notice-close">&#xe601;</i></div><div class="notice-notice-before"></div>'],
         init: function () {
             if (!this.dom) {
                 this.dom = $(this.string[0]);
@@ -26,19 +26,31 @@
                 wrapper.append('<div class="notice-desc">' + params.desc + '</div>');
             }
             this.dom.append(e);
+            var that = this;
             setTimeout(function () {
                 e.css('height', wrapper.outerHeight());
                 content.addClass('notice-notice-content-show');
                 before.addClass('notice-notice-before-show');
-                e.find(".notice-notice-content-wrapper").addClass('notice-notice-content-wrapper-show');
+                e.find('.notice-notice-content-wrapper').addClass('notice-notice-content-wrapper-show');
                 e.find('.notice-title').addClass('notice-title-show');
                 e.find('.notice-desc').addClass('notice-desc-show');
+
+                if (typeof params.duration !== 'number' || params.duration < 0) {
+                    setTimeout(function () {
+                        that.close(e);
+                    }, 5000);
+                } else if (params.duration === 0) {
+                    var close = e.find('.notice-close');
+                    close.addClass('notice-close-show');
+                    close.bind('click', function () {
+                        that.close(e);
+                    });
+                } else if (params.duration > 0) {
+                    setTimeout(function () {
+                        that.close(e);
+                    }, params.duration * 1000);
+                }
             }, 14);
-            if (!(typeof params.duration === 'number' && params.duration > 0)) params.duration = 5;
-            var that = this;
-            setTimeout(function () {
-                that.close(e);
-            }, params.duration * 1000);
             return e;
         },
         success: function (params) {
@@ -57,6 +69,7 @@
             e.children().eq(0).removeClass('notice-notice-content-show');
             e.children().eq(1).removeClass('notice-notice-before-show');
             e.find('.notice-notice-content-wrapper').removeClass('notice-notice-content-wrapper-show');
+            e.find('.notice-close').removeClass('notice-close-show');
             e.find('.notice-title').removeClass('notice-title-show');
             e.find('.notice-desc').removeClass('notice-desc-show');
             setTimeout(function () {

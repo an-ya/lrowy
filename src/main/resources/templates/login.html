@@ -20,14 +20,38 @@
             background-color: #fafafa;
         }
 
+        label {
+            display: none;
+        }
+
+        input[type='file'] {
+            position:absolute;clip:rect(0 0 0 0);
+        }
+
+        input::-webkit-input-placeholder {
+            color: rgba(0,0,0,.3);
+        }
+
         .login-box {
-            position: relative;
+            position: absolute;
             top: 50%;
-            margin: auto;
+            left: 50%;
             width: 450px;
             padding: 0 25px;
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+        }
+
+        .info-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 450px;
+            padding: 0 25px;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            visibility: hidden;
         }
 
         .top {
@@ -61,17 +85,14 @@
             margin-bottom: 20px;
             background-color: #fff;
             border: 1px solid #e9e9e9;
-            transition: .3s;
+            /*transition: .4s;*/
         }
 
         .form .item.hide {
             height: 0;
             opacity: 0;
+            border: 0;
             margin-bottom: 0;
-        }
-
-        .form label {
-            display: none;
         }
 
         .form input {
@@ -83,10 +104,6 @@
             background-color: #fff;
             border: 0;
             outline: 0;
-        }
-
-        .form input::-webkit-input-placeholder {
-            color: rgba(0,0,0,.3);
         }
 
         .form button {
@@ -129,8 +146,8 @@
         .btn {
             position: relative;
             display: flex;
-            height: 40px;
-            line-height: 40px;
+            height: 42px;
+            line-height: 42px;
             background: #fff;
         }
 
@@ -141,6 +158,7 @@
             border: 0;
             outline: 0;
             background: #fff;
+            pointer-events: none;
         }
 
         .btn .divider {
@@ -163,6 +181,7 @@
         .btn .active {
             color: #304455;
             cursor: pointer;
+            pointer-events: auto;
         }
 
         .btn .other {
@@ -178,12 +197,107 @@
             line-height: 40px;
         }
 
+        .msg {
+            height: 42px;
+            margin-bottom: 20px;
+            line-height: 40px;
+            text-align: center;
+            background-color: #e8f0fe;
+            border: 1px solid #e9e9e9;
+        }
+
+        .msg i {
+            margin-right: 6px;
+            color: #1E9fff;
+            font-size: 16px;
+        }
+
+        .msg span {
+            font-weight: bold;
+        }
+
+        .info {
+            display: flex;
+            align-items: center;
+            height: 66px;
+            padding: 0 12px;
+            margin-bottom: 20px;
+            text-align: center;
+            background-color: #fff;
+            /*transition: .4s;*/
+        }
+
+        .info .avatar {
+            display: block;
+            flex-shrink: 0;
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+            color: rgba(0,0,0,.3);
+            line-height: 40px;
+            text-align: center;
+            border: 1px solid #e9e9e9;
+            cursor: pointer;
+            background: no-repeat center;
+            background-size: cover;
+        }
+
+        .info .avatar:hover {
+            color: #1E9fff;
+        }
+
+        .info input {
+            flex-grow: 1;
+            height: 40px;
+            padding-left: 12px;
+            font-size: 14px;
+            background-color: #fff;
+            border: 1px solid #e9e9e9;
+            outline: 0;
+        }
+
+        .info.hide {
+            height: 0;
+            opacity: 0;
+            border: 0;
+            margin-bottom: 0;
+        }
+
+        .twinkle {
+            -webkit-animation-timing-function: ease;
+            animation-timing-function: ease;
+            -webkit-animation-duration: .6s;
+            animation-duration: .6s;
+            -webkit-animation-fill-mode: both;
+            animation-fill-mode: both;
+            -webkit-animation-play-state: running;
+            animation-play-state: running;
+            -webkit-animation-name: Twinkle;
+            animation-name: Twinkle;
+        }
+
+        @-webkit-keyframes Twinkle {
+            0% {
+                background: rgba(253, 239, 232, 0);
+            }
+            50% {
+                background: rgba(253, 239, 232, 1);
+            }
+            100% {
+                background: rgba(253, 239, 232, 0);
+            }
+        }
+
         .grecaptcha-badge {
             box-shadow: none!important;
         }
 
         @media screen and (max-width: 464px) {
             .login-box {
+                width: 100%;
+            }
+
+            .info-box {
                 width: 100%;
             }
         }
@@ -211,10 +325,16 @@
             <button onclick="getCaptcha()">发送</button>
         </div>
     </div>
+    <div class="info hide">
+        <label class="iconfont avatar" for="avatar">&#xe61e;</label>
+        <input type="file" id="avatar">
+        <label for="name">称昵</label>
+        <input id="name" value="" placeholder="称昵" autocomplete="off"/>
+    </div>
     <div class="btn">
-        <button class="login active">登录</button>
+        <button class="login active" onclick="login()">登录</button>
         <span class="divider">|</span>
-        <button class="logon active" >注册</button>
+        <button class="logon active" onclick="logon()">注册</button>
         <div class="other dropdown-content">
             <button class="dropdown-trigger active" title="其他"><i class="iconfont">&#xe645;</i></button>
             <div class="dropdown hidden">
@@ -226,6 +346,12 @@
         </div>
     </div>
 </div>
+<div class="info-box">
+    <div class="top">
+        <span class="title custom-font1">Lrowy</span>
+    </div>
+    <div class="msg"><i class="iconfont">&#xe657;</i>注册成功：<span>958938239@qq.com</span></div>
+</div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
@@ -233,15 +359,10 @@
 <script th:src="@{/js/common-v2.js}"></script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/ivu-message.js}"></script>
-<script src="https://www.recaptcha.net/recaptcha/api.js?render=6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti&hl=zh-CN async defer"></script>
-<script>
-    grecaptcha.ready(function () {
-        grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'homepage' }).then(function (token) {
-            // console.log(token)
-        });
-    });
-</script>
-<script>
+<script th:src="'https://www.recaptcha.net/recaptcha/api.js?render=' + ${reCaptchaId} + '&hl=zh-CN async defer'"></script>
+<script th:inline="javascript">
+    var url = getQueryString('url');
+    var reCaptchaId = [[${reCaptchaId}]];
     var $email = $('#email');
     var $name = $('.form .tip').eq(0);
     var emailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/;
@@ -255,17 +376,119 @@
         if (email && emailReg.test(email)) getUserByEmail(email);
     }, 300));
 
-    function logon () {
+    $('#avatar').bind('change', function () {
+        var files = this.files;
+        if (files.length) {
+            var file = files[0];
+            var reader = new FileReader();
+            if(!/image\/\w+/.test(file.type)){
+                message.fail({ content: '请确保文件为图像类型', duration: 0 });
+                return false;
+            }
+            reader.onload = function (e) {
+                var $label = $('label.avatar');
+                $label.html('');
+                $label.css('background-image', 'url(' + e.target.result + ')');
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function getQueryString (name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    function go () {
+        if (url) {
+            window.location.href = url;
+        } else {
+            window.location.href = '/index';
+        }
+    }
+
+    function error (e) {
+        e.addClass('twinkle');
+        setTimeout(function () {
+            e.removeClass('twinkle');
+        }, 600);
+    }
+
+    function setLogin() {
+        $('.login').addClass('active');
+        $('.logon').removeClass('active');
+        $('#captchaItem').addClass('hide');
+        $('.info').addClass('hide');
+    }
+
+    function setLogon() {
+        $('.logon').addClass('active');
+        $('.login').removeClass('active');
+        $('#captchaItem').removeClass('hide');
+        $('.info').removeClass('hide');
+    }
+
+    function login () {
         $.ajax({
-            url: '/logon',
+            url: '/login',
             type: 'post',
             data: {
                 email: $('#email').val(),
+                password: $('#password').val()
             },
             success: function (data) {
-                console.log(data);
+                if (data.code === '000') {
+                    go();
+                } else {
+                    if (data.code === '101') {
+                        setLogon();
+                    } else if (data.code === '102') {
+                        error($('#password'));
+                    } else if (data.code === '402') {
+                        error($('#email'));
+                    }
+                    message.fail({ content: data.msg, desc: data.msg, duration: 0 });
+                }
             }
         });
+    }
+
+    function logon () {
+        if ($('#captchaItem').hasClass('hide')) {
+            $('#captchaItem').removeClass('hide');
+        } else {
+            var formData = new FormData();
+            formData.append('email', $('#email').val());
+            formData.append('password', $('#password').val());
+            formData.append('code', $('#captcha').val());
+            formData.append('name', $('#name').val());
+            formData.append('avatar', $('#avatar')[0].files.item(0));
+            $.ajax({
+                url: '/logon',
+                type: 'post',
+                data: formData,
+                async: false,
+                processData : false,
+                contentType : false,
+                success: function (data) {
+                    if (data.code === '000') {
+                        go();
+                    } else {
+                        if (data.code === '304') {
+                            error($('#captcha'));
+                        } else if (data.code === '402') {
+                            error($('#email'));
+                        } else if (data.code === '403') {
+                            setLogin();
+                        }
+                        message.fail({ content: data.msg, desc: data.msg, duration: 0 });
+                    }
+                }
+            });
+        }
     }
 
     function getUserByEmail (email) {
@@ -279,13 +502,9 @@
                     var name = data.result ? data.result.name : '';
                     setUserName(name);
                     if (data.result) {
-                        $('.login').addClass('active');
-                        $('.logon').removeClass('active');
-                        $('#captchaItem').addClass('hide');
+                        setLogin();
                     } else if (emailReg.test(email)) {
-                        $('.logon').addClass('active');
-                        $('.login').removeClass('active');
-                        $('#captchaItem').removeClass('hide');
+                        setLogon();
                     }
                 }
             }
@@ -294,16 +513,16 @@
 
     function getCaptcha () {
         grecaptcha.ready(function () {
-            grecaptcha.execute('6Ldk29AUAAAAABhz9hLTLF9ZcmoI6dCTvxO_94ti', { action: 'captcha' }).then(function (token) {
+            grecaptcha.execute(reCaptchaId, { action: 'captcha' }).then(function (token) {
                 $.ajax({
                     url: '/getCaptcha',
                     type: 'post',
                     data: { token: token, email: $email.val() },
                     success: function (data) {
                         if (data.code === '000') {
-                            message.open({ content: '成功发送验证码到邮箱' + data.result.sendTarget, duration: 3 });
+                            message.success({ content: data.result.createDate + ' 成功发送验证码到邮箱：<span>' + data.result.sendTarget + '</span>，注：找不到邮件时试着查看垃圾箱', duration: 0 });
                         } else {
-                            notice.fail({ title: '发生错误', desc: data.msg });
+                            message.fail({ content: data.msg, duration: 0 });
                         }
                     }
                 });

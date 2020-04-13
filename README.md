@@ -62,17 +62,9 @@ http.socketTimeout=10000
 http.staleConnectionCheckEnabled=true
 
 # github oauth
-<<<<<<< HEAD
-github.oauth.clientId=github oauth的appid
-github.oauth.clientSecret=github oauth秘钥
-
-# google reCaptcha secret
-google.reCaptcha.secret=google reCaptcha秘钥
-=======
 github.oauth.clientId=github oauth appid
 github.oauth.clientSecret=github oauth 密钥
 
 # token
 token.secret=token密钥
->>>>>>> ce2aa1966429b2fb0e9dca16f7e6fa3bc85939d0
 ```

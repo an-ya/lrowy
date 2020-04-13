@@ -6,10 +6,13 @@ public class Email {
     private int emailId;
     private String content;
     private String subject;
-    private String sendType;
     private String sendFrom;
     private String sendTo;
     private Date sendDate;
+
+    public Email() {
+
+    }
 
     public int getEmailId() {
         return emailId;
@@ -33,14 +36,6 @@ public class Email {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public String getSendType() {
-        return sendType;
-    }
-
-    public void setSendType(String sendType) {
-        this.sendType = sendType;
     }
 
     public String getSendFrom() {

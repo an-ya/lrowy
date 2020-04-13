@@ -19,6 +19,14 @@
     </insert>
 
     <select id="findCaptchaByTarget" resultMap="captcha">
-        SELECT * FROM captcha WHERE sendTarget=#{sendTarget} ORDER BY createDate LIMIT 1;
+        SELECT * FROM captcha WHERE sendTarget=#{sendTarget} ORDER BY createDate DESC LIMIT 1;
+    </select>
+
+    <select id="findCaptchaByIpToday" resultMap="captcha">
+        SELECT * FROM captcha WHERE ip=#{ip} AND TO_DAYS(createDate) = TO_DAYS(NOW()) ORDER BY createDate;
+    </select>
+
+    <select id="findCaptchaByTargetToday" resultMap="captcha">
+        SELECT * FROM captcha WHERE sendTarget=#{sendTarget} AND TO_DAYS(createDate) = TO_DAYS(NOW()) ORDER BY createDate;
     </select>
 </mapper>

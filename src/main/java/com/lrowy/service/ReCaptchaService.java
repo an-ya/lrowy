@@ -1,6 +1,5 @@
 package com.lrowy.service;
 
-import com.lrowy.pojo.captcha.Captcha;
 import com.lrowy.pojo.captcha.ReCaptchaResponse;
 import com.lrowy.pojo.common.http.HttpResult;
 import com.lrowy.utils.JsonUtil;

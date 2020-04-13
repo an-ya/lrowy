@@ -13,7 +13,7 @@ import java.util.List;
 public class ImageUtil {
     private static ByteArrayOutputStream byteArrayOutputStream = null;
 
-    private static void InputStreamCacher(InputStream inputStream) {
+    private static void InputStreamCache(InputStream inputStream) {
         byteArrayOutputStream = new ByteArrayOutputStream();
         byte[] buffer = new byte[1024];
         int len;
@@ -33,7 +33,7 @@ public class ImageUtil {
 
     public static BufferedImage readImageStream(String type, InputStream inputStream) throws IOException {
         if (type.equals("ico")) {
-            InputStreamCacher(inputStream);
+            InputStreamCache(inputStream);
             try {
                 List<BufferedImage> images = ICODecoder.read(getInputStream());
                 int index = 0;

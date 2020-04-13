@@ -42,10 +42,10 @@ public class JwtUtil {
             br.setSuccess(true);
             br.setResult(claims);
         } catch (ExpiredJwtException e) {
-            br.setCode(SystemConstant.JWT_ERRCODE_EXPIRE.getCode());
+            br.setCode(SystemConstant.JWT_EXPIRE.getCode());
             br.setSuccess(false);
         } catch (Exception e) {
-            br.setCode(SystemConstant.JWT_ERRCODE_FAIL.getCode());
+            br.setCode(SystemConstant.JWT_FAIL.getCode());
             br.setSuccess(false);
         }
         return br;

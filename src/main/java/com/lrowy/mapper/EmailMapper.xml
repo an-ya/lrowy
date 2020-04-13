@@ -5,7 +5,6 @@
         <id column="emailId" property="emailId"/>
         <result column="content" property="content"/>
         <result column="subject" property="subject"/>
-        <result column="sendType" property="sendType"/>
         <result column="sendFrom" property="sendFrom"/>
         <result column="sendTo" property="sendTo"/>
         <result column="sendDate" property="sendDate"/>
@@ -15,14 +14,10 @@
         <selectKey keyProperty="emailId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO email (content,subject,sendType,sendFrom,sendTo,sendDate) VALUE (#{content},#{subject},#{sendType},#{sendFrom},#{sendDate});
+        INSERT INTO email (content,subject,sendFrom,sendTo,sendDate) VALUE (#{content},#{subject},#{sendFrom},#{sendTo},#{sendDate});
     </insert>
 
     <select id="findEmail" resultMap="email">
-        SELECT * FROM email WHERE emailId=#{emailId};
-    </select>
-
-    <select id="findEmailById" resultMap="email">
         SELECT * FROM email WHERE emailId=#{emailId};
     </select>
 </mapper>

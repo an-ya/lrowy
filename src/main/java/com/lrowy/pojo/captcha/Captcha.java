@@ -12,13 +12,17 @@ public class Captcha {
     private String code;
     private Date createDate;
 
-    public Captcha () {
+    public Captcha() {
         this.timeout = 3600;
         this.createDate = new Date();
     }
 
-    public boolean isExpired () {
+    public boolean isExpired() {
         return (new Date().getTime() - this.createDate.getTime()) / 1000 > this.timeout;
+    }
+
+    public boolean inOneMinute() {
+        return (new Date().getTime() - this.createDate.getTime()) / 1000 < 60;
     }
 
     public int getCaptchaId() {

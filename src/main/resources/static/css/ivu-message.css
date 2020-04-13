@@ -45,13 +45,12 @@
 .ivu-message-notice-content {
     display: inline-block;
     position: relative;
-    pointer-events: all;
     padding: 8px 16px;
+    text-align: center;
     border-radius: 4px;
     background: #fff;
     border: 1px solid #eee;
-    text-align: center;
-    font-weight: bold;
+    pointer-events: all;
 }
 
 .ivu-message-notice-content img {
@@ -60,6 +59,22 @@
     height: 30px;
     margin-right: 16px;
     vertical-align: middle;
+}
+
+.ivu-message-notice-content span {
+    color: #1E9fff;
+}
+
+.ivu-message-notice-icon {
+    font-size: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.ivu-message-notice-close {
+    font-size: 12px;
+    margin-left: 8px;
+    cursor: pointer;
 }
 
 @-webkit-keyframes ivuMessageIn {

@@ -14,7 +14,6 @@ import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Random;
 
 @Controller
 public class BaseController {
@@ -45,38 +44,5 @@ public class BaseController {
 
     protected void userLogout() {
         getSession().removeAttribute("login");
-    }
-
-    protected String getCaptcha () {
-        String sources = "0123456789";
-        Random rand = new Random();
-        StringBuilder flag = new StringBuilder();
-        for (int j = 0; j < 6; j++) {
-            flag.append(sources.charAt(rand.nextInt(9)));
-        }
-        return flag.toString();
-    }
-
-    protected String createRandom(boolean numberFlag, int length) {
-        StringBuilder retStr = new StringBuilder();
-        String strTable = numberFlag ? "1234567890" : "1234567890abcdefghijkmnpqrstuvwxyz";
-        int len = strTable.length();
-        boolean bDone = true;
-        do {
-            retStr = new StringBuilder();
-            int count = 0;
-            for (int i = 0; i < length; i++) {
-                double dblR = Math.random() * len;
-                int intR = (int) Math.floor(dblR);
-                char c = strTable.charAt(intR);
-                if (('0' <= c) && (c <= '9')) count++;
-                retStr.append(strTable.charAt(intR));
-            }
-            if (count >= 2) {
-                bDone = false;
-            }
-        } while (bDone);
-
-        return retStr.toString();
     }
 }

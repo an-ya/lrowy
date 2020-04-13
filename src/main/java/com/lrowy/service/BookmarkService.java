@@ -240,7 +240,7 @@ public class BookmarkService {
         bookmarkDao.deleteBookmarkFavicon(bookmarkId);
         int line = bookmarkDao.deleteFavicon(favicon.getFaviconId());
         if (line > 0) {
-            if (!deleteFaviconFile(favicon.getFaviconUrl()) || !deleteFaviconFile(favicon.getFaviconBlurUrl())) br.setInfo(SystemConstant.DELETEFILE_ERROR);
+            if (!deleteFaviconFile(favicon.getFaviconUrl()) || !deleteFaviconFile(favicon.getFaviconBlurUrl())) br.setInfo(SystemConstant.DELETE_FILE_ERROR);
         }
         return br;
     }
