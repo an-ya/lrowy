@@ -321,21 +321,21 @@
         <li th:if="${user == null}" class="header-item dropdown-content">
             <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>
             <div class="dropdown hidden fixed">
-                <ul class="dropdown-menu">
-                    <li id="login" class="dropdown-item">登录</li>
-                    <li class="dropdown-item">注册</li>
-                </ul>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/login" target="_self">登录</a>
+                    <a class="dropdown-item" href="/login" target="_self">注册</a>
+                </div>
             </div>
         </li>
         <li class="header-item browser">
             <button title="内嵌预览器" class="side" onclick="openIframe()"><i class="iconfont">&#xe7e3;</i></button>
         </li>
     </ul>
-    <span class="logo custom-font1">Anya'编辑工具</span>
+    <span class="logo custom-font1">Anya'writer</span>
 </div>
 <div class="sidebar">
     <div class="sidebar-inner">
-        <div class="h1">标签<img src="images/Spinner-1s-120px.gif" style="display: none;"/></div>
+        <div class="h1">标签<img src="images/loading.gif" style="display: none;"/></div>
         <div class="tags">
             <div th:each="tag : ${tags}" class="tag-item" th:text="${tag.name}" th:attr="data-id=${tag.articleTagId},data-name=${tag.name}"></div>
         </div>

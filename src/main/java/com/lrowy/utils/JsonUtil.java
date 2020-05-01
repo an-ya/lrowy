@@ -12,16 +12,10 @@ public final class JsonUtil {
 
     }
 
-    /**
-     * Serialize any Java value as a String.
-     */
     public static String generate(Object object) throws JsonProcessingException {
         return mapper.writeValueAsString(object);
     }
 
-    /**
-     * Deserialize JSON content from given JSON content String.
-     */
     public static <T> T parse(String content, Class<T> valueType) throws IOException {
         return mapper.readValue(content, valueType);
     }

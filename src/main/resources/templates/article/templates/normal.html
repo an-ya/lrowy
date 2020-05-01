@@ -279,21 +279,6 @@
         }
     }
 
-    function setCodeScroll () {
-        $('pre code').on('mousewheel DOMMouseScroll', function (e) {
-            var wheel = e.originalEvent.wheelDelta || -e.originalEvent.detail;
-            var delta = Math.max(-1, Math.min(1, wheel));
-            var $pre = $(this).parent(), right = $(this).outerWidth() - $pre.outerWidth(), scrollLeft = parseInt($pre.scrollLeft());
-            if (scrollLeft < parseInt(right) && delta < 0) {
-                e.preventDefault();
-                $pre.scrollLeft($pre.scrollLeft() + 50);
-            } else if (scrollLeft > 0 && delta > 0) {
-                e.preventDefault();
-                $pre.scrollLeft($pre.scrollLeft() - 50);
-            }
-        });
-    }
-
     function pageTo (href, end) {
         var target, pattern = /##.+/;
         var limit = Math.round($(document).height() - $(window).height());
@@ -506,7 +491,6 @@
         });
         setImages();
         setDirectory();
-        // setCodeScroll();
         pageTo(bash);
     });
 </script>

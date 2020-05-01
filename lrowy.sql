@@ -64,10 +64,10 @@ CREATE TABLE user (
   type varchar(32) NOT NULL,
   name varchar(32),
   email varchar(128),
-  avatar varchar(128),
   website varchar(128),
   password varchar(128),
   description varchar(128),
+  avatarVersion int(5),
   origin varchar(32) NOT NULL,
   originId varchar(64)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8mb4;

@@ -6,6 +6,7 @@ public class User {
     private String name;
     private String email;
     private String avatar;
+    private int avatarVersion;
     private String website;
     private String password;
     private String description;
@@ -14,6 +15,10 @@ public class User {
 
     public User() {
 
+    }
+
+    public void initAvatar() {
+        this.avatar = "/upload/avatar/" + this.userId + ".png?v=" + this.avatarVersion;
     }
 
     public int getUserId() {
@@ -54,6 +59,14 @@ public class User {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    public int getAvatarVersion() {
+        return avatarVersion;
+    }
+
+    public void setAvatarVersion(int avatarVersion) {
+        this.avatarVersion = avatarVersion;
     }
 
     public String getWebsite() {

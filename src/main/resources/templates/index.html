@@ -8,221 +8,11 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="/css/swiper.min.css">
     <link rel="stylesheet" href="layui-v2.5.4/css/layui.css">
-    <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
-    <link rel="stylesheet" th:href="@{/css/banner.css}">
     <link rel="stylesheet" th:href="@{/css/animation.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
-    <style>
-        html,body {
-            height: 100%;
-        }
-
-        .header {
-            position: absolute;
-            background-color: transparent;
-            box-shadow: none;
-        }
-
-        .main {
-            height: 100%;
-            padding-top: 0;
-            background: transparent;
-        }
-
-        .main-third {
-            height: 100%;
-            background: transparent;
-        }
-
-        .main-back {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /*.main:after {*/
-        /*    content: '';*/
-        /*    position: absolute;*/
-        /*    top: 0;*/
-        /*    left: 0;*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
-        /*    background-repeat: no-repeat;*/
-        /*    background-image: linear-gradient(0deg, hsla(0, 0%, 100%, 0) 60%, #fff), linear-gradient(70deg, #dbedff 32%, #ebfff0);*/
-        /*    opacity: .3;*/
-        /*    z-index: -1;*/
-        /*}*/
-
-        /*.main-second:after {*/
-        /*    content: '';*/
-        /*    position: absolute;*/
-        /*    top: 100%;*/
-        /*    left: 0;*/
-        /*    width: 50%;*/
-        /*    height: 100%;*/
-        /*    background-color: #f2f3f7;*/
-        /*    opacity: .3;*/
-        /*    z-index: -1;*/
-        /*}*/
-
-        .main-back .whale {
-            display: block;
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            top: 40%;
-            right: 8%;
-            font-size: 120px;
-            color: #a9cacf;
-            opacity: 0;
-        }
-
-        .main .hua-wrapper {
-            position: absolute;
-            width: 100%;
-            height: 260px;
-            bottom: 0;
-            left: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .main .hua-wrapper .hua {
-            height: 100%;
-            margin-left: 20%;
-        }
-
-        .main .hua-wrapper .hua img {
-            height: 100%;
-        }
-
-        .main-back .mark-wrapper {
-            position: absolute;
-            top: 40%;
-            left: 8%;
-            opacity: .3;
-        }
-
-        .main-back .mark-wrapper:hover {
-            opacity: .6!important;
-        }
-
-        .main-back .mark-wrapper .mark {
-            display: block;
-            color: #a9cacf;
-            font-size: 120px;
-            -webkit-animation: shake 10s infinite;
-            animation: shake 10s infinite;
-            opacity: .7;
-            cursor: pointer;
-        }
-
-        .article-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            overflow: hidden;
-        }
-
-        .article-title {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            height: 60px;
-            font-size: 1.2rem;
-            text-align: center;
-            line-height: 60px;
-            -webkit-transform: translateX(-50%);
-            transform: translateX(-50%);
-        }
-
-        .category-page {
-            display: inline-block;
-            padding: 0 10px;
-            cursor: auto;
-        }
-
-        #category-page-prev, #category-page-next {
-            cursor: pointer;
-        }
-
-        #category-page-prev.disabled, #category-page-next.disabled {
-            opacity: .35;
-            cursor: auto;
-            pointer-events: none;
-        }
-
-        .article-category {
-            position: relative;
-            width: 900px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .article-category-item {
-            position: relative;
-            width: 18%;
-            height: 260px;
-            opacity: 1;
-            -webkit-transition: .3s;
-            transition: .3s;
-            overflow: hidden;
-        }
-
-        .article-category-item-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: no-repeat top center;
-            background-size: cover;
-            visibility: hidden;
-        }
-
-        .article-category-item-wrapper.active {
-            visibility: visible;
-            z-index: 10;
-        }
-
-        .article-category-form {
-            display: none;
-            padding: 20px;
-        }
-
-        .parallax {
-            visibility: hidden;
-        }
-
-        @media screen and (max-width: 900px) {
-            .article-container {
-                align-items: flex-start;
-            }
-
-            .article-category {
-                flex-direction: column;
-                width: 66%;
-                margin-left: 8%;
-            }
-
-            .article-category-item {
-                height: 22vw;
-                width: 100%;
-                margin-bottom: 2vh;
-            }
-
-            .article-category-item:last-child {
-                margin-bottom: 0;
-            }
-        }
-    </style>
 </head>
 <body>
 <div class="header">
@@ -233,10 +23,10 @@
         <li th:if="${user == null}" class="header-item dropdown-content">
             <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>
             <div class="dropdown hidden fixed">
-                <ul class="dropdown-menu">
-                    <li id="login" class="dropdown-item">登录</li>
-                    <li class="dropdown-item">注册</li>
-                </ul>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="/login" target="_self">登录</a>
+                    <a class="dropdown-item" href="/login" target="_self">注册</a>
+                </div>
             </div>
         </li>
     </ul>
@@ -249,100 +39,10 @@
         </div>
     </div>
 </div>
-<div class="main-back">
-<!--    <div class="mark-wrapper parallax" data-parallax-offset="0" data-parallax-x="-15.7%" data-parallax-y="-77%" data-parallax-opacity-e="0" data-parallax-opacity-o="0.3" data-parallax-range="62.5%" data-parallax-mode="staticOut">-->
-<!--        <i title="月球" class="iconfont mark" onclick="console.log('ok')">&#xe611;</i>-->
-<!--    </div>-->
-<!--    <i class="iconfont whale parallax" data-parallax-offset="70%" data-parallax-x="-5%" data-parallax-opacity-e="1" data-parallax-opacity-o="0" data-parallax-range="30%" data-parallax-mode="static" onclick="console.log('ok')">&#xe693;</i>-->
-</div>
 <div class="main">
-    <div class="banner-content parallax" data-parallax-offset="top" data-parallax-opacity-e="0" data-parallax-opacity-o="1" data-parallax-range="height">
-        <div class="banner-container swiper-container">
-            <div class="swiper-parallax" data-swiper-parallax="-25%" th:style="'background-image:url(' + @{/images/banner02.jpg} + ');'"></div>
-            <div class="swiper-wrapper custom-font1">
-                <div class="swiper-slide">
-                    <div class="t-box" data-swiper-parallax-x="-40" data-swiper-parallax-opacity="0">
-                        <p class="name">程序员</p>
-                    </div>
-                    <div class="t-box" data-swiper-parallax-x="-80" data-swiper-parallax-opacity="0">
-                        <span class="desc">没有两个程序员会遇见一模一样的情况</span>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="t-box" data-swiper-parallax-x="-40" data-swiper-parallax-opacity="0">
-                        <p class="name">3D绘画师</p>
-                    </div>
-                    <div class="t-box" data-swiper-parallax-x="-80" data-swiper-parallax-opacity="0">
-                        <span class="desc">用软件绘制世界</span>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="t-box" data-swiper-parallax-x="-40" data-swiper-parallax-opacity="0">
-                        <p class="name">游戏爱好者</p>
-                    </div>
-                    <div class="t-box" data-swiper-parallax-x="-80" data-swiper-parallax-opacity="0">
-                        <span class="desc">爱研究游戏</span>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-scrollbar"></div>
-        </div>
-        <div class="swiper-button-prev parallax" th:style="'background-image:url(' + @{/images/lastIco.png} + ');'" data-parallax-offset="parent.top" data-parallax-range="parent.height" data-parallax-x="46"></div>
-        <div class="swiper-button-next parallax" th:style="'background-image:url(' + @{/images/nextIco.png} + ');'" data-parallax-offset="parent.top" data-parallax-range="parent.height" data-parallax-x="-46"></div>
-    </div>
-<!--    <div class="banner-back" th:style="'background-image:url(' + @{/images/banner03.jpg} + ');'"><div class="banner-mask"></div></div>-->
-    <div class="hua-wrapper">
-        <div class="hua parallax" data-parallax-offset="0" data-parallax-x="40" data-parallax-opacity-e="0.3" data-parallax-opacity-o="1" data-parallax-range="80%">
-            <img th:src="@{/images/hua-min.png}" alt=""/>
-        </div>
-    </div>
+
 </div>
-<div class="main main-second">
-    <div class="article-title custom-font1 view-p" data-view-Attr="children" data-view-delay="100" data-view-mode="static">
-        <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 200ms;" onclick="prevCatePage()"><span id="category-page-prev"><</span></span>
-        <span class="t fade-in" data-view-anim-in="fade-in" data-view-anim-out="fade-out" style="animation-delay: 100ms;">文章/page1</span>
-        <span class="category-page elastic-show" data-view-anim-in="elastic-show" data-view-anim-out="elastic-hide" style="animation-delay: 300ms;" onclick="nextCatePage()"><span id="category-page-next">></span></span>
-    </div>
-    <div class="article-container">
-        <div class="article-category fade-in view-p" data-view-y="-50" data-view-opacity="0" data-view-delay="100" data-view-mode="static">
-            <div class="article-category-item bl-show" style="transition-delay: 100ms;animation-delay: 100ms;">
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);" onclick="scrollToMain(1)"></div>
-                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);"></div>
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);"></div>
-            </div>
-            <div class="article-category-item bl-show" style="transition-delay: 200ms;animation-delay: 200ms;">
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
-                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/3.jpg);"></div>
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);"></div>
-            </div>
-            <div class="article-category-item bl-show" style="transition-delay: 300ms;animation-delay: 300ms;">
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
-                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);"></div>
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);"></div>
-            </div>
-            <div class="article-category-item bl-show" style="transition-delay: 400ms;animation-delay: 400ms;">
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/5.jpg);" onclick="scrollToMain(1)"></div>
-                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/4.jpg);"></div>
-            </div>
-            <div class="article-category-item bl-show" style="transition-delay: 500ms;animation-delay: 500ms;">
-                <div class="article-category-item-wrapper" style="background-image: url(https://www.lrowy.com//upload/img/label/1.jpg);" onclick="scrollToMain(1)"></div>
-                <div class="article-category-item-wrapper active" style="background-image: url(https://www.lrowy.com//upload/img/label/2.jpg);"></div>
-            </div>
-        </div>
-    </div>
-    <div class="bl-show" style="
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f2f3f7;
-            -webkit-animation-duration: .5s;
-            animation-duration: .5s;
-            z-index: -1;"></div>
-</div>
-<div class="main-third"><div onclick="scrollToMain(0)" style="position: relative;text-align: center;">首页</div></div>
-<form class="article-category-form layui-form layui-form-pane" action="">
+<form class="layui-form layui-form-pane" action="" style="display:none;">
     <div class="layui-form-item">
         <label class="layui-form-label">编号</label>
         <div class="layui-input-block">
@@ -368,11 +68,11 @@
         </div>
     </div>
 </form>
-<!--<script src="https://cdn.bootcss.com/jquery/2.2.1/jquery.min.js"></script>-->
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="/js/swiper.min.js"></script>
-<script src="/layui-v2.5.4/layui.js"></script>
+<script src="/layui-v2.5.4//layui.all.js"></script>
+<script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer', 'form']);</script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/index.js}"></script>

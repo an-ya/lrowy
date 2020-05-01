@@ -8,6 +8,7 @@ import com.lrowy.pojo.user.User;
 import com.lrowy.pojo.common.response.BaseResponse;
 
 import com.lrowy.service.CaptchaService;
+import com.lrowy.service.ImageService;
 import com.lrowy.service.OAuthService;
 import com.lrowy.utils.IpUtil;
 import com.lrowy.utils.MD5Util;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -30,11 +32,12 @@ public class MainController extends BaseController {
     @Value("${google.reCaptcha.id}")
     private String reCaptchaId;
 
-
     @Autowired
     private UserDao userDao;
     @Autowired
     private CaptchaDao captchaDao;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private OAuthService oAuthService;
     @Autowired
@@ -78,6 +81,7 @@ public class MainController extends BaseController {
         } else {
             try {
                 if (user.getPassword().equals(MD5Util.encrypt(password))) {
+                    user.initAvatar();
                     userLogin(user);
                 } else {
                     br.setInfo(SystemConstant.USER_PASSWORD_ERROR);
@@ -128,6 +132,13 @@ public class MainController extends BaseController {
                         user.setPassword(ePassword);
                         user.setOrigin("Own");
                         userDao.saveUser(user);
+                        try {
+                            if (avatar != null) imageService.saveAvatar(avatar, user.getUserId());
+                            user.setAvatarVersion(1);
+                            user.initAvatar();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         userLogin(user);
                     } catch (NoSuchAlgorithmException e) {
                         br.setInfo(SystemConstant.ALGORITHM_ERROR);

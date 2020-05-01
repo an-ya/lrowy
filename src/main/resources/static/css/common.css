@@ -237,6 +237,7 @@ a:hover {
 }
 
 .dropdown .dropdown-menu .dropdown-item {
+    display: block;
     margin: 0;
     padding: 7px 16px;
     color: #515a6e;

@@ -23,7 +23,9 @@ public enum SystemConstant {
     EMAIL_REGISTERED("403", "邮箱已注册"),
     ALGORITHM_ERROR("501", "加密出错"),
     MKDIR_ERROR("601", "文件夹创建失败"),
-    DELETE_FILE_ERROR("602", "删除文件失败"),;
+    DELETE_FILE_ERROR("602", "删除文件失败"),
+    IMAGE_TYPE_ERROR("603", "图片类型不支持"),
+    IO_ERROR("604", "IO出错");
 
 
     /** 枚举编号 */
