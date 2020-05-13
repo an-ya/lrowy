@@ -18,6 +18,10 @@ public class ReCaptchaService {
     @Resource
     private HttpAPIService httpAPIService;
 
+    ReCaptchaResponse deserialize(String content) throws IOException {
+        return JsonUtil.parse(content, ReCaptchaResponse.class);
+    }
+
     public String verify(String token, String ip) throws Exception {
         Map<String, Object> params = new HashMap<>();
         params.put("secret", secret);
@@ -25,9 +29,5 @@ public class ReCaptchaService {
         params.put("remoteip", ip);
         HttpResult hr = httpAPIService.doPost("https://www.recaptcha.net/recaptcha/api/siteverify", params);
         return hr.getEntityString();
-    }
-
-    public ReCaptchaResponse deserialize(String content) throws IOException {
-        return JsonUtil.parse(content, ReCaptchaResponse.class);
     }
 }

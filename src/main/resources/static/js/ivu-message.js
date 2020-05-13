@@ -1,67 +1,61 @@
 (function($, window) {
+    var $container = $('<div class="ivu-message"></div>');
+    $('body').append($container);
+
     window.message = {
-        dom: null,
-        string: ['<div class="ivu-message"></div>', '<div class="ivu-message-notice"><div class="ivu-message-notice-content"></div></div>'],
-        init: function () {
-            if (!this.dom) {
-                this.dom = $(this.string[0]);
-                $('body').append(this.dom);
-            }
-        },
         open: function (params) {
             if (!params) params = {};
-            this.init();
-            var e = $(this.string[1]);
-            e.children().eq(0).html(params.content);
-            if (params.icon) e.children().eq(0).prepend(params.icon);
-            this.dom.append(e);
-            e.addClass('move-message-enter-active');
-            e.css('height', e.outerHeight());
-            setTimeout(function () {
-                e.removeClass('move-message-enter-active');
-            }, 300);
+            var $message = $('<div class="ivu-message-notice"><div class="ivu-message-notice-content"></div></div>'),
+                $content = $message.find('.ivu-message-notice-content');
+
+            if (params.content) $content.html(params.content);
+            if (params.icon) $content.prepend(params.icon);
             var that = this;
             if (typeof params.duration !== 'number' || params.duration < 0) {
                 setTimeout(function () {
-                    that.close(e);
+                    that.close($message);
                 }, 5000);
             } else if (params.duration === 0) {
-                e.children().eq(0).append('<i class="iconfont ivu-message-notice-close">&#xe601;</i>');
-                e.find('.ivu-message-notice-close').bind('click', function () {
-                    that.close(e);
+                var $close = $('<i class="ivu-message-notice-close">&#xe611;</i>');
+                $content.append($close);
+                $close.bind('click', function () {
+                    that.close($message);
                 });
             } else if (params.duration > 0) {
                 setTimeout(function () {
-                    that.close(e);
+                    that.close($message);
                 }, params.duration * 1000);
             }
-            return e;
+
+            $container.append($message);
+            $message.css('height', $message.outerHeight());
+            $message.addClass('move-message-enter-active');
+            setTimeout(function () {
+                $message.removeClass('move-message-enter-active');
+            }, 300);
+            return $message;
         },
         loading: function (params) {
             if (!params) params = {};
-            params.content = '<img src="images/loading.gif"/><span>loading . . .</span>';
+            params.content = '<img src="images/loading.gif" alt="loading"/><span>loading . . .</span>';
             return this.open(params);
         },
         success: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="iconfont ivu-message-notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
+            params.icon = '<i class="ivu-message-notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
             return this.open(params);
         },
         fail: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="iconfont ivu-message-notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
+            params.icon = '<i class="ivu-message-notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
             return this.open(params);
         },
-        close: function (e, success) {
-            e.addClass('move-message-leave-active');
-            if (e.next().length !== 0) {
-                e.css({'height': 0, 'padding': 0});
-            }
+        close: function ($message, success) {
+            $message.addClass('move-message-leave-active');
+            if (!$message.is(':last-child')) $message.css({'height': 0, 'padding': 0});
             setTimeout(function () {
-                e.remove();
-                if (success && success instanceof Function) {
-                    success();
-                }
+                $message.remove();
+                if (success && success instanceof Function) success();
             }, 300);
         }
     };

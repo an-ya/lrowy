@@ -7,8 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
-    <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
+    <link rel="stylesheet" th:href="@{/css/tool.css}">
     <style>
         html {
             height: 100%;
@@ -225,6 +224,7 @@
             margin-bottom: 20px;
             text-align: center;
             background-color: #fff;
+            overflow: hidden;
             /*transition: .4s;*/
         }
 
@@ -272,6 +272,7 @@
             text-align: center;
             background-color: #e8f0fe;
             border: 1px solid #e9e9e9;
+            overflow: hidden;
         }
 
         .msg i {
@@ -315,6 +316,20 @@
 
         .grecaptcha-badge {
             box-shadow: none!important;
+        }
+
+        .oauth {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .oauth img {
+            flex-grow: 0;
+            width: 64px;
+            height: 64px;
+            margin-bottom: 10px;
         }
 
         @media screen and (max-width: 464px) {
@@ -373,7 +388,7 @@
             <div class="dropdown hidden">
                 <ul class="dropdown-menu">
                     <li class="dropdown-item">忘记密码</li>
-                    <li class="dropdown-item">第三方登录</li>
+                    <li class="dropdown-item" onclick="modal.open($('#oauth'), '第三方登录')">第三方登录</li>
                 </ul>
             </div>
         </div>
@@ -399,13 +414,15 @@
         </div>
     </div>
 </div>
+<div id="oauth" style="display:none;">
+    <a class="oauth" href="https://github.com/login/oauth/authorize?client_id=2aa8575f003ba2c492cc&scope=user:email&redirect_uri=http://localhost/oauth"><img th:src="@{/images/github.png}" alt="github">Github</a>
+</div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
 <script th:src="@{/js/common-v2.js}"></script>
-<script th:src="@{/js/nvi-notice.js}"></script>
-<script th:src="@{/js/ivu-message.js}"></script>
+<script th:src="@{/js/tool.js}"></script>
 <script th:src="'https://www.recaptcha.net/recaptcha/api.js?render=' + ${reCaptchaId} + '&hl=zh-CN async defer'"></script>
 <script th:inline="javascript">
     var url = getQueryString('url');
@@ -413,6 +430,10 @@
     var $email = $('#email');
     var $name = $('#emailItem .tip');
     var emailReg = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,5}$/;
+
+    function closeModal() {
+        $('.modal-container').removeClass('show')
+    }
 
     var setUserName = _.throttle(function (email) {
         $name.html(email);

@@ -1,79 +1,76 @@
 (function($, window) {
+    var $container = $('<div class="notice"></div>');
+    $('body').append($container);
+
     window.notice = {
-        dom: null,
-        string: ['<div class="notice"></div>', '<div class="notice-notice"><div class="notice-notice-content"><div class="notice-notice-content-wrapper"></div><i class="iconfont notice-close">&#xe601;</i></div><div class="notice-notice-before"></div>'],
-        init: function () {
-            if (!this.dom) {
-                this.dom = $(this.string[0]);
-                $('body').append(this.dom);
-            }
-        },
         open: function (params) {
             if (!params) params = {};
-            this.init();
-            var e = $(this.string[1]), content = e.children().eq(0), before = e.children().eq(1);
-            if (params.color) {
-                content.css('border-left', '5px solid ' + params.color);
-                before.css('background', params.color);
-            }
-            var wrapper = e.find('.notice-notice-content-wrapper');
-            if (params.content) {
-                wrapper.html(params.content);
-            } else {
-                if (params.icon) wrapper.append(params.icon);
-                if (params.title) wrapper.append('<div class="notice-title">' + params.title + '</div>');
-                if (!params.desc) params.desc = '&nbsp;';
-                wrapper.append('<div class="notice-desc">' + params.desc + '</div>');
-            }
-            this.dom.append(e);
-            var that = this;
-            setTimeout(function () {
-                e.css('height', wrapper.outerHeight());
-                content.addClass('notice-notice-content-show');
-                before.addClass('notice-notice-before-show');
-                e.find('.notice-notice-content-wrapper').addClass('notice-notice-content-wrapper-show');
-                e.find('.notice-title').addClass('notice-title-show');
-                e.find('.notice-desc').addClass('notice-desc-show');
+            var $notice = $('<div class="notice-notice">' +
+                '   <div class="notice-notice-content">' +
+                '       <div class="notice-notice-content-wrapper"></div>' +
+                '       <i class="iconfont notice-close">&#xe611;</i>' +
+                '   </div>' +
+                '   <div class="notice-notice-before">' +
+                '</div>'),
+                $content = $notice.find('.notice-notice-content'),
+                $before = $notice.find('.notice-notice-before'),
+                $wrapper = $notice.find('.notice-notice-content-wrapper'),
+                $close = $notice.find('.notice-close');
 
-                if (typeof params.duration !== 'number' || params.duration < 0) {
-                    setTimeout(function () {
-                        that.close(e);
-                    }, 5000);
-                } else if (params.duration === 0) {
-                    var close = e.find('.notice-close');
-                    close.addClass('notice-close-show');
-                    close.bind('click', function () {
-                        that.close(e);
-                    });
-                } else if (params.duration > 0) {
-                    setTimeout(function () {
-                        that.close(e);
-                    }, params.duration * 1000);
-                }
+            if (params.color) {
+                $content.css('border-left', '5px solid ' + params.color);
+                $before.css('background', params.color);
+            }
+
+            if (params.content) {
+                $wrapper.html(params.content);
+            } else {
+                if (params.icon) $wrapper.append(params.icon);
+                if (params.title) $wrapper.append('<div class="notice-title">' + params.title + '</div>');
+                if (!params.desc) params.desc = '&nbsp;';
+                $wrapper.append('<div class="notice-desc">' + params.desc + '</div>');
+            }
+
+            var that = this;
+            if (typeof params.duration !== 'number' || params.duration < 0) {
+                setTimeout(function () {
+                    that.close($notice);
+                }, 5000);
+            } else if (params.duration === 0) {
+                $close.addClass('notice-close-show');
+                $close.bind('click', function () {
+                    that.close($notice);
+                });
+            } else if (params.duration > 0) {
+                setTimeout(function () {
+                    that.close($notice);
+                }, params.duration * 1000);
+            }
+
+            $container.append($notice);
+            $notice.css('height', $wrapper.outerHeight());
+            setTimeout(function () {
+                $notice.addClass('show');
             }, 14);
-            return e;
+            return $notice;
         },
         success: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="iconfont notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
+            params.icon = '<i class="notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
             return this.open(params);
         },
         fail: function (params) {
             if (!params) params = {};
             params.color = '#f90';
-            params.icon = '<i class="iconfont notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
+            params.icon = '<i class="notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
             return this.open(params);
         },
-        close: function (e) {
-            e.addClass('notice-notice-hidden');
-            e.children().eq(0).removeClass('notice-notice-content-show');
-            e.children().eq(1).removeClass('notice-notice-before-show');
-            e.find('.notice-notice-content-wrapper').removeClass('notice-notice-content-wrapper-show');
-            e.find('.notice-close').removeClass('notice-close-show');
-            e.find('.notice-title').removeClass('notice-title-show');
-            e.find('.notice-desc').removeClass('notice-desc-show');
+        close: function ($notice, success) {
+            $notice.removeClass('show');
+            $notice.css({'height': 0, 'margin-bottom': 0});
             setTimeout(function () {
-                e.remove();
+                $notice.remove();
+                if (success && success instanceof Function) success();
             }, 800);
         }
     };

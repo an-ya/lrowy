@@ -12,6 +12,17 @@
     <link rel="stylesheet" th:href="@{/css/index.css}">
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
     <link rel="stylesheet" th:href="@{/css/animation.css}">
+    <style>
+        .user {
+            padding: 8px 10px;
+        }
+
+        .user img {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+        }
+    </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
 </head>
 <body>
@@ -33,9 +44,10 @@
     <span class="logo custom-font1">Anya</span>
 </div>
 <div class="sidebar">
-    <div class="sidebar-inner">
-        <div class="test" style="text-align: center;">
-            添加分类
+    <div  class="sidebar-inner">
+        <div th:if="${user != null}" class="user">
+            <img th:src="${user.avatar}" th:alt="${user.name}"/>
+            <div class="test" style="text-align: center;">添加分类</div>
         </div>
     </div>
 </div>

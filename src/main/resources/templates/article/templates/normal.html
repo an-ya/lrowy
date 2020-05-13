@@ -9,6 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/article.css}">
     <link rel="stylesheet" th:href="@{/css/comment.css}">
+    <link rel="stylesheet" th:href="@{/css/preview.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
     <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=201911013">
@@ -151,7 +152,6 @@
                 </div>
             </div>
         </div>
-        <a href="https://github.com/login/oauth/authorize?client_id=2aa8575f003ba2c492cc&scope=user:email&redirect_uri=http://localhost:8080/oauth">github</a>
         <textarea id="editor"></textarea>
     </div>
     <div class="right-side">
@@ -240,6 +240,7 @@
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
+<script th:src="@{/js/preview.js}"></script>
 <script th:src="@{/js/common-v2.js}"></script>
 <script>
     var page = $('html, body'), scrollTop, isScrolling = false, scrollCount = 0;
@@ -247,7 +248,7 @@
     var dirIndex = -1, showType, currentDir;
     var $header = $('.header');
 
-    function setDirectory (resetFlag) {
+    function setDirectory(resetFlag) {
         var dirString = '', num = 0, minLevel = 7;
         $('.article :header').each(function () {
             var $this = $(this);
@@ -279,7 +280,7 @@
         }
     }
 
-    function pageTo (href, end) {
+    function pageTo(href, end) {
         var target, pattern = /##.+/;
         var limit = Math.round($(document).height() - $(window).height());
         if (href === '#') {
@@ -301,7 +302,7 @@
         page.stop().animate({scrollTop: target}, 600, function () {isScrolling = false;});
     }
 
-    function setAnchor () {
+    function setAnchor() {
         var a = $('a[href*="#"]');
         a.off('mousedown touchstart');
         a.on('mousedown touchstart', function () {
@@ -316,7 +317,7 @@
         });
     }
 
-    function setCursor (index, dir) {
+    function setCursor(index, dir) {
         var top = 0, li = dir.find('ul').children().eq(index);
         if (index < 0) {
             dir.find('.cursor').css({'top': 0, 'height': 0, 'border': 'none'});
@@ -331,7 +332,7 @@
         dirIndex = index;
     }
 
-    function initCursor (href) {
+    function initCursor(href) {
         $('a[href*="#"]').each(function () {
             var $this = $(this), ref = $this.attr('href');
             if (ref === href) {
@@ -342,7 +343,7 @@
     }
 
     // 常规判断方法
-    function setResize () {
+    function setResize() {
         var h = $header.height();
         if (h === 60) {
             currentDir = $('.right-side .dir-body');
@@ -356,7 +357,7 @@
     }
 
     // 设置监听器判断方法
-    function setResizeObserver () {
+    function setResizeObserver() {
         var observer = new ResizeObserver(function (entries) {
             if (entries[0].contentRect.height > 0) {
                 currentDir = $('.right-side .dir-body');
@@ -369,7 +370,7 @@
         observer.observe($('.right-side .dir-body')[0]);
     }
 
-    function scrollEvent () {
+    function scrollEvent() {
         scrollTop = $(this).scrollTop();
 
         if (scrollTop > $('.footer').offset().top - $(window).height()) {
@@ -391,7 +392,7 @@
         if (!target) {setCursor(-1, currentDir);}
     }
 
-    function copyLink (ele) {
+    function copyLink(ele) {
         var id = $(ele).data('articleId');
         navigator.clipboard.writeText(window.location.host + '/article/' + id).then(function () {
             layer.msg('复制成功！');
@@ -400,13 +401,20 @@
         });
     }
 
-    function setImages () {
-        var image = $('.article p img');
+    function setImages() {
+        var image = $('.article p img'), array = [];
         image.parent().css('padding', '0');
+        image.each(function (index) {
+            $(this).data('index', index);
+            array.push($(this).attr('src'));
+        });
+        image.click(function () {
+            preview.init(array, $(this).data('index'));
+        });
         image.show();
     }
 
-    function setArticle (id, html) {
+    function setArticle(id, html) {
         var $article = $('#article');
         var $wrapper = $('.article_wrapper');
         if (id === $article.data('articleId')) {

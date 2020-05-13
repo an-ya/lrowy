@@ -1,14 +1,23 @@
 @font-face {
     font-family: 'iconfont';  /* project id 1286797 */
-    src: url('//at.alicdn.com/t/font_1286797_yfo9cs0ooq.eot');
-    src: url('//at.alicdn.com/t/font_1286797_yfo9cs0ooq.eot?#iefix') format('embedded-opentype'),
-    url('//at.alicdn.com/t/font_1286797_yfo9cs0ooq.woff2') format('woff2'),
-    url('//at.alicdn.com/t/font_1286797_yfo9cs0ooq.woff') format('woff'),
-    url('//at.alicdn.com/t/font_1286797_yfo9cs0ooq.ttf') format('truetype'),
-    url('//at.alicdn.com/t/font_1286797_yfo9cs0ooq.svg#iconfont') format('svg');
+    src: url('//at.alicdn.com/t/font_1286797_bmgvloest5.eot');
+    src: url('//at.alicdn.com/t/font_1286797_bmgvloest5.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1286797_bmgvloest5.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1286797_bmgvloest5.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1286797_bmgvloest5.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1286797_bmgvloest5.svg#iconfont') format('svg');
 }
 
 .iconfont {
+    font-family: "iconfont", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: .2px;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+i {
     font-family: "iconfont", sans-serif;
     font-size: 14px;
     font-style: normal;

@@ -22,6 +22,10 @@
     </insert>
 
     <select id="findUserByEmail" resultMap="user">
-        SELECT * FROM user WHERE email=#{email};
+        SELECT * FROM user WHERE email=#{email} AND origin='Own';
+    </select>
+
+    <select id="findUserByOrigin" resultMap="user">
+        SELECT * FROM user WHERE origin=#{origin} AND originId=#{originId};
     </select>
 </mapper>

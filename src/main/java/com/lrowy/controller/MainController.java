@@ -131,10 +131,10 @@ public class MainController extends BaseController {
                         user.setEmail(email);
                         user.setPassword(ePassword);
                         user.setOrigin("Own");
+                        user.setAvatarVersion(1);
                         userDao.saveUser(user);
                         try {
                             if (avatar != null) imageService.saveAvatar(avatar, user.getUserId());
-                            user.setAvatarVersion(1);
                             user.initAvatar();
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -171,7 +171,13 @@ public class MainController extends BaseController {
 
     @RequestMapping(value = "/oauth", method = RequestMethod.GET)
     public String oauth(String code) {
-        oAuthService.getUserInfo(code);
+        try {
+            User user = oAuthService.initUser(code);
+            user.initAvatar();
+            userLogin(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "redirect:/";
     }
 
