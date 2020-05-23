@@ -63,7 +63,6 @@
 }
 
 .article p img {
-    display: none;
     max-width: 100%;
 }
 
@@ -88,7 +87,7 @@
 }
 
 .directory {
-    display: block;
+    display: none;
     padding-bottom: 8px;
     border-bottom: 1px solid #eee;
 }
@@ -140,10 +139,6 @@
 
 .directory a:hover {
     color: #2979ff;
-}
-
-.directory.none {
-    display: none;
 }
 
 .level1 {margin-left: 15px;}

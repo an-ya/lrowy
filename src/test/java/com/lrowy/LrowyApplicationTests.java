@@ -5,6 +5,7 @@ import com.lrowy.dao.CaptchaDao;
 import com.lrowy.pojo.captcha.Captcha;
 import com.lrowy.pojo.common.http.HttpResult;
 
+import com.lrowy.service.CommentService;
 import com.lrowy.service.HttpAPIService;
 import com.lrowy.utils.JsonUtil;
 import org.junit.Test;
@@ -21,6 +22,8 @@ import java.util.List;
 public class LrowyApplicationTests {
     @Resource
     private HttpAPIService httpAPIService;
+    @Resource
+    private CommentService commentService;
     @Autowired
     private CaptchaDao captchaDao;
 
@@ -36,6 +39,11 @@ public class LrowyApplicationTests {
         } catch (Exception e) {
 //            e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testComment() {
+        System.out.println(commentService.getCommentByIssue(1, "Article"));
     }
 
     @Test

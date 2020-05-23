@@ -63,11 +63,8 @@
                 <div class="desc">程序员</div>
             </div>
             <div class="sticky">
-                <div class="directory none">
-                    <div class="h1">目录</div>
-                    <div class="dir-body"><div class="cursor"></div></div>
-                </div>
-                <a class="to-top" href="javascript:void(0);" title="回到顶部" onclick="pageTo('#', true)">
+                <div class="directory"></div>
+                <a class="to-top" href="javascript:void(0);" title="回到顶部" onclick="pageTo('#')">
                     <svg class="icon" aria-hidden="true">
                         <use xlink:href="#iconyoujiantou-copy"></use>
                     </svg>
@@ -203,10 +200,7 @@
             <div class="desc">程序员</div>
         </div>
         <div class="sticky">
-            <div class="directory none">
-                <div class="h1">目录</div>
-                <div class="dir-body"><div class="cursor"></div></div>
-            </div>
+            <div class="directory"></div>
             <a class="to-top" href="javascript:void(0);" title="回到顶部" onclick="pageTo('#', true)">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconyoujiantou-copy"></use>
@@ -243,45 +237,41 @@
 <script th:src="@{/js/preview.js}"></script>
 <script th:src="@{/js/common-v2.js}"></script>
 <script>
-    var page = $('html, body'), scrollTop, isScrolling = false, scrollCount = 0;
     var bash = decodeURIComponent(window.location.hash);
-    var dirIndex = -1, showType, currentDir;
-    var $header = $('.header');
 
-    function setDirectory(resetFlag) {
-        var dirString = '', num = 0, minLevel = 7;
+    function setDirectory() {
+        var str = '',
+            num = 0,
+            minLevel = 7;
         $('.article :header').each(function () {
-            var $this = $(this);
-            var contentH = $this.text().replace(/\s*/g, '');
+            var $this = $(this),
+                contentH = $this.text().replace(/\s*/g, '');
             contentH = contentH.replace(/\./g, '-');
             contentH = contentH.replace(/\(/g, '');
             contentH = contentH.replace(/\)/g, '');
-            var level = $this[0].tagName.substr(1,1);
-            var hID = num + '-' + contentH;
+            var level = $this[0].tagName.substr(1,1),
+                hID = num + '-' + contentH;
             $this.attr('id', hID);
             hID = '##' + hID;
 
-            dirString += '<li><div class="item level' + level + '"><a href="' + hID + '">' + contentH + '</a></div></li>';
             num += 1;
+            str += '<li><div class="item level' + level + '"><a href="' + hID + '">' + contentH + '</a></div></li>';
             if (level < minLevel) minLevel = level;
         });
-        dirString = '<ul>' + dirString + '</ul>';
+        str = '<div class="h1">目录</div><div class="dir-body"><div class="cursor"></div><ul>' + str + '</ul></div>';
         if (num > 0) {
-            if (resetFlag) {
-                $('.directory .dir-body').html('<div class="cursor"></div>' + dirString);
-            } else {
-                $('.directory .dir-body').append(dirString);
-            }
+            $('.directory').html(str);
             $('.directory ul').css('margin-left', -(minLevel - 1) * 15 + 'px');
-            $('.directory').removeClass('none');
             $('.directory .item').mdRipple();
+            $('.directory').show();
             setAnchor();
             initCursor(bash);
         }
     }
 
-    function pageTo(href, end) {
-        var target, pattern = /##.+/;
+    function pageTo(href) {
+        var target,
+            pattern = /##.+/;
         var limit = Math.round($(document).height() - $(window).height());
         if (href === '#') {
             target = 0;
@@ -297,18 +287,20 @@
         } else {
             return;
         }
-        isScrolling = true;
-        if (!end) scrollCount++;
-        page.stop().animate({scrollTop: target}, 600, function () {isScrolling = false;});
+        $(window).unbind('scroll');
+        $('html').stop().animate({scrollTop: target}, 600, 'swing', function () {}).promise().then(function () {
+            $(window).scroll(_.throttle(scrollEvent, 300));
+        });
     }
 
     function setAnchor() {
         var a = $('a[href*="#"]');
         a.off('mousedown touchstart');
         a.on('mousedown touchstart', function () {
-            var $this = $(this);
-            var href = $this.attr('href'), index = $this.parents('li').prevAll().length;
-            setCursor(index, currentDir);
+            var $this = $(this),
+                href = $this.attr('href'),
+                index = $this.parents('li').prevAll().length;
+            setCursor(index);
             $this.on('mouseup mouseleave touchend', function () {
                 pageTo(href);
                 window.location.hash = href;
@@ -317,8 +309,10 @@
         });
     }
 
-    function setCursor(index, dir) {
-        var top = 0, li = dir.find('ul').children().eq(index);
+    function setCursor(index) {
+        var dir = $('.directory:visible'),
+            top = 0,
+            li = dir.find('ul').children().eq(index);
         if (index < 0) {
             dir.find('.cursor').css({'top': 0, 'height': 0, 'border': 'none'});
             dir.find('li').removeClass('active');
@@ -329,7 +323,6 @@
             dir.find('li').removeClass('active');
             li.addClass('active');
         }
-        dirIndex = index;
     }
 
     function initCursor(href) {
@@ -337,50 +330,19 @@
             var $this = $(this), ref = $this.attr('href');
             if (ref === href) {
                 var index = $this.parents('li').prevAll().length;
-                setCursor(index, currentDir);
+                setCursor(index);
             }
         });
-    }
-
-    // 常规判断方法
-    function setResize() {
-        var h = $header.height();
-        if (h === 60) {
-            currentDir = $('.right-side .dir-body');
-            if (showType === 0) setCursor(dirIndex, currentDir);
-            showType = 1;
-        } else {
-            currentDir = $('.right-side-copy .dir-body');
-            if (showType === 1) setCursor(dirIndex, currentDir);
-            showType = 0;
-        }
-    }
-
-    // 设置监听器判断方法
-    function setResizeObserver() {
-        var observer = new ResizeObserver(function (entries) {
-            if (entries[0].contentRect.height > 0) {
-                currentDir = $('.right-side .dir-body');
-                setCursor(dirIndex, currentDir);
-            } else {
-                currentDir = $('.right-side-copy .dir-body');
-                setCursor(dirIndex, currentDir);
-            }
-        });
-        observer.observe($('.right-side .dir-body')[0]);
     }
 
     function scrollEvent() {
-        scrollTop = $(this).scrollTop();
+        var scrollTop = $(this).scrollTop();
 
         if (scrollTop > $('.footer').offset().top - $(window).height()) {
             $('.header').addClass('hide');
         } else {
             $('.header').removeClass('hide');
         }
-
-        if (isScrolling) return;
-        if (scrollCount > 0) {scrollCount--;return;}
 
         var target = false;
         $('.article :header').each(function () {
@@ -389,7 +351,8 @@
                target = true;
            }
         });
-        if (!target) {setCursor(-1, currentDir);}
+
+        if (!target) {setCursor(-1);}
     }
 
     function copyLink(ele) {
@@ -402,7 +365,8 @@
     }
 
     function setImages() {
-        var image = $('.article p img'), array = [];
+        var image = $('.article p img'),
+            array = [];
         image.parent().css('padding', '0');
         image.each(function (index) {
             $(this).data('index', index);
@@ -411,28 +375,26 @@
         image.click(function () {
             preview.init(array, $(this).data('index'));
         });
-        image.show();
     }
 
     function setArticle(id, html) {
-        var $article = $('#article');
-        var $wrapper = $('.article_wrapper');
+        var $article = $('#article'),
+            $wrapper = $('.article_wrapper');
         if (id === $article.data('articleId')) {
             $wrapper.height($article.height());
             $('#article').html(html);
             hljs.highlightBlock($article[0]);
             setImages();
-            setDirectory(true);
-            setCodeScroll();
+            setDirectory();
             $wrapper.height($article.height());
             pageTo('##');
         }
     }
 
     function editorFocus(ev) {
-        var $editor = $(ev.editor.element.$);
-        var $comment = $('#' + $editor.data('commentId'));
-        var $nick = $comment.children().eq(1);
+        var $editor = $(ev.editor.element.$),
+            $comment = $('#' + $editor.data('commentId')),
+            $nick = $comment.children().eq(1);
         $('.comment-at').remove();
         $nick.prepend('<span class="comment-at custom-font1">@ </span>');
     }
@@ -488,10 +450,6 @@
         }, 600);
     });
 
-    setResize();
-    $(window).resize(setResize);
-    // lodash throttle常用于防止事件在短时间内触发极多次，如ios上的滚轮事件，文本输入框change事件。
-    $(window).scroll(_.throttle(scrollEvent, 100));
     $(document).ready(function () {
         commom.setMenuButton({
             menuClass: 'menu',

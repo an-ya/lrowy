@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lrowy.dao.CommentDao">
+    <resultMap id="comment" type="com.lrowy.pojo.comment.Comment">
+        <id column="commentId" property="commentId"/>
+        <result column="issueId" property="issueId"/>
+        <result column="issueType" property="issueType"/>
+        <result column="userId" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="avatarVersion" property="avatarVersion"/>
+        <result column="pUserId" property="pUserId"/>
+        <result column="pName" property="pName"/>
+        <result column="pAvatarVersion" property="pAvatarVersion"/>
+        <result column="createDate" property="createDate"/>
+        <result column="content" property="content"/>
+    </resultMap>
+
+    <insert id="saveComment" parameterType="com.lrowy.pojo.comment.Comment">
+        <selectKey keyProperty="commentId" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO comment (issueId,issueType,userId,parentId,createDate,content) VALUE (#{issueId},#{issueType},#{userId},#{parentId},#{createDate},#{content});
+    </insert>
+
+    <select id="findCommentByIssue" resultMap="comment">
+        SELECT comment.commentId,comment.issueId,comment.issueType,comment.userId,user.name,user.avatarVersion,pUser.userId AS pUserId,pUser.name AS pName,pUser.avatarVersion AS pAvatarVersion,comment.createDate,comment.content
+        FROM comment
+        LEFT JOIN user ON comment.userId=user.userId
+        LEFT JOIN comment AS parent ON comment.parentId=parent.commentId
+        LEFT JOIN user AS pUser ON parent.userId=pUser.userId
+        WHERE comment.issueId=#{issueId} AND comment.issueType=#{issueType}
+        ORDER BY comment.createDate;
+    </select>
+</mapper>

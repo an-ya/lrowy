@@ -74,9 +74,10 @@ CREATE TABLE user (
 CREATE TABLE comment (
   commentId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   issueId int(10) NOT NULL,
+  issueType varchar(32) NOT NULL,
   parentId int(10),
   userId int(10) NOT NULL,
-  date datetime NOT NULL,
+  createDate datetime NOT NULL,
   content text
 ) ENGINE=InnoDB AUTO_INCREMENT=1 CHARSET=utf8mb4;
 CREATE TABLE captcha (

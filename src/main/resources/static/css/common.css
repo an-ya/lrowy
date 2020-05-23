@@ -330,8 +330,7 @@ a:hover {
 }
 
 .right-side-copy {
-    height: 0;
-    overflow: hidden;
+    display: none;
 }
 
 .float-side {
@@ -481,7 +480,7 @@ a:hover {
     }
 
     .right-side-copy {
-        height: auto;
+        display: block;
     }
 
     .float-side {
