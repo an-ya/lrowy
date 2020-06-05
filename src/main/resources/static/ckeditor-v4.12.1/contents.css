@@ -4,20 +4,18 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
 
 ::-webkit-scrollbar {
-	width: 14px;
-	height: 14px;
-}
-
-::-webkit-scrollbar-corner {
-	background-color: transparent;
+	width: 6px;
+	height: 6px;
 }
 
 ::-webkit-scrollbar-thumb {
-	height: 6px;
-	border-radius: 7px;
-	border: 4px solid transparent;
-	background-color: #ddd;
+	background-color: #c2c2c2;
 	background-clip: padding-box;
+	min-height: 28px;
+}
+
+::-webkit-scrollbar-track-piece {
+	background-color: #fff;
 }
 
 /* cyrillic-ext */

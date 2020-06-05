@@ -8,6 +8,7 @@
         <result column="userId" property="userId"/>
         <result column="name" property="name"/>
         <result column="avatarVersion" property="avatarVersion"/>
+        <result column="pId" property="pId"/>
         <result column="pUserId" property="pUserId"/>
         <result column="pName" property="pName"/>
         <result column="pAvatarVersion" property="pAvatarVersion"/>
@@ -19,11 +20,11 @@
         <selectKey keyProperty="commentId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO comment (issueId,issueType,userId,parentId,createDate,content) VALUE (#{issueId},#{issueType},#{userId},#{parentId},#{createDate},#{content});
+        INSERT INTO comment (issueId,issueType,userId,parentId,createDate,content) VALUE (#{issueId},#{issueType},#{userId},#{pId},#{createDate},#{content});
     </insert>
 
     <select id="findCommentByIssue" resultMap="comment">
-        SELECT comment.commentId,comment.issueId,comment.issueType,comment.userId,user.name,user.avatarVersion,pUser.userId AS pUserId,pUser.name AS pName,pUser.avatarVersion AS pAvatarVersion,comment.createDate,comment.content
+        SELECT comment.commentId,comment.issueId,comment.issueType,comment.userId,user.name,user.avatarVersion,comment.parentId AS pId,pUser.userId AS pUserId,pUser.name AS pName,pUser.avatarVersion AS pAvatarVersion,comment.createDate,comment.content
         FROM comment
         LEFT JOIN user ON comment.userId=user.userId
         LEFT JOIN comment AS parent ON comment.parentId=parent.commentId

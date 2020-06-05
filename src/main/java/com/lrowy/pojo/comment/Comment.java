@@ -1,6 +1,8 @@
 package com.lrowy.pojo.comment;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Comment {
     private int commentId;
@@ -8,12 +10,27 @@ public class Comment {
     private String issueType;
     private int userId;
     private String name;
+    private String avatar;
     private String avatarVersion;
+    private int pId;
     private int pUserId;
     private String pName;
+    private String pAvatar;
     private String pAvatarVersion;
     private Date createDate;
     private String content;
+    private int level;
+    private boolean fold;
+    private List<Comment> child;
+
+    public Comment() {
+
+    }
+
+    public void initAvatar() {
+        if (this.userId != 0) this.avatar = "/upload/avatar/" + this.userId + ".png?v=" + this.avatarVersion;
+        if (this.pUserId != 0) this.pAvatar = "/upload/avatar/" + this.pUserId + ".png?v=" + this.pAvatarVersion;
+    }
 
     public int getCommentId() {
         return commentId;
@@ -55,12 +72,28 @@ public class Comment {
         this.name = name;
     }
 
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
     public String getAvatarVersion() {
         return avatarVersion;
     }
 
     public void setAvatarVersion(String avatarVersion) {
         this.avatarVersion = avatarVersion;
+    }
+
+    public int getpId() {
+        return pId;
+    }
+
+    public void setpId(int pId) {
+        this.pId = pId;
     }
 
     public int getpUserId() {
@@ -77,6 +110,14 @@ public class Comment {
 
     public void setpName(String pName) {
         this.pName = pName;
+    }
+
+    public String getpAvatar() {
+        return pAvatar;
+    }
+
+    public void setpAvatar(String pAvatar) {
+        this.pAvatar = pAvatar;
     }
 
     public String getpAvatarVersion() {
@@ -101,5 +142,29 @@ public class Comment {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public boolean isFold() {
+        return fold;
+    }
+
+    public void setFold(boolean fold) {
+        this.fold = fold;
+    }
+
+    public List<Comment> getChild() {
+        return child;
+    }
+
+    public void setChild(List<Comment> child) {
+        this.child = child;
     }
 }

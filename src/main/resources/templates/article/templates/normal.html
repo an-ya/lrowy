@@ -9,7 +9,7 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/article.css}">
     <link rel="stylesheet" th:href="@{/css/comment.css}">
-    <link rel="stylesheet" th:href="@{/css/preview.css}">
+    <link rel="stylesheet" th:href="@{/css/tool.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
     <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=201911013">
@@ -88,68 +88,34 @@
         <div class="article-wrapper">
             <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
         </div>
-        <div class="comment-title">评论</div>
-        <div class="comment-list">
-            <div class="comment" id="10001">
-                <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
-                <div class="comment-nickname">Anya</div>
-                <div class="comment-content">
-                    <p>这是评论</p>
-                </div>
-                <div class="comment-info">
-                    <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
-                    <span class="comment-time">2019.11.28</span>
-                </div>
-                <div class="comment-reply">
-                    <div class="comment" id="100010">
-                        <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
-                        <div class="comment-nickname">Anya</div>
-                        <div class="comment-content">
-                            <p>这是评论</p>
-                        </div>
-                        <div class="comment-info">
-                            <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
-                            <span class="comment-time">2019.11.28</span>
+        <div class="comment-container">
+            <div class="comment-title">评论</div>
+            <div class="comment-list">
+                <div class="comment" th:each="c : ${comments}" th:id="${c.commentId}">
+                    <img class="comment-avatar" th:src="${c.avatar}" alt=""/>
+                    <div class="comment-nickname" th:text="${c.name}"></div>
+                    <div class="comment-content" th:utext="${c.content}"></div>
+                    <div class="comment-info">
+                        <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                        <span class="comment-time" th:text="${#dates.format(c.createDate, 'yyyy.MM.dd')}"></span>
+                    </div>
+                    <div class="comment-reply" th:if="${c.child != null}">
+                        <div class="comment" th:each="r : ${c.child}" th:id="${r.commentId}">
+                            <img class="comment-avatar" th:src="${r.avatar}" alt=""/>
+                            <div class="comment-nickname" th:text="${r.name}"></div>
+                            <div class="comment-content" th:utext="${r.content}"></div>
+                            <div class="comment-info">
+                                <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                                <span class="comment-time" th:text="${#dates.format(r.createDate, 'yyyy.MM.dd')}"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="comment" id="100011">
-                        <img class="comment-avatar" src="https://www.lrowy.com/img/user/default.png" alt=""/>
-                        <div class="comment-nickname">Anya</div>
-                        <div class="comment-content">
-                            <p>这是评论</p>
-                        </div>
-                        <div class="comment-info">
-                            <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
-                            <span class="comment-time">2019.11.28</span>
-                        </div>
-                    </div>
-<!--                    <div id="reply-editor1" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="10001"></div>-->
                 </div>
             </div>
-            <div class="comment" id="10002">
-                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
-                <div class="comment-nickname">Anya</div>
-                <div class="comment-content">
-                    <p>这是评论</p>
-                </div>
-                <div class="comment-info">
-                    <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
-                    <span class="comment-time">2019.11.28</span>
-                </div>
-            </div>
-            <div class="comment" id="10003">
-                <img class="comment-avatar" src="https://www.qubaobei.com/files/head/300/20191107/39/1573116125494.jpg" alt=""/>
-                <div class="comment-nickname">Anya</div>
-                <div class="comment-content">
-                    <p>这是评论</p>
-                </div>
-                <div class="comment-info">
-                    <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
-                    <span class="comment-time">2019.11.28</span>
-                </div>
-            </div>
+            <div th:if="${user == null}">请登录</div>
+            <textarea id="editor" style="height:200px;"></textarea>
+            <div class="comment-submit-btn" onclick="submitComment()">发表</div>
         </div>
-        <textarea id="editor"></textarea>
     </div>
     <div class="right-side">
         <div class="panel">
@@ -223,6 +189,10 @@
         <p>Copyright © 2019 www.lrowy.com All Rights Reserved</p>
     </div>
 </div>
+<div class="oauth-container" id="oauth" style="display:none;">
+    <a class="oauth" th:href="${'/login?url=/article/' + article.articleId}"><img th:src="@{/images/email.png}" alt="email">邮箱</a>
+    <a class="oauth" th:href="${'https://github.com/login/oauth/authorize?client_id=' + clientId + '&scope=user:email&redirect_uri=http://localhost/oauth&state=/article/' + article.articleId}"><img th:src="@{/images/github.png}" alt="github" style="transform:scale(.83) translateY(-2px);">Github</a>
+</div>
 <script>hljs.initHighlightingOnLoad();</script>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
@@ -232,9 +202,8 @@
 <script src="/layui-v2.5.4//layui.all.js"></script>
 <script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer']);</script>
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
-<script th:src="@{/js/nvi-notice.js}"></script>
+<script th:src="@{/js/tool.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
-<script th:src="@{/js/preview.js}"></script>
 <script th:src="@{/js/common-v2.js}"></script>
 <script>
     var bash = decodeURIComponent(window.location.hash);
@@ -399,17 +368,39 @@
         $nick.prepend('<span class="comment-at custom-font1">@ </span>');
     }
 
+    function submitComment() {
+        $.ajax({
+            url: '/comment/add',
+            type: 'post',
+            data: {
+                issueId: $('#article').data('articleId'),
+                content: editor.getData()
+            },
+            success: function (data) {
+                if (data.code === '000') {
+                    message.open({ content: '发表成功' });
+                } else if (data.code === '103') {
+                    modal.open({title:'请登录', content:$('#oauth')});
+                }
+            }
+        });
+    }
+
     var config = { placeholder: '从这里开始写正文' };
+    CKEDITOR.timestamp = 'J5S9';
     CKEDITOR.editorConfigCustom(config);
     var editor = CKEDITOR.replace('editor', config);
 
     CKEDITOR.disableAutoInline = true;
-    // var editor1 = CKEDITOR.inline('reply-editor1', config);
-    // editor1.on('focus', editorFocus);
 
     $('.comment-reply-btn').click(function () {
-        var $comment = $(this).parent().parent(), $parent = $comment.parent();
-        var editor, editorId, commentId = $comment.attr('id'), $editor;
+        var $comment = $(this).parent().parent(),
+            $parent = $comment.parent(),
+            editor,
+            editorId,
+            $editor,
+            name = $comment.children().eq(1).text().replace('@ ', ''),
+            commentId = $comment.attr('id');
         if ($parent.hasClass('comment-reply')) {
             $editor = $parent.find('.comment-reply-editor');
             if ($editor.length > 0) {
@@ -417,7 +408,7 @@
                 $editor.data('commentId', commentId);
             } else {
                 editorId = 'reply-editor' + $comment.attr('id');
-                $parent.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="' + commentId + '"></div></div>');
+                $parent.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复' + name + '" data-comment-id="' + commentId + '"></div></div>');
                 editor = CKEDITOR.inline(editorId, config);
                 editor.on('focus', editorFocus);
             }
@@ -430,9 +421,9 @@
                 editorId = 'reply-editor' + $comment.attr('id');
                 var $reply = $comment.find('.comment-reply');
                 if ($reply.length > 0) {
-                    $reply.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="' + commentId + '"></div></div>');
+                    $reply.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复' + name + '" data-comment-id="' + commentId + '"></div></div>');
                 } else {
-                    $comment.append('<div class="comment-reply"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复Anya" data-comment-id="' + commentId + '"></div></div>');
+                    $comment.append('<div class="comment-reply"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复' + name + '" data-comment-id="' + commentId + '"></div></div>');
                 }
                 editor = CKEDITOR.inline(editorId, config);
                 editor.on('focus', editorFocus);
@@ -445,11 +436,12 @@
             if (editorId) {
                 if (!editor) editor = CKEDITOR.instances[editorId];
                 editor.focus();
-                editor.placeholder = '回复123156';
+                editor.placeholder = '回复' + name;
             }
         }, 600);
     });
 
+    $(window).scroll(_.throttle(scrollEvent, 300));
     $(document).ready(function () {
         commom.setMenuButton({
             menuClass: 'menu',

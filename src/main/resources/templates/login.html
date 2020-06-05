@@ -318,20 +318,6 @@
             box-shadow: none!important;
         }
 
-        .oauth {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .oauth img {
-            flex-grow: 0;
-            width: 64px;
-            height: 64px;
-            margin-bottom: 10px;
-        }
-
         @media screen and (max-width: 464px) {
             .login-box {
                 width: 100%;
@@ -388,7 +374,7 @@
             <div class="dropdown hidden">
                 <ul class="dropdown-menu">
                     <li class="dropdown-item">忘记密码</li>
-                    <li class="dropdown-item" onclick="modal.open($('#oauth'), '第三方登录')">第三方登录</li>
+                    <li class="dropdown-item" onclick="modal.open({title:'第三方登录', content:$('#oauth')})">第三方登录</li>
                 </ul>
             </div>
         </div>
@@ -415,7 +401,7 @@
     </div>
 </div>
 <div id="oauth" style="display:none;">
-    <a class="oauth" href="https://github.com/login/oauth/authorize?client_id=2aa8575f003ba2c492cc&scope=user:email&redirect_uri=http://localhost/oauth"><img th:src="@{/images/github.png}" alt="github">Github</a>
+    <a class="oauth" th:href="${'https://github.com/login/oauth/authorize?client_id=' + clientId + '&scope=user:email&redirect_uri=http://localhost/oauth&state=/'}"><img th:src="@{/images/github.png}" alt="github">Github</a>
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>

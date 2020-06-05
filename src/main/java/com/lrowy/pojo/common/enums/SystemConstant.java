@@ -9,6 +9,7 @@ public enum SystemConstant {
     PARAMS_INVALID("005", "请求无效"),
     USER_EMAIL_NOT_FIND("101", "未找到该邮箱注册用户"),
     USER_PASSWORD_ERROR("102", "密码错误"),
+    USER_NOT_LOGIN("103", "用户未登录"),
     JWT_EXPIRE("201", "token失效"),
     JWT_FAIL("202", "token验证失败"),
     CAPTCHA_EMAIL_DAY_LIMIT("301", "邮箱日发送验证码次数受限"),

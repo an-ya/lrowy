@@ -30,22 +30,22 @@ i {
     font-family: 'ZCOOL XiaoWei', Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;
 }
 
-::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-}
+/*::-webkit-scrollbar {*/
+/*    width: 14px;*/
+/*    height: 14px;*/
+/*}*/
 
-::-webkit-scrollbar-corner {
-    background-color: transparent;
-}
+/*::-webkit-scrollbar-corner {*/
+/*    background-color: transparent;*/
+/*}*/
 
-::-webkit-scrollbar-thumb {
-    height: 6px;
-    border-radius: 7px;
-    border: 4px solid transparent;
-    background-color: #ddd;
-    background-clip: padding-box;
-}
+/*::-webkit-scrollbar-thumb {*/
+/*    height: 6px;*/
+/*    border-radius: 7px;*/
+/*    border: 4px solid transparent;*/
+/*    background-color: #ddd;*/
+/*    background-clip: padding-box;*/
+/*}*/
 
 * {
     -webkit-tap-highlight-color: transparent;
@@ -425,6 +425,30 @@ a:hover {
     transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+.oauth-container {
+    display: flex;
+    align-items: stretch;
+}
+
+.oauth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.oauth:last-child {
+    margin-right: 0;
+}
+
+.oauth img {
+    flex-grow: 0;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 10px;
+}
+
 .footer {
     height: 300px;
     background: #fafafa;
@@ -495,5 +519,22 @@ a:hover {
 @media screen and (max-width: 694px) {
     .left-side {
         width: 100%;
+    }
+}
+
+@media (-webkit-max-device-pixel-ratio: 1) {
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #c2c2c2;
+        background-clip: padding-box;
+        min-height: 28px;
+    }
+
+    ::-webkit-scrollbar-track-piece {
+        background-color: #fff;
     }
 }

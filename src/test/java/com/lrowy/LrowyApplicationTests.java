@@ -3,6 +3,7 @@ package com.lrowy;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lrowy.dao.CaptchaDao;
 import com.lrowy.pojo.captcha.Captcha;
+import com.lrowy.pojo.comment.Comment;
 import com.lrowy.pojo.common.http.HttpResult;
 
 import com.lrowy.service.CommentService;
@@ -43,7 +44,12 @@ public class LrowyApplicationTests {
 
     @Test
     public void testComment() {
-        System.out.println(commentService.getCommentByIssue(1, "Article"));
+        List<Comment> comments = commentService.getCommentByIssue(1, "Article");
+        try {
+            System.out.println(JsonUtil.generate(comments));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test

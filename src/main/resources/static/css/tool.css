@@ -227,6 +227,23 @@
     padding: 16px;
 }
 
+.modal-footer {
+    display: none;
+    padding: 12px 18px;
+    text-align: right;
+    border-top: 1px solid #e8eaec;
+}
+
+.modal-btn {
+    display: inline-block;
+    padding: 0 15px;
+    color: #fff;
+    line-height: 32px;
+    background: #2d8cf0;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 454px) {
     .modal-inner {
         width: 100%;

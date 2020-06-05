@@ -29,6 +29,8 @@ import java.util.regex.Pattern;
 
 @Controller
 public class MainController extends BaseController {
+    @Value("${github.oauth.clientId}")
+    private String clientId;
     @Value("${google.reCaptcha.id}")
     private String reCaptchaId;
 
@@ -57,6 +59,7 @@ public class MainController extends BaseController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
+        model.addAttribute("clientId", clientId);
         model.addAttribute("reCaptchaId", reCaptchaId);
         return "/login";
     }
@@ -170,7 +173,7 @@ public class MainController extends BaseController {
     }
 
     @RequestMapping(value = "/oauth", method = RequestMethod.GET)
-    public String oauth(String code) {
+    public String oauth(String code, String state) {
         try {
             User user = oAuthService.initUser(code);
             user.initAvatar();
@@ -178,7 +181,7 @@ public class MainController extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "redirect:/";
+        return "redirect:" + state;
     }
 
     @RequestMapping(value = "/getUserByEmail", method = RequestMethod.POST)
