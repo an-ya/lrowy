@@ -36,8 +36,8 @@ CKEDITOR.editorConfig = function( config ) {
     config.mathJaxClass = 'mjx';
     config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
 
-    config.filebrowserBrowseUrl = '/browser/browse.php';
-    config.filebrowserUploadUrl = '/uploader/upload.php';
+    config.filebrowserBrowseUrl = '/upload';
+    config.filebrowserUploadUrl = '/comment/uploadImage';
 
     config.codeSnippet_theme = 'vue';
     config.codeSnippet_languages = {

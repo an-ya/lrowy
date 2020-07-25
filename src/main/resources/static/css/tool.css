@@ -516,6 +516,7 @@
     line-height: 32px;
     background: rgba(0,0,0,.4);
     border-radius: 30px;
+    z-index: 10001;
 }
 
 .preview_opr_list {
@@ -547,4 +548,16 @@
     opacity: .35;
     cursor: auto;
     pointer-events: none;
+}
+
+@media screen and (max-width: 954px) {
+    .preview_inner {
+        width: 100%;
+        height: 100%;
+    }
+
+    .preview_inner .preview_close {
+        top: 20px;
+        right: 20px;
+    }
 }

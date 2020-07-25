@@ -16,7 +16,7 @@
                     that.close($message);
                 }, 5000);
             } else if (params.duration === 0) {
-                var $close = $('<i class="ivu-message-notice-close">&#xe611;</i>');
+                var $close = $('<i class="iconfont ivu-message-notice-close">&#xe611;</i>');
                 $content.append($close);
                 $close.bind('click', function () {
                     that.close($message);
@@ -42,12 +42,12 @@
         },
         success: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="ivu-message-notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
+            params.icon = '<i class="iconfont ivu-message-notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
             return this.open(params);
         },
         fail: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="ivu-message-notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
+            params.icon = '<i class="iconfont ivu-message-notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
             return this.open(params);
         },
         close: function ($message, success) {

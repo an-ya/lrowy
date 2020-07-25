@@ -2,13 +2,13 @@
     var $container = $('<div class="preview_container">' +
         '    <div class="preview_mask" onclick="preview.hide()"></div>' +
         '    <div class="preview_inner" id="img_container">' +
-        '        <div class="preview_close" onclick="preview.hide()"><i>&#xe611;</i></div>' +
+        '        <div class="preview_close" onclick="preview.hide()"><i class="iconfont">&#xe611;</i></div>' +
         '        <div class="preview_content"></div>' +
         '    </div>' +
         '    <div class="preview_opr">' +
         '        <ul class="preview_opr_list">' +
-        '            <li class="preview_opr_item"><i id="prev" title="上一张" onclick="preview.prev()">&#xe779;</i></li>' +
-        '            <li class="preview_opr_item"><i id="next" title="下一张" onclick="preview.next()">&#xe775;</i></li>' +
+        '            <li class="preview_opr_item"><i class="iconfont" id="prev" title="上一张" onclick="preview.prev()">&#xe779;</i></li>' +
+        '            <li class="preview_opr_item"><i class="iconfont" id="next" title="下一张" onclick="preview.next()">&#xe775;</i></li>' +
         '        </ul>' +
         '    </div>' +
         '</div>'),

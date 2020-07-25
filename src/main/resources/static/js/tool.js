@@ -16,7 +16,7 @@
                     that.close($message);
                 }, 5000);
             } else if (params.duration === 0) {
-                var $close = $('<i class="ivu-message-notice-close">&#xe611;</i>');
+                var $close = $('<i class="iconfont ivu-message-notice-close">&#xe611;</i>');
                 $content.append($close);
                 $close.bind('click', function () {
                     that.close($message);
@@ -42,12 +42,12 @@
         },
         success: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="ivu-message-notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
+            params.icon = '<i class="iconfont ivu-message-notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
             return this.open(params);
         },
         fail: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="ivu-message-notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
+            params.icon = '<i class="iconfont ivu-message-notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
             return this.open(params);
         },
         close: function ($message, success) {
@@ -66,7 +66,7 @@
         '    <div class="modal-mask"></div>\n' +
         '    <div class="modal-inner">\n' +
         '        <div class="modal-content">\n' +
-        '            <i class="modal-close" onclick="modal.close()">&#xe611;</i>\n' +
+        '            <i class="iconfont modal-close" onclick="modal.close()">&#xe611;</i>\n' +
         '            <div class="modal-header"></div>\n' +
         '            <div class="modal-body"></div>\n' +
         '            <div class="modal-footer"><div class="modal-btn">确定</div></div>\n' +
@@ -175,13 +175,13 @@
         },
         success: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
+            params.icon = '<i class="iconfont notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
             return this.open(params);
         },
         fail: function (params) {
             if (!params) params = {};
             params.color = '#f90';
-            params.icon = '<i class="notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
+            params.icon = '<i class="iconfont notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
             return this.open(params);
         },
         close: function ($notice, success) {
@@ -199,13 +199,13 @@
     var $container = $('<div class="preview_container">' +
         '    <div class="preview_mask" onclick="preview.hide()"></div>' +
         '    <div class="preview_inner" id="img_container">' +
-        '        <div class="preview_close" onclick="preview.hide()"><i>&#xe611;</i></div>' +
+        '        <div class="preview_close" onclick="preview.hide()"><i class="iconfont">&#xe611;</i></div>' +
         '        <div class="preview_content"></div>' +
         '    </div>' +
         '    <div class="preview_opr">' +
         '        <ul class="preview_opr_list">' +
-        '            <li class="preview_opr_item"><i id="prev" title="上一张" onclick="preview.prev()">&#xe779;</i></li>' +
-        '            <li class="preview_opr_item"><i id="next" title="下一张" onclick="preview.next()">&#xe775;</i></li>' +
+        '            <li class="preview_opr_item"><i class="iconfont" id="prev" title="上一张" onclick="preview.prev()">&#xe779;</i></li>' +
+        '            <li class="preview_opr_item"><i class="iconfont" id="next" title="下一张" onclick="preview.next()">&#xe775;</i></li>' +
         '        </ul>' +
         '    </div>' +
         '</div>'),

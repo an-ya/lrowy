@@ -457,7 +457,7 @@
 
     function go() {
         if (url) {
-            window.location.href = url;
+            window.location.href = decodeURIComponent(url);
         } else {
             window.location.href = '/index';
         }

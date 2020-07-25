@@ -10,10 +10,9 @@
     <link rel="stylesheet" th:href="@{/css/article.css}">
     <link rel="stylesheet" th:href="@{/css/comment.css}">
     <link rel="stylesheet" th:href="@{/css/tool.css}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
+    <link rel="stylesheet" th:href="@{/css/vue.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
-    <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=201911013">
-    <script src="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+    <script th:src="@{/js/highlight.pack.js}"></script>
     <script src="//at.alicdn.com/t/font_1286797_bzbcblwzlg.js"></script>
 </head>
 <body>
@@ -93,28 +92,36 @@
             <div class="comment-list">
                 <div class="comment" th:each="c : ${comments}" th:id="${c.commentId}">
                     <img class="comment-avatar" th:src="${c.avatar}" alt=""/>
-                    <div class="comment-nickname" th:text="${c.name}"></div>
+                    <div class="comment-nickname">
+                        <span class="owner" th:text="${c.name}"></span>
+                    </div>
                     <div class="comment-content" th:utext="${c.content}"></div>
                     <div class="comment-info">
-                        <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                        <a class="comment-reply-btn" href="javascript:void(0);" th:attr="onclick=${user == null ? 'loginTip()' : 'setComment(this)'}"><i class="iconfont">&#xe635;</i>回复</a>
                         <span class="comment-time" th:text="${#dates.format(c.createDate, 'yyyy.MM.dd')}"></span>
                     </div>
                     <div class="comment-reply" th:if="${c.child != null}">
                         <div class="comment" th:each="r : ${c.child}" th:id="${r.commentId}">
                             <img class="comment-avatar" th:src="${r.avatar}" alt=""/>
-                            <div class="comment-nickname" th:text="${r.name}"></div>
+                            <div class="comment-nickname">
+                                <span class="owner" th:text="${r.name}"></span>
+                                <span th:if="${r.fold}" class="comment-reply-text">回复</span>
+                                <span th:if="${r.fold}" th:text="${r.pName}"></span>
+                            </div>
                             <div class="comment-content" th:utext="${r.content}"></div>
                             <div class="comment-info">
-                                <a class="comment-reply-btn" href="javascript:void(0);"><i class="iconfont">&#xe635;</i>回复</a>
+                                <a class="comment-reply-btn" href="javascript:void(0);" th:attr="onclick=${user == null ? 'loginTip()' : 'setComment(this)'}"><i class="iconfont">&#xe635;</i>回复</a>
                                 <span class="comment-time" th:text="${#dates.format(r.createDate, 'yyyy.MM.dd')}"></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div th:if="${user == null}">请登录</div>
-            <textarea id="editor" style="height:200px;"></textarea>
-            <div class="comment-submit-btn" onclick="submitComment()">发表</div>
+            <div class="editor-container" id="editor-container">
+                <div th:if="${user == null}" class="tip middle"><span>请先<a href="javascript:void(0);" onclick="loginTip()">登录</a></span></div>
+                <textarea id="editor"  style="height:200px;" placeholder="从这里开始写正文"></textarea>
+            </div>
+            <div th:if="${user != null}" class="comment-submit-btn" onclick="submitComment()">发表</div>
         </div>
     </div>
     <div class="right-side">
@@ -167,7 +174,7 @@
         </div>
         <div class="sticky">
             <div class="directory"></div>
-            <a class="to-top" href="javascript:void(0);" title="回到顶部" onclick="pageTo('#', true)">
+            <a class="to-top" href="javascript:void(0);" title="回到顶部" onclick="pageTo('#')">
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#iconyoujiantou-copy"></use>
                 </svg>
@@ -193,22 +200,18 @@
     <a class="oauth" th:href="${'/login?url=/article/' + article.articleId}"><img th:src="@{/images/email.png}" alt="email">邮箱</a>
     <a class="oauth" th:href="${'https://github.com/login/oauth/authorize?client_id=' + clientId + '&scope=user:email&redirect_uri=http://localhost/oauth&state=/article/' + article.articleId}"><img th:src="@{/images/github.png}" alt="github" style="transform:scale(.83) translateY(-2px);">Github</a>
 </div>
+<link rel="stylesheet" th:href="@{/css/content-styles.css}">
 <script>hljs.initHighlightingOnLoad();</script>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
-<script src="/ckeditor-v4.12.1/ckeditor.js"></script>
-<script src="/ckeditor-v4.12.1/config-simple.js?t=46592"></script>
-<script src="/layui-v2.5.4//layui.all.js"></script>
-<script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer']);</script>
 <script>document.addEventListener('DOMContentLoaded', function () { FastClick.attach(document.body); }, false);</script>
 <script th:src="@{/js/tool.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
 <script th:src="@{/js/common-v2.js}"></script>
+<script th:src="@{/js/ckeditor.js}"></script>
 <script>
-    var bash = decodeURIComponent(window.location.hash);
-
-    function setDirectory() {
+    function setDirectory(bash) {
         var str = '',
             num = 0,
             minLevel = 7;
@@ -282,10 +285,12 @@
         var dir = $('.directory:visible'),
             top = 0,
             li = dir.find('ul').children().eq(index);
-        if (index < 0) {
+        if (index === -1) {
             dir.find('.cursor').css({'top': 0, 'height': 0, 'border': 'none'});
             dir.find('li').removeClass('active');
-            window.location.hash = '';
+        } else if (index === -2) {
+            dir.find('.cursor').css({'top': $('.dir-body:visible').height(), 'height': 0, 'border': 'none'});
+            dir.find('li').removeClass('active');
         } else {
             li.prevAll().each(function () {top += $(this).height();});
             dir.find('.cursor').css({'top': top, 'height': li.height(), 'border': ''});
@@ -307,36 +312,49 @@
     function scrollEvent() {
         var scrollTop = $(this).scrollTop();
 
-        if (scrollTop > $('.footer').offset().top - $(window).height()) {
+        if (scrollTop === 0) window.location.hash = '';
+
+        if (scrollTop > $('.footer').offset().top - $(window).height() || scrollTop > $('.comment-container').offset().top - 60) {
             $('.header').addClass('hide');
+            $('.sidebar').addClass('full');
         } else {
             $('.header').removeClass('hide');
+            $('.sidebar').removeClass('full');
         }
 
-        var target = false;
-        $('.article :header').each(function () {
-           if (scrollTop + 61 >= $(this).offset().top) {
-               initCursor('##' + $(this).attr('id'));
-               target = true;
-           }
-        });
-
-        if (!target) {setCursor(-1);}
+        var $header = $('.article :header'), bottom = $('#article').offset().top + $('#article').outerHeight(), index =  -1;
+        for (var i = 0;i < $header.length;i++) {
+            if (scrollTop + 61 >= $($header[i]).offset().top) {
+                if (i === ($header.length - 1) && scrollTop + 61 >= bottom) {
+                    index = -2;
+                } else {
+                    index++;
+                }
+            } else {
+                if (i === 0) {
+                    break;
+                }
+            }
+        }
+        if (index > 0) {
+            initCursor('##' + $header[index].getAttribute('id'));
+        } else {
+            setCursor(index);
+        }
     }
 
     function copyLink(ele) {
         var id = $(ele).data('articleId');
         navigator.clipboard.writeText(window.location.host + '/article/' + id).then(function () {
-            layer.msg('复制成功！');
+            message.open({ content: '复制成功！' });
         }).catch(function () {
-            layer.msg('浏览器不支持！');
+            message.open({ content: '浏览器不支持！' });
         });
     }
 
     function setImages() {
-        var image = $('.article p img'),
+        var image = $('.article figure img'),
             array = [];
-        image.parent().css('padding', '0');
         image.each(function (index) {
             $(this).data('index', index);
             array.push($(this).attr('src'));
@@ -360,96 +378,154 @@
         }
     }
 
-    function editorFocus(ev) {
-        var $editor = $(ev.editor.element.$),
-            $comment = $('#' + $editor.data('commentId')),
-            $nick = $comment.children().eq(1);
-        $('.comment-at').remove();
-        $nick.prepend('<span class="comment-at custom-font1">@ </span>');
+    function loginTip() {
+        modal.open({title:'请登录', content:$('#oauth')});
     }
 
     function submitComment() {
-        $.ajax({
-            url: '/comment/add',
-            type: 'post',
-            data: {
-                issueId: $('#article').data('articleId'),
-                content: editor.getData()
-            },
-            success: function (data) {
-                if (data.code === '000') {
-                    message.open({ content: '发表成功' });
-                } else if (data.code === '103') {
-                    modal.open({title:'请登录', content:$('#oauth')});
+        var content = editor.getData();
+        if (content === '') {
+            message.fail({ content: '内容不应为空' });
+        } else {
+            $.ajax({
+                url: '/comment/add',
+                type: 'post',
+                data: {
+                    issueId: $('#article').data('articleId'),
+                    content: content
+                },
+                success: function (data) {
+                    if (data.code === '000') {
+                        window.location.reload();
+                    } else if (data.code === '103') {
+                        loginTip();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
-    var config = { placeholder: '从这里开始写正文' };
-    CKEDITOR.timestamp = 'J5S9';
-    CKEDITOR.editorConfigCustom(config);
-    var editor = CKEDITOR.replace('editor', config);
+    function submitReply(e) {
+        var $editor = $(e).prev(),
+            id = $editor.data('commentId'),
+            editor = CKEDITOR.instances[$editor.attr('id')],
+            content = editor.getData();
+        if (content === '') {
+            message.fail({ content: '内容不应为空' });
+        } else {
+            $.ajax({
+                url: '/comment/add',
+                type: 'post',
+                data: {
+                    pId: id,
+                    issueId: $('#article').data('articleId'),
+                    content: content
+                },
+                success: function (data) {
+                    if (data.code === '000') {
+                        window.location.reload();
+                    } else if (data.code === '103') {
+                        loginTip();
+                    }
+                }
+            });
+        }
+    }
 
-    CKEDITOR.disableAutoInline = true;
+    function initInlineEditor(id, placeholder, success) {
+        config.placeholder = placeholder;
+        CKEDITOR.InlineEditor
+            .create(document.querySelector('#' + id), config)
+            .then(editor => {
+                var $editor = $(editor.sourceElement);
+                CKEDITOR.instances[id] = editor;
+                editor.editing.view.document.on('change:isFocused', (evt,name,value) => {
+                    if (value) {
+                        var $comment = $('#' + $editor.data('commentId')), $nick = $comment.children().eq(1);
+                        $('.comment-at').remove();
+                        $nick.prepend('<span class="comment-at custom-font1">@ </span>');
+                    }
+                });
+                success(editor, id);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
 
-    $('.comment-reply-btn').click(function () {
-        var $comment = $(this).parent().parent(),
+    function initClassicEditor() {
+        var config = CKEDITOR.ClassicEditor.simpleConfig;
+        config.simpleUpload = { uploadUrl: 'http://localhost/comment/uploadImage' };
+        CKEDITOR.ClassicEditor.create(document.querySelector('#editor'), config)
+            .then(editor => {
+                window.editor = editor;
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }
+
+    function setComment(e) {
+        var $comment = $(e).parent().parent(),
             $parent = $comment.parent(),
             editor,
             editorId,
             $editor,
-            name = $comment.children().eq(1).text().replace('@ ', ''),
+            name = $comment.children().eq(1).find('.owner').text(),
             commentId = $comment.attr('id');
+
+        var focus = function (editor, editorId) {
+            editor.editing.view.focus();
+            $comment.addClass('twinkle');
+            setTimeout(function () {
+                $comment.removeClass('twinkle');
+                window.location.href = '#' + editorId;
+            }, 600);
+        };
+
         if ($parent.hasClass('comment-reply')) {
             $editor = $parent.find('.comment-reply-editor');
             if ($editor.length > 0) {
                 editorId = $editor.attr('id');
                 $editor.data('commentId', commentId);
+                editor = CKEDITOR.instances[editorId];
+                editor.changePlaceholder('回复' + name);
+                focus(editor, editorId);
             } else {
                 editorId = 'reply-editor' + $comment.attr('id');
-                $parent.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复' + name + '" data-comment-id="' + commentId + '"></div></div>');
-                editor = CKEDITOR.inline(editorId, config);
-                editor.on('focus', editorFocus);
+                $parent.append('<div class="comment-reply-content"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" data-comment-id="' + commentId + '"></div><div class="comment-submit-btn" onclick="submitReply(this)">发表</div></div>');
+                initInlineEditor(editorId, '回复' + name, focus);
             }
         } else if ($parent.hasClass('comment-list')) {
             $editor = $comment.find('.comment-reply-editor');
             if ($editor.length > 0) {
                 editorId = $editor.attr('id');
                 $editor.data('commentId', commentId);
+                editor = CKEDITOR.instances[editorId];
+                editor.changePlaceholder('回复' + name);
+                focus(editor, editorId);
             } else {
                 editorId = 'reply-editor' + $comment.attr('id');
                 var $reply = $comment.find('.comment-reply');
                 if ($reply.length > 0) {
-                    $reply.append('<div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复' + name + '" data-comment-id="' + commentId + '"></div></div>');
+                    $reply.append('<div class="comment-reply-content"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" data-comment-id="' + commentId + '"></div><div class="comment-submit-btn" onclick="submitReply(this)">发表</div></div>');
                 } else {
-                    $comment.append('<div class="comment-reply"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" placeholder="回复' + name + '" data-comment-id="' + commentId + '"></div></div>');
+                    $comment.append('<div class="comment-reply"><div class="comment-reply-content"><div id="' + editorId + '" class="comment-reply-editor" contenteditable="true" data-comment-id="' + commentId + '"></div><div class="comment-submit-btn" onclick="submitReply(this)">发表</div></div></div>');
                 }
-                editor = CKEDITOR.inline(editorId, config);
-                editor.on('focus', editorFocus);
+                initInlineEditor(editorId, '回复' + name, focus);
             }
         }
-
-        $comment.addClass('twinkle');
-        setTimeout(function () {
-            $comment.removeClass('twinkle');
-            if (editorId) {
-                if (!editor) editor = CKEDITOR.instances[editorId];
-                editor.focus();
-                editor.placeholder = '回复' + name;
-            }
-        }, 600);
-    });
+    }
 
     $(window).scroll(_.throttle(scrollEvent, 300));
     $(document).ready(function () {
-        commom.setMenuButton({
-            menuClass: 'menu',
-            menuActiveClass: 'menu-active'
-        });
+        var bash = decodeURIComponent(window.location.hash);
+        CKEDITOR.instances = {};
+        commom.setMenuButton({ menuClass: 'menu', menuActiveClass: 'menu-active'});
         setImages();
-        setDirectory();
+        setDirectory(bash);
         pageTo(bash);
+        initClassicEditor();
     });
 </script>
 </body>

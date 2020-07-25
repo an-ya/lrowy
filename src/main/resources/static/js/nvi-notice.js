@@ -56,13 +56,13 @@
         },
         success: function (params) {
             if (!params) params = {};
-            params.icon = '<i class="notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
+            params.icon = '<i class="iconfont notice-icon" style="color:#1E9fff;font-weight:normal;">&#xe657;</i>';
             return this.open(params);
         },
         fail: function (params) {
             if (!params) params = {};
             params.color = '#f90';
-            params.icon = '<i class="notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
+            params.icon = '<i class="iconfont notice-icon" style="color:#f90;font-weight:normal;">&#xe64d;</i>';
             return this.open(params);
         },
         close: function ($notice, success) {

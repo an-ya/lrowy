@@ -5,363 +5,93 @@
     <title>Anya-编辑工具</title>
     <meta name="renderer" content="webkit">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link rel="stylesheet" href="layui-v2.5.4/css/layui.css">
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/vue.css}">
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
     <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
-    <link rel="stylesheet" href="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/styles/vue.css?t=20191020">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap">
-    <script src="/ckeditor-v4.12.1/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
     <style>
-        html, body {
-            height: 100%;
-            overflow: hidden;
-        }
+        html {font-size: 16px;}
+        html, body {height: 100%;overflow: hidden;}
 
-        .header-menu {
-            width: 100%;
-        }
+        .sidebar:after {content: none;}
+        .sidebar .sidebar-header {flex-shrink: 0;height: 39px;border-bottom: 1px solid #eee;}
 
-        .header-item .side {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            border: none;
-            outline: none;
-            background: none;
-        }
+        .main {box-sizing: border-box;display: flex;flex-direction: column;height: 100%;width: 100%;margin-top: 0;overflow-x: hidden;overflow-y: auto;background-color: #fafafa;}
+        .main .top {display: flex;}
+        .toolbar {flex-shrink: 0;display: flex;width: 180px;justify-content: flex-end;padding: 4px 6px 4px 42px;border-right: 1px solid #eee;}
+        .toolbar .menu-button {position: fixed;top: 4px;left: 6px;z-index: 1010;}
+        .toolbar .button {display: flex;justify-content: center;align-items: center;width: 30px;height: 30px;padding: 0;font-size: 1.6rem;}
+        .toolbar .avatar {flex-shrink: 0;width: 28px;height: 28px;margin: 0 6px;border: 1px solid #eee;border-radius: 2px;}
 
-        .header-item .side i {
-            color: #5f656f;
-            font-size: 1.4rem;
-            cursor: pointer;
-        }
+        .document-editor__toolbar .ck.ck-toolbar {border: 0;}
+        .document-editor__editable {flex-grow: 1;padding: 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
+        .document-editor__editable .ck.ck-editor__editable {width: 680px;margin: 0 auto;line-height: 1.6;background: #fff;border-top: 1px solid #eee;}
 
-        .main {
-            box-sizing: border-box;
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            height: 100%;
-            width: 100%;
-            margin-top: 0;
-            padding-top: 60px;
-            overflow: hidden;
-        }
+        .tag {display: inline-block;height: 20px;padding: 0 10px;margin-right: 8px;line-height: 20px;border-radius: 10px;background: #eee;}
+        .tag i {margin-left: 6px;font-size: 12px;cursor: pointer;}
+        .tags {padding: 0 10px;overflow: hidden;border-bottom: 1px solid #eee;-webkit-transition: height .3s ease;transition: height .3s ease;}
+        .tag-item {position: relative;display: inline-block;height: 20px;padding: 0 10px;line-height: 20px;border-radius: 10px;cursor: pointer;overflow: hidden;-webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);}
+        .tag-item:hover {color: #2979ff;}
+        .tag-item-active {color: #2979ff;background: rgba(41, 121, 255, .12);}
+        .tag-item-long-press {background: rgba(41, 121, 255, .24);}
 
-        .tag {
-            display: inline-block;
-            height: 20px;
-            padding: 0 10px;
-            margin-right: 8px;
-            line-height: 20px;
-            border-radius: 10px;
-            background: #eee;
-        }
+        .article-list .article {padding: 12px 10px;border-bottom: 1px solid #eee;}
+        .article-list .article-active {border-right: 2px solid #2979ff;}
+        .article-list .article .t {margin-bottom: 9px;font-size: 16px;font-weight: bold;cursor: pointer;}
+        .article-list .article .bottom {display: flex;align-items: center;color: #8a8a8a;font-size: 13px;}
+        .article-list .none {height: 50px;text-align: center;line-height: 50px;border-bottom: 1px solid #eee;}
 
-        .tag i {
-            margin-left: 6px;
-            font-size: 12px;
-            cursor: pointer;
-        }
+        .article-info {display: none;}
+        .article-form {padding: 10px;}
+        .article-form .tag {margin: 8px 0 8px 8px;}
+        .article-form .plus {margin-left: 6px;cursor: pointer;}
+        .article-form .layui-form-switch {box-sizing: content-box;margin-left: 0;}
 
-        .tags {
-            padding: 0 10px;
-            overflow: hidden;
-            border-bottom: 1px solid #eee;
-            -webkit-transition: height .3s ease;
-            transition: height .3s ease;
-        }
+        .page-list {font-size: 0;padding: 10px;}
+        .page-list .page {display: inline-block;height: 20px;padding: 0 6px;font-size: 14px;line-height: 20px;cursor: pointer;}
+        .page-list .page.current {color: #2979ff;background: rgba(41, 121, 255, .12);pointer-events: none;}
+        .page-list .page.disabled {color: #d2d2d2;cursor: not-allowed;}
+        .page-list .page-space {cursor: default;border: none;pointer-events: none;}
+        .page-list span {border: 1px solid #fafafa;}
 
-        .tag-item {
-            position: relative;
-            display: inline-block;
-            height: 20px;
-            padding: 0 10px;
-            line-height: 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            overflow: hidden;
-            -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        .tag-item:hover {
-            color: #2979ff;
-        }
-
-        .tag-item-active {
-            color: #2979ff;
-            background: rgba(41, 121, 255, .12);
-        }
-
-        .tag-item-long-press {
-            background: rgba(41, 121, 255, .24);
-        }
-
-        .article-list .article {
-            padding: 12px 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .article-list .article-active {
-            border-right: 2px solid #2979ff;
-        }
-
-        .article-list .article .t {
-            margin-bottom: 9px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .article-list .article .bottom {
-            display: flex;
-            align-items: center;
-            color: #8a8a8a;
-            font-size: 13px;
-        }
-
-        .article-list .none {
-            height: 50px;
-            text-align: center;
-            line-height: 50px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .article-info {
-            display: none;
-        }
-
-        .article-form {
-            padding: 10px;
-        }
-
-        .article-form .tag {
-            margin: 8px 0 8px 8px;
-        }
-
-        .article-form .plus {
-            margin-left: 6px;
-            cursor: pointer;
-        }
-
-        .article-form .layui-form-switch {
-            box-sizing: content-box;
-            margin-left: 0;
-        }
-
-        /*.article-form .layui-form-checked[lay-skin=primary] i {*/
-        /*    border-color: rgba(41, 121, 255, .24)!important;*/
-        /*    background-color: rgba(41, 121, 255, .24);*/
-        /*    color: #2979ff;*/
-        /*}*/
-
-        .page-list {
-            font-size: 0;
-            padding: 10px;
-        }
-
-        .page-list .page {
-            display: inline-block;
-            height: 20px;
-            padding: 0 6px;
-            font-size: 14px;
-            line-height: 20px;
-            cursor: pointer;
-        }
-
-        .page-list .page.current {
-            color: #2979ff;
-            background: rgba(41, 121, 255, .12);
-            pointer-events: none;
-        }
-
-        .page-list .page.disabled {
-            color: #d2d2d2;
-            cursor: not-allowed;
-        }
-
-        .page-list .page-space {
-            cursor: default;
-            border: none;
-            pointer-events: none;
-        }
-
-        .page-list span {
-            border: 1px solid #fafafa;
-        }
-
-        .md-ripple-container {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-clip: padding-box;
-            pointer-events: none;
-        }
-
-        .md-ripple-container svg {
-            position: absolute;
-            fill: rgba(56, 103, 214, .12);
-            -webkit-transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            transition: all .4s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-
-        #editor {
-            width: 70%;
-            height: 100%;
-            visibility: hidden;
-        }
-
-        #cke_1_bottom {
-            height: 20px;
-        }
-
-        .browser-wrapper {
-            flex-grow: 1;
-            height: 100%;
-            min-width: 300px;
-        }
-
-        .browser-content {
-            height: calc(100% - 30px);
-        }
-
-        .browser-content iframe {
-            border: 0;
-        }
-
-        iframe.disable {
-            pointer-events: none;
-        }
-
-        .browser-toolbox {
-            box-sizing: content-box;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            height: 28px;
-            padding: 0 6px;
-            border-top: 1px solid #d1d1d1;
-            overflow: hidden;
-        }
-
-        .browser-toolbox input {
-            flex-grow: 1;
-            height: 20px;
-            width: 50px;
-            padding: 0 14px;
-            color: #8a8a8a;
-            border: 0;
-            outline: 0;
-            border-radius: 10px;
-            background: #f8f8f8;
-        }
-
-        .browser-toolbox input:focus {
-            color: #304455;
-        }
-
-        .browser-toolbox button {
-            height: 28px;
-            padding: 1px 6px;
-            line-height: 28px;
-            border: none;
-            outline: none;
-            background: none;
-        }
-
-        .browser-toolbox button:hover {
-            background: #e5e5e5;
-        }
-
-        .browser-toolbox button i {
-            font-size: 16px;
-        }
-
-        .browser-toolbox .dropdown-content {
-            flex-shrink: 0;
-        }
-
-        .browser-toolbox .dropdown-content button {
-            padding: 0 6px;
-        }
-
-        @media screen and (max-width: 900px) {
-            .browser-wrapper {
-                display: none!important;
-            }
-
-            #editor {
-                width: 100%;
-            }
-
-            .cke_resizer {
-                display: none;
-            }
-
-            .header-menu .browser {
-                display: none;
-            }
+        @media screen and (max-width: 826px) {
+            .toolbar {flex-direction: column;width: auto;padding: 40px 6px 4px;}
+            .toolbar .avatar {margin: 0;}
+            .document-editor__editable {padding: 0;}
+            .document-editor__editable .ck.ck-editor__editable {width: 100%;border-color: transparent;}
         }
     </style>
 </head>
 <body>
-<div class="header">
-    <ul class="header-menu">
-        <li th:if="${user != null}" class="header-item">
-            <button class="menu-button"><span>Menu</span></button>
-        </li>
-        <li th:if="${user == null}" class="header-item dropdown-content">
-            <button class="login-button dropdown-trigger"><i class="iconfont">&#xe622;</i></button>
-            <div class="dropdown hidden fixed">
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/login" target="_self">登录</a>
-                    <a class="dropdown-item" href="/login" target="_self">注册</a>
-                </div>
-            </div>
-        </li>
-        <li class="header-item browser">
-            <button title="内嵌预览器" class="side" onclick="openIframe()"><i class="iconfont">&#xe7e3;</i></button>
-        </li>
-    </ul>
-    <span class="logo custom-font1">Anya'writer</span>
+<div class="main">
+    <div class="top">
+        <div class="toolbar">
+            <button class="button menu-button" title="菜单"><span class="icon"><span>Menu</span></span></button>
+            <button th:if="${user == null}" class="button" id="login" title="登录/注册"><span class="iconfont icon-login"></span></button>
+            <img th:if="${user != null}" class="avatar" th:src="${user.avatar}" alt="">
+            <button th:if="${user != null}" class="button" title="保存/更新" onclick="saveEvent()"><span class="iconfont icon-upload"></span></button>
+        </div>
+        <div class="document-editor__toolbar"></div>
+    </div>
+    <div class="document-editor__editable">
+        <div id="editor"></div>
+    </div>
 </div>
-<div class="sidebar">
+
+<div class="sidebar full">
+    <div class="sidebar-header"></div>
     <div class="sidebar-inner">
         <div class="h1">标签<img src="images/loading.gif" style="display: none;"/></div>
         <div class="tags">
             <div th:each="tag : ${tags}" class="tag-item" th:text="${tag.name}" th:attr="data-id=${tag.articleTagId},data-name=${tag.name}"></div>
         </div>
-        <div class="article-list">
-<!--            <div th:each="article : ${articles}" class="article">-->
-<!--                <div class="t line1" th:text="${article.title}"></div>-->
-<!--                <div class="bottom">-->
-<!--                    <span th:each="tag : ${article.tags}" class="tag" th:text="${tag.name}"></span>-->
-<!--                    <span th:if="${article.description != null && article.description != ''}" class="desc line1" th:text="${article.description}"></span>-->
-<!--                </div>-->
-<!--            </div>-->
-        </div>
-        <div class="page-list">
-<!--            <a class="iconfont page">&#xe60e;</a>-->
-<!--            <span class="page">1</span>-->
-<!--            <span class="page page-space">…</span>-->
-<!--            <span class="page">3</span>-->
-<!--            <span class="page">4</span>-->
-<!--            <span class="page current">5</span>-->
-<!--            <span class="page">6</span>-->
-<!--            <span class="page">7</span>-->
-<!--            <span class="page page-space">…</span>-->
-<!--            <span class="page">9</span>-->
-<!--            <a class="iconfont page">&#xe60b;</a>-->
-        </div>
-        <div class="article-info">
+        <div class="article-list"></div>
+        <div class="page-list"></div>
+        <div class="article-info" th:if="${user != null}">
             <div class="h1">文章信息</div>
             <form class="article-form layui-form layui-form-pane" action="">
                 <div class="layui-form-item">
@@ -448,38 +178,416 @@
         </div>
     </div>
 </div>
-<div class="main">
-    <textarea id="editor"></textarea>
-    <div class="browser-wrapper">
-        <div class="browser-content"><iframe id="browser" width="100%" height="100%"></iframe></div>
-        <div class="browser-toolbox">
-            <input id="browser-url" value="http://" placeholder="" title="iframe无法追踪当前路径值，同时当前的所有浏览将不会被记录" onkeydown="keyup_submit()">
-            <button title="重置为默认绑定页" onclick="iframeReset()"><i style="font-size:19px;">&#xe614;</i></button>
-            <button title="回退" onclick="iframeBack()"><i >&#xe644;</i></button>
-            <button title="前进" onclick="iframeForward()"><i style="display:block;transform:rotate(180deg);">&#xe644;</i></button>
-            <button title="刷新" onclick="refreshIframe()"><i style="font-size:19px;">&#xe62a;</i></button>
-            <div class="dropdown-content">
-                <button title="收藏夹" class="dropdown-trigger"><i class="iconfont">&#xe658;</i></button>
-                <div class="dropdown hidden">
-                    <ul class="dropdown-menu">
-                        <li class="dropdown-item" onclick="iframeGo('http://localhost:8080')">首页</li>
-                        <li class="dropdown-item" onclick="iframeGo('https://www.baidu.com')">百度</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+<link rel="stylesheet" th:href="@{/css/content-styles.css}">
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
-<script src="/ckeditor-v4.12.1/ckeditor.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/babel-polyfill/7.10.4/polyfill.min.js"></script>
 <script src="/layui-v2.5.4//layui.all.js"></script>
 <script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer', 'form', 'laydate']);</script>
-<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/common-v2.js}"></script>
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/ivu-message.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
-<script th:src="@{/js/writer.js}"></script>
+<script th:src="@{/js/ckeditor.js}"></script>
+<script>
+    var pattern = new RegExp("^(#/)([0-9]+)$"),
+        hash = window.location.hash,
+        editor,
+        type = 0,
+        articleId = 0,
+        articleFormBtn = $('#article-form-btn'),
+        tags = [],
+        currentTags = [],
+        pageNo = 1,
+        pageSize = 4,
+        totalCount,
+        autoUpdateDate = false,
+        form = layui.form,
+        laydate = layui.laydate;
+
+    if (hash === '') {
+        type = 1;
+        articleFormBtn.text('新增文章');
+    } else if (pattern.test(hash)) {
+        getArticle(parseInt(hash.replace(pattern, '$2')));
+    } else {
+        type = 1;
+        articleFormBtn.text('新增文章');
+        notice.fail({title:'参数错误'});
+    }
+    setArticleByTags(1);
+    initEditor();
+    $('#login').click(function () {
+        window.location.href = '/login?url=' + encodeURIComponent(window.location.href);
+    });
+    commom.setDropdown();
+    commom.setMenuButton();
+
+    function getArticle(id) {
+        var loading = message.loading({loadingText: '加载中 . . .'});
+        $.ajax({
+            url: '/article/init',
+            type: 'post',
+            data: {
+                articleId: id
+            },
+            success: function (data) {
+                message.close(loading);
+                if (data.code === '000') {
+                    window.location.hash = '#/' + id;
+                    articleId = id;
+                    type = 2;
+                    $('.article-info').show();
+                    articleFormBtn.text('修改文章');
+                    editor.setData(data.result.content);
+                    setForm($('.article-form'), data.result, '');
+                    form.render();
+                    setTagDeleteEvent();
+                } else {
+                    type = 1;
+                    articleFormBtn.text('新增文章');
+                    notice.fail({title: '发生错误', desc: data.msg});
+                }
+            }
+        });
+    }
+
+    function setArticles(articles) {
+        var tags, string = '', i = 0, j = 0, c = '';
+        for (i = 0; i < articles.length; i++) {
+            tags = articles[i].tags;
+            c = articles[i].articleId === articleId ? 'article article-active' : 'article';
+            string += '<div class="' + c + '"><div class="t line1" data-id="' + articles[i].articleId + '">' + articles[i].title + '</div><div class="bottom">';
+            for (j = 0; j < tags.length; j++) {
+                string += '<span class="tag">' + tags[j].name + '</span>';
+            }
+            if (articles[i].description) string += '<span class="desc line1">' + articles[i].description + '</span>';
+            string += '</div></div>';
+        }
+        $('.article-list').html(string);
+        $('.article .t').click(function () {
+            $('.article').removeClass('article-active');
+            $(this).parent().addClass('article-active');
+            getArticle($(this).data('id'));
+        });
+    }
+
+    function setPageList() {
+        var string = '';
+        var lastPage = Math.ceil(totalCount / pageSize);
+        string += pageNo === 1 ? '<a class="iconfont page disabled" data-page="prev">&#xe60e;</a>' : '<a class="iconfont page" data-page="prev">&#xe60e;</a>';
+        string += pageNo === 1 ? '<span class="page current" data-page="1">1</span>' : '<span class="page" data-page="1">1</span>';
+        if (pageNo > 4) string += '<span class="page page-space">…</span>';
+        for (var i = pageNo - 2; i <= pageNo + 2; i++) {
+            if (i > 1 && i < lastPage) string += pageNo === i ? '<span class="page current" data-page="' + i + '">' + i + '</span>' : '<span class="page" data-page="' + i + '">' + i + '</span>';
+        }
+        if (pageNo < lastPage - 3) string += '<span class="page page-space">…</span>';
+        if (lastPage > 1) string += pageNo === lastPage ? '<span class="page current" data-page="' + lastPage + '">' + lastPage + '</span>' : '<span class="page" data-page="' + lastPage + '">' + lastPage + '</span>';
+        string += pageNo === lastPage ? '<a class="iconfont page disabled" data-page="next">&#xe60b;</a>' : '<a class="iconfont page" data-page="next">&#xe60b;</a>';
+        $('.page-list').html(string);
+        $('.page').click(function () {
+            var page = $(this).data('page');
+            if ($(this).hasClass('disabled')) return;
+            if (page === 'prev') page = pageNo - 1;
+            if (page === 'next') page = pageNo + 1;
+            setArticleByTags(page);
+        });
+    }
+
+    function setArticleByTags(page) {
+        $('.h1 img').show();
+        $.ajax({
+            url: '/article/get',
+            type: 'post',
+            data: {
+                tags: tags.map(function (item) {
+                    return item.id;
+                }),
+                pageNo: page,
+                pageSize: pageSize
+            },
+            success: function (data) {
+                $('.h1 img').hide();
+                if (data.code === '000') {
+                    if (data.result && data.result.length > 0) {
+                        pageNo = data.pageNo;
+                        pageSize = data.pageSize;
+                        totalCount = data.totalCount;
+                        setArticles(data.result);
+                        setPageList();
+                    } else {
+                        $('.article-list').html('<div class="none">无匹配文章</div>');
+                        $('.page-list').html('');
+                    }
+                }
+            }
+        });
+    }
+
+    function setTag(list, name) {
+        currentTags = list;
+        var string = '';
+        for (var i = 0; i < list.length ; i++) string += '<span class="tag">' + list[i].name + '<i class="iconfont" data-id="' + list[i].articleTagId + '" data-name="' + list[i].name + '">&#xe611;</i></span>';
+        $('[name="'+ name + '"]').html(string);
+    }
+
+    function setTagDeleteEvent() {
+        $('.article-form .tag i').click(function () {
+            var $this = $(this);
+            var id = $this.data('id');
+            var name = $this.data('name');
+            layer.confirm('确定解除标签：' + name + '？', {
+                btn: ['确定','取消'],
+                move: false,
+                shadeClose: true,
+            }, function(){
+                $.ajax({
+                    url: '/article/tag/delete',
+                    type: 'post',
+                    data: {
+                        articleId: articleId,
+                        articleTagId: id,
+                    },
+                    success: function (data) {
+                        layer.close(layer.index);
+                        if (data.code === '000') {
+                            setArticleByTags(pageNo);
+                            $this.parents('.tag').remove();
+                            notice.success({title: '成功解除标签'});
+                        } else {
+                            notice.fail({title: '发生错误', desc: data.msg});
+                        }
+                    }
+                });
+            });
+        });
+    }
+
+    function addTagEvent() {
+        var string = '确定绑定标签', has = false, list = [];
+        if (tags.length === 0) {
+            layer.msg('未选中任何标签');
+            return;
+        }
+        for (var i = 0; i < tags.length; i++) {
+            has = false;
+            for (var j = 0; j < currentTags.length; j++) {
+                if (tags[i].id === currentTags[j].articleTagId) {
+                    has = true;
+                    break;
+                }
+            }
+            if (!has) list.push(tags[i]);
+        }
+        for (i = 0; i < list.length; i++) {
+            if (i !== 0) string += '、';
+            string += list[i].name;
+        }
+        string += '?';
+        if (list.length === 0) {
+            layer.msg('文章已经绑定选中标签');
+            return;
+        }
+        layer.confirm(string, {
+            btn: ['确定','取消'],
+            move: false,
+            shadeClose: true,
+        }, function(){
+            $.ajax({
+                url: '/article/tag/add',
+                type: 'post',
+                data: {
+                    articleId: articleId,
+                    tags: list.map(function (item) {
+                        return item.id;
+                    }),
+                },
+                success: function (data) {
+                    layer.close(layer.index);
+                    if (data.code === '000') {
+                        setArticleByTags(pageNo);
+                        setTag(data.result.tags, 'tags');
+                        setTagDeleteEvent();
+                        notice.success({title: '成功绑定标签'});
+                    } else {
+                        notice.fail({title: '发生错误', desc: data.msg});
+                    }
+                }
+            });
+        });
+    }
+
+    function setForm($form, result, parent) {
+        var value;
+        for (i in result) {
+            if (result.hasOwnProperty(i)) {
+                value = result[i];
+                if (value == null) break;
+                if (typeof value == 'object' && value.constructor === Object) {
+                    setForm($form, value, i);
+                } else if (value.constructor === Array) {
+                    setTag(value, i);
+                } else {
+                    if (parent.length > 0) {
+                        $form.find('[name="' + parent + '.' + i + '"]').val(value);
+                    } else {
+                        var ele = $form.find('[name="' + i + '"]');
+                        if (ele.prop('type') === 'checkbox') {
+                            if (value === 1) {
+                                ele.prop('checked', true);
+                            } else {
+                                ele.prop('checked', false);
+                            }
+                        } else {
+                            ele.val(value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function initEditor() {
+        var config = CKEDITOR.DecoupledEditor.defaultConfig;
+        config.simpleUpload = {
+            uploadUrl: 'http://localhost/article/uploadImage'
+        };
+        CKEDITOR.createDecoupledEditor(document.querySelector('#editor'), config, function (editor) {
+            window.editor = editor;
+            document.querySelector('.document-editor__toolbar').appendChild(editor.ui.view.toolbar.element);
+            document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+        }, function (error) {
+            console.log(error);
+        });
+    }
+
+    function saveArticle(editor) {
+        var loading = message.loading({loadingText: '保存中 . . .'});
+        var html = editor.getData();
+        $.ajax({
+            url: '/article/add',
+            type: 'post',
+            data: {
+                content: html
+            },
+            success: function (data) {
+                message.close(loading);
+                if (data.code === '000') {
+                    type = 2;
+                    window.location.hash = '#/' + data.result.articleId;
+                    setForm($('.article-form'), data.result, '');
+                    form.render();
+                    setArticleByTags(pageNo);
+                    notice.success({title: '成功新增文章'});
+                } else {
+                    notice.fail({title: '发生错误', desc: data.msg});
+                }
+            }
+        });
+    }
+
+    function updateArticle(params) {
+        var loading = message.loading({loadingText: '保存中 . . .'});
+        $.ajax({
+            url: params.content ? '/article/update/content' : '/article/update/info',
+            type: 'post',
+            data: params,
+            success: function (data) {
+                message.close(loading);
+                if (data.code === '000') {
+                    if (params.content) {
+                        $('.article-form').find('[name="updateDate"]').val(data.result.updateDate);
+                    } else {
+                        setArticleByTags(pageNo);
+                        setForm($('.article-form'), data.result, '');
+                    }
+                    form.render();
+                    notice.success({title: '成功更改文章'});
+                } else {
+                    notice.fail({title: '发生错误', desc: data.msg});
+                }
+            }
+        });
+    }
+
+    function saveEvent() {
+        if (type === 1) {
+            saveArticle(editor);
+        } else if (type === 2) {
+            var data = {articleId: articleId, content: editor.getData()};
+            if (autoUpdateDate) data.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+            updateArticle(data);
+        }
+    }
+
+    function removeTagData(data, id) {
+        var temp = [];
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].id !== id) {
+                temp.push(data[i]);
+            }
+        }
+        return temp;
+    }
+
+    var $tagItem = $('.tag-item');
+    $tagItem.mdRipple();
+    $tagItem.on('mousedown touchstart', function () {
+        var $this = $(this);
+        var id = parseInt($this.data('id'));
+        var name = $this.data('name');
+        var longPress = false, end = false;
+        setTimeout(function () {
+            longPress = true;
+            if (!end) $this.addClass('tag-item-long-press');
+        }, 300);
+        $this.on('mouseup mouseleave touchend', function () {
+            end  = true;
+            $this.removeClass('tag-item-long-press');
+            if ($this.hasClass('tag-item-active')) {
+                if (longPress) {
+                    tags = removeTagData(tags, id);
+                    $this.removeClass('tag-item-active');
+                } else {
+                    tags = [];
+                    $tagItem.removeClass('tag-item-active');
+                }
+            } else {
+                if (longPress) {
+                    tags.push({id: id, name: name});
+                    $this.addClass('tag-item-active');
+                } else {
+                    tags = [];
+                    tags.push({id: id, name: name});
+                    $tagItem.removeClass('tag-item-active');
+                    $this.addClass('tag-item-active');
+                }
+            }
+            setArticleByTags();
+            $this.off('mouseup mouseleave touchend');
+        });
+    });
+
+    laydate.render({elem: '#createDate', type: 'datetime'});
+    laydate.render({elem: '#updateDate', type: 'datetime'});
+
+    form.on('switch(autoUpdateDate)', function (data) {
+        autoUpdateDate = data.othis.hasClass('layui-form-onswitch');
+    });
+
+    form.on('submit', function (data) {
+        if (type === 1) {
+            saveArticle(data.field);
+        } else if (type === 2) {
+            var field = data.field;
+            if (autoUpdateDate) field.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+            updateArticle(field);
+        }
+
+        return false;
+    });
+</script>
 </body>
 </html>

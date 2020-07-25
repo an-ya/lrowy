@@ -12,11 +12,13 @@ import com.lrowy.pojo.common.enums.SystemConstant;
 import com.lrowy.pojo.common.response.BasePagingResponse;
 import com.lrowy.pojo.common.response.BaseResponse;
 import com.lrowy.service.CommentService;
+import com.lrowy.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -30,6 +32,8 @@ public class ArticleController extends BaseController {
     private ArticleDao articleDao;
     @Autowired
     private CommentDao commentDao;
+    @Autowired
+    private ImageService imageService;
     @Autowired
     private CommentService commentService;
 
@@ -177,5 +181,22 @@ public class ArticleController extends BaseController {
             commentDao.saveComment(comment);
         }
         return br;
+    }
+
+    @RequestMapping("/comment/uploadImage")
+    @ResponseBody
+    public String commentUploadImage(MultipartFile upload) {
+        return imageService.saveCommentImage(upload);
+    }
+
+    @RequestMapping("/article/uploadImage")
+    @ResponseBody
+    public String articleUploadImage(MultipartFile upload) {
+        return imageService.saveArticleImage(upload);
+    }
+
+    @RequestMapping("/article/ckeditor5")
+    public String ckeditor5() {
+        return "/article/ckeditor5";
     }
 }

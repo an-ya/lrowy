@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ckeditor5</title>
+    <meta name="renderer" content="webkit">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/vue.css}">
+    <link rel="stylesheet" th:href="@{/css/content-styles.css}">
+</head>
+<body>
+<div class="editors-container"><div id="editor1"></div></div>
+<div class="editors-container"><div id="editor2"></div></div>
+<script th:src="@{/js/ckeditor.js}"></script>
+<script th:src="@{/js/highlight.pack.js}"></script>
+<script>
+    var config = CKEDITOR.ClassicEditor.simpleConfig;
+    config.simpleUpload = {
+        uploadUrl: 'http://localhost/comment/uploadImage'
+    };
+
+    CKEDITOR.ClassicEditor
+        .create(document.querySelector('#editor1'), config)
+        .then(editor => {
+            window.editor1 = editor;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+
+    CKEDITOR.InlineEditor
+        .create(document.querySelector('#editor2'), config)
+        .then(editor => {
+            window.editor2 = editor;
+        })
+        .catch(error => {
+            console.log(error);
+        });
+</script>
+</body>
+</html>

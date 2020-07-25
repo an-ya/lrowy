@@ -3,7 +3,7 @@
         '    <div class="modal-mask"></div>\n' +
         '    <div class="modal-inner">\n' +
         '        <div class="modal-content">\n' +
-        '            <i class="modal-close" onclick="modal.close()">&#xe611;</i>\n' +
+        '            <i class="iconfont modal-close" onclick="modal.close()">&#xe611;</i>\n' +
         '            <div class="modal-header"></div>\n' +
         '            <div class="modal-body"></div>\n' +
         '            <div class="modal-footer"><div class="modal-btn">确定</div></div>\n' +

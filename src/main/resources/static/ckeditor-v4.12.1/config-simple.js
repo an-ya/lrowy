@@ -7,34 +7,31 @@ CKEDITOR.editorConfigCustom = function( config ) {
     config.language = 'zh-cn';//设置语言为中文
 
     config.toolbarGroups = [
-        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
-        { name: 'colors', groups: [ 'colors' ] },
         { name: 'document', groups: [ 'mode', 'document', 'doctools' ] },
-        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
-        { name: 'forms', groups: [ 'forms' ] },
-        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
-        '/',
-        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] },
         { name: 'styles', groups: [ 'styles' ] },
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker', 'editing' ] },
         { name: 'links', groups: [ 'links' ] },
+        { name: 'forms', groups: [ 'forms' ] },
         { name: 'insert', groups: [ 'insert' ] },
         '/',
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ] },
+        '/',
+        { name: 'colors', groups: [ 'colors' ] },
         { name: 'tools', groups: [ 'tools' ] },
         { name: 'others', groups: [ 'others' ] },
         { name: 'about', groups: [ 'about' ] }
     ];
 
-    config.removeButtons = 'Format,Font,FontSize,NumberedList,Outdent,Blockquote,JustifyLeft,BidiLtr,Form,Scayt,SelectAll,Find,Cut,Source,Templates,Flash,HorizontalRule,Smiley,PageBreak,Iframe,Maximize,ShowBlocks,About,Save,Print,Preview,NewPage,Copy,Paste,PasteText,PasteFromWord,Replace,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,BulletedList,Indent,CreateDiv,JustifyCenter,JustifyRight,JustifyBlock,BidiRtl,Language,Anchor';
+    config.removeButtons = 'Source,Save,NewPage,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Strike,Subscript,Superscript,NumberedList,BulletedList,Indent,Outdent,Blockquote,CreateDiv,JustifyLeft,JustifyCenter,JustifyRight,JustifyBlock,BidiLtr,BidiRtl,Language,Anchor,Unlink,Flash,HorizontalRule,Smiley,SpecialChar,PageBreak,Iframe,Format,Font,FontSize,TextColor,BGColor,Maximize,ShowBlocks,About';
     config.removePlugins = 'easyimage,cloudservices,image';
-    config.extraPlugins = 'codesnippet,image2,mathjax,resize,confighelper';
+    config.extraPlugins = 'codesnippet,image2,resize,confighelper';
 
     config.image_previewText = ' ';
 
-    config.mathJaxClass = 'mjx';
-    config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML';
-
-    config.filebrowserBrowseUrl = '/browser/browse.php';
-    config.filebrowserUploadUrl = '/uploader/upload.php';
+    config.filebrowserBrowseUrl = '/upload';
+    config.filebrowserUploadUrl = '/comment/uploadImage';
 
     config.codeSnippet_theme = 'vue';
     config.codeSnippet_languages = {

@@ -1,0 +1,18 @@
+:root {
+	--ck-color-base-border: #eee;
+	--ck-color-code-block-label-background: rgba(148, 148, 148, .6);
+}
+
+.ck.ck-editor__editable {
+	position: relative;
+	width: 100%;
+	z-index: 1;
+}
+
+.ck-content p {
+	margin: 1em 0;
+}
+
+.ck-content pre {
+	border: 1px solid #eee;
+}

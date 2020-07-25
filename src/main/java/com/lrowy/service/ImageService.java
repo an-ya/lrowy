@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class ImageService {
@@ -30,6 +31,25 @@ public class ImageService {
         }
     }
 
+    private String saveImage(MultipartFile file, String directory) {
+        long size = file.getSize() / 1024;
+        if (size > 1024) {
+            return "{\"error\":{\"message\":\"上传的文件不应大于1M。\"}}";
+        } else {
+            File folder = new File(uploadPath + directory);
+            if (!folder.exists()) if (!folder.mkdirs()) return "{\"error\":{\"message\":\"文件创建失败。\"}}";
+            try {
+                BufferedImage image = ImageUtil.readMultipartFile(file);
+                String uuid = UUID.randomUUID().toString().replace("-", "");
+                ImageUtil.write(image, "png", uploadPath + directory + uuid + ".png");
+                return "{\"uploaded\":1,\"url\":\"" + "/upload/" + directory + uuid + ".png" + "\"}";
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "{\"error\":{\"message\":\"图片读取失败。\"}}";
+            }
+        }
+    }
+
     public void saveAvatar(MultipartFile file, int id) throws IOException {
         saveAvatar(ImageUtil.readMultipartFile(file), id);
     }
@@ -43,5 +63,13 @@ public class ImageService {
             BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
             saveAvatar(image, id);
         }
+    }
+
+    public String saveCommentImage(MultipartFile file) {
+        return saveImage(file, "comment/");
+    }
+
+    public String saveArticleImage(MultipartFile file) {
+        return saveImage(file, "article/");
     }
 }
