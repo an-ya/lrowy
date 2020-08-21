@@ -26,10 +26,9 @@
         .toolbar .menu-button {position: fixed;top: 4px;left: 6px;z-index: 1010;}
         .toolbar .button {display: flex;justify-content: center;align-items: center;width: 30px;height: 30px;padding: 0;font-size: 1.6rem;}
         .toolbar .avatar {flex-shrink: 0;width: 28px;height: 28px;margin: 0 6px;border: 1px solid #eee;border-radius: 2px;}
-
-        .document-editor__toolbar .ck.ck-toolbar {border: 0;}
-        .document-editor__editable {flex-grow: 1;padding: 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
-        .document-editor__editable .ck.ck-editor__editable {width: 680px;margin: 0 auto;line-height: 1.6;background: #fff;border-top: 1px solid #eee;}
+        .toolbar-right .ck.ck-toolbar {border: 0;}
+        .container {flex-grow: 1;padding: 0 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
+        .container .ck.ck-editor__editable, .container .content {display: none;width: 680px;margin: 66px auto;line-height: 1.6;background: #fff;border-top: 1px solid #eee;}
 
         .tag {display: inline-block;height: 20px;padding: 0 10px;margin-right: 8px;line-height: 20px;border-radius: 10px;background: #eee;}
         .tag i {margin-left: 6px;font-size: 12px;cursor: pointer;}
@@ -61,8 +60,8 @@
         @media screen and (max-width: 826px) {
             .toolbar {flex-direction: column;width: auto;padding: 40px 6px 4px;}
             .toolbar .avatar {margin: 0;}
-            .document-editor__editable {padding: 0;}
-            .document-editor__editable .ck.ck-editor__editable {width: 100%;border-color: transparent;}
+            .container {padding: 0;}
+            .container .ck.ck-editor__editable, .container .content {width: 100%;margin:0;border-color: transparent;}
         }
     </style>
 </head>
@@ -75,10 +74,11 @@
             <img th:if="${user != null}" class="avatar" th:src="${user.avatar}" alt="">
             <button th:if="${user != null}" class="button" title="保存/更新" onclick="saveEvent()"><span class="iconfont icon-upload"></span></button>
         </div>
-        <div class="document-editor__toolbar"></div>
+        <div class="toolbar-right"></div>
     </div>
-    <div class="document-editor__editable">
+    <div class="container">
         <div id="editor"></div>
+        <div class="content" id="read"></div>
     </div>
 </div>
 
@@ -91,6 +91,7 @@
         </div>
         <div class="article-list"></div>
         <div class="page-list"></div>
+        <div onclick="writerOrRead()">编辑/预览</div>
         <div class="article-info" th:if="${user != null}">
             <div class="h1">文章信息</div>
             <form class="article-form layui-form layui-form-pane" action="">
@@ -181,9 +182,7 @@
 
 <link rel="stylesheet" th:href="@{/css/content-styles.css}">
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdn.bootcss.com/fastclick/1.0.6/fastclick.js"></script>
 <script src="https://cdn.bootcss.com/lodash.js/4.17.15/lodash.min.js"></script>
-<script src="https://cdn.bootcdn.net/ajax/libs/babel-polyfill/7.10.4/polyfill.min.js"></script>
 <script src="/layui-v2.5.4//layui.all.js"></script>
 <script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer', 'form', 'laydate']);</script>
 <script th:src="@{/js/common-v2.js}"></script>
@@ -192,38 +191,40 @@
 <script th:src="@{/js/md-ripple.js}"></script>
 <script th:src="@{/js/ckeditor.js}"></script>
 <script>
-    var pattern = new RegExp("^(#/)([0-9]+)$"),
-        hash = window.location.hash,
-        editor,
+    var editor,
+        mode = 0,
         type = 0,
         articleId = 0,
-        articleFormBtn = $('#article-form-btn'),
         tags = [],
         currentTags = [],
         pageNo = 1,
         pageSize = 4,
         totalCount,
         autoUpdateDate = false,
-        form = layui.form,
-        laydate = layui.laydate;
+        form = layui.form;
 
-    if (hash === '') {
-        type = 1;
-        articleFormBtn.text('新增文章');
-    } else if (pattern.test(hash)) {
-        getArticle(parseInt(hash.replace(pattern, '$2')));
-    } else {
-        type = 1;
-        articleFormBtn.text('新增文章');
-        notice.fail({title:'参数错误'});
-    }
-    setArticleByTags(1);
-    initEditor();
-    $('#login').click(function () {
-        window.location.href = '/login?url=' + encodeURIComponent(window.location.href);
-    });
-    commom.setDropdown();
-    commom.setMenuButton();
+    (function init() {
+        var pattern = new RegExp("^(#/)([0-9]+)$"),
+            hash = window.location.hash;
+
+        if (hash === '') {
+            type = 1;
+            $('#article-form-btn').text('新增文章');
+        } else if (pattern.test(hash)) {
+            articleId = parseInt(hash.replace(pattern, '$2'));
+            getArticle(articleId);
+        } else {
+            type = 1;
+            $('#article-form-btn').text('新增文章');
+            notice.fail({title:'参数错误'});
+        }
+        setArticleByTags(1);
+        initEditor();
+        $('#login').click(function () {
+            window.location.href = '/login?url=' + encodeURIComponent(window.location.href);
+        });
+        commom.setMenuButton();
+    })();
 
     function getArticle(id) {
         var loading = message.loading({loadingText: '加载中 . . .'});
@@ -240,14 +241,14 @@
                     articleId = id;
                     type = 2;
                     $('.article-info').show();
-                    articleFormBtn.text('修改文章');
+                    $('#article-form-btn').text('修改文章');
                     editor.setData(data.result.content);
                     setForm($('.article-form'), data.result, '');
                     form.render();
                     setTagDeleteEvent();
                 } else {
                     type = 1;
-                    articleFormBtn.text('新增文章');
+                    $('#article-form-btn').text('新增文章');
                     notice.fail({title: '发生错误', desc: data.msg});
                 }
             }
@@ -454,13 +455,16 @@
         config.simpleUpload = {
             uploadUrl: 'http://localhost/article/uploadImage'
         };
-        CKEDITOR.createDecoupledEditor(document.querySelector('#editor'), config, function (editor) {
-            window.editor = editor;
-            document.querySelector('.document-editor__toolbar').appendChild(editor.ui.view.toolbar.element);
-            document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
-        }, function (error) {
-            console.log(error);
-        });
+        CKEDITOR.DecoupledEditor
+            .create(document.querySelector('#editor'), config)
+            .then(function (editor) {
+                window.editor = editor;
+                document.querySelector('.toolbar-right').appendChild(editor.ui.view.toolbar.element);
+                document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
 
     function saveArticle(editor) {
@@ -512,6 +516,11 @@
         });
     }
 
+    function writerOrRead() {
+        if ()
+        editor.isReadOnly = editor.isReadOnly !== true;
+    }
+
     function saveEvent() {
         if (type === 1) {
             saveArticle(editor);
@@ -532,62 +541,66 @@
         return temp;
     }
 
-    var $tagItem = $('.tag-item');
-    $tagItem.mdRipple();
-    $tagItem.on('mousedown touchstart', function () {
-        var $this = $(this);
-        var id = parseInt($this.data('id'));
-        var name = $this.data('name');
-        var longPress = false, end = false;
-        setTimeout(function () {
-            longPress = true;
-            if (!end) $this.addClass('tag-item-long-press');
-        }, 300);
-        $this.on('mouseup mouseleave touchend', function () {
-            end  = true;
-            $this.removeClass('tag-item-long-press');
-            if ($this.hasClass('tag-item-active')) {
-                if (longPress) {
-                    tags = removeTagData(tags, id);
-                    $this.removeClass('tag-item-active');
+    (function setTagItemEvent() {
+        var $tagItem = $('.tag-item');
+        $tagItem.mdRipple();
+        $tagItem.on('mousedown touchstart', function () {
+            var $this = $(this);
+            var id = parseInt($this.data('id'));
+            var name = $this.data('name');
+            var longPress = false, end = false;
+            setTimeout(function () {
+                longPress = true;
+                if (!end) $this.addClass('tag-item-long-press');
+            }, 300);
+            $this.on('mouseup mouseleave touchend', function () {
+                end  = true;
+                $this.removeClass('tag-item-long-press');
+                if ($this.hasClass('tag-item-active')) {
+                    if (longPress) {
+                        tags = removeTagData(tags, id);
+                        $this.removeClass('tag-item-active');
+                    } else {
+                        tags = [];
+                        $tagItem.removeClass('tag-item-active');
+                    }
                 } else {
-                    tags = [];
-                    $tagItem.removeClass('tag-item-active');
+                    if (longPress) {
+                        tags.push({id: id, name: name});
+                        $this.addClass('tag-item-active');
+                    } else {
+                        tags = [];
+                        tags.push({id: id, name: name});
+                        $tagItem.removeClass('tag-item-active');
+                        $this.addClass('tag-item-active');
+                    }
                 }
-            } else {
-                if (longPress) {
-                    tags.push({id: id, name: name});
-                    $this.addClass('tag-item-active');
-                } else {
-                    tags = [];
-                    tags.push({id: id, name: name});
-                    $tagItem.removeClass('tag-item-active');
-                    $this.addClass('tag-item-active');
-                }
-            }
-            setArticleByTags();
-            $this.off('mouseup mouseleave touchend');
+                setArticleByTags();
+                $this.off('mouseup mouseleave touchend');
+            });
         });
-    });
+    })();
 
-    laydate.render({elem: '#createDate', type: 'datetime'});
-    laydate.render({elem: '#updateDate', type: 'datetime'});
+    (function setForm(form, laydate) {
+        laydate.render({elem: '#createDate', type: 'datetime'});
+        laydate.render({elem: '#updateDate', type: 'datetime'});
 
-    form.on('switch(autoUpdateDate)', function (data) {
-        autoUpdateDate = data.othis.hasClass('layui-form-onswitch');
-    });
+        form.on('switch(autoUpdateDate)', function (data) {
+            autoUpdateDate = data.othis.hasClass('layui-form-onswitch');
+        });
 
-    form.on('submit', function (data) {
-        if (type === 1) {
-            saveArticle(data.field);
-        } else if (type === 2) {
-            var field = data.field;
-            if (autoUpdateDate) field.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
-            updateArticle(field);
-        }
+        form.on('submit', function (data) {
+            if (type === 1) {
+                saveArticle(data.field);
+            } else if (type === 2) {
+                var field = data.field;
+                if (autoUpdateDate) field.updateDate = new Date().Format("yyyy-MM-dd hh:mm:ss");
+                updateArticle(field);
+            }
 
-        return false;
-    });
+            return false;
+        });
+    })(layui.form, layui.laydate);
 </script>
 </body>
 </html>

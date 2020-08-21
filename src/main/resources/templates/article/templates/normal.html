@@ -58,8 +58,8 @@
                 </div>
             </div>
             <div class="about">
-                <div class="name">黯伢</div>
-                <div class="desc">程序员</div>
+                <div class="name" onclick="test1()">黯伢</div>
+                <div class="desc" onclick="test2()">程序员</div>
             </div>
             <div class="sticky">
                 <div class="directory"></div>
@@ -260,7 +260,7 @@
             return;
         }
         $(window).unbind('scroll');
-        $('html').stop().animate({scrollTop: target}, 600, 'swing', function () {}).promise().then(function () {
+        $('html,body').stop().animate({scrollTop: target}, 600, 'swing', function () {}).promise().then(function () {
             $(window).scroll(_.throttle(scrollEvent, 300));
         });
     }
@@ -456,7 +456,8 @@
     function initClassicEditor() {
         var config = CKEDITOR.ClassicEditor.simpleConfig;
         config.simpleUpload = { uploadUrl: 'http://localhost/comment/uploadImage' };
-        CKEDITOR.ClassicEditor.create(document.querySelector('#editor'), config)
+        CKEDITOR.ClassicEditor
+            .create(document.querySelector('#editor'), config)
             .then(editor => {
                 window.editor = editor;
             })
@@ -521,7 +522,7 @@
     $(document).ready(function () {
         var bash = decodeURIComponent(window.location.hash);
         CKEDITOR.instances = {};
-        commom.setMenuButton({ menuClass: 'menu', menuActiveClass: 'menu-active'});
+        commom.setMenuButton({ menuClass: 'menu', menuActiveClass: 'menu-active' });
         setImages();
         setDirectory(bash);
         pageTo(bash);

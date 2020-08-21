@@ -11,64 +11,77 @@
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
     <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
-    <link rel="stylesheet" th:href="@{/css/bookmark.css}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
+    <style>
+        html {font-size: 16px;}
+        html, body {height: 100%;overflow: hidden;}
+
+        .sidebar:after {content: none;}
+        .sidebar .sidebar-header {flex-shrink: 0;height: 39px;border-bottom: 1px solid #eee;}
+
+        .main {box-sizing: border-box;display: flex;flex-direction: column;height: 100%;width: 100%;margin-top: 0;overflow-x: hidden;overflow-y: auto;background-color: #fafafa;}
+        .main .top {display: flex;}
+        .toolbar {flex-shrink: 0;display: flex;width: 180px;justify-content: flex-end;padding: 4px 6px 4px 42px;border-right: 1px solid #eee;}
+        .toolbar .menu-button {position: fixed;top: 4px;left: 6px;z-index: 1010;}
+        .toolbar .button {display: flex;justify-content: center;align-items: center;width: 30px;height: 30px;padding: 0;font-size: 1.6rem;}
+        .toolbar .avatar {flex-shrink: 0;width: 28px;height: 28px;margin: 0 6px;border: 1px solid #eee;border-radius: 2px;}
+
+        .container {flex-grow: 1;padding: 0 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
+        .container .inner {width: 680px;margin: 66px auto;line-height: 1.6;background: #fff;border-top: 1px solid #eee;}
+
+        .bookmark-item {display: flex;align-items: center;height: 52px;padding-left: 16px;-webkit-transition: .3s;transition: .3s;}
+        .bookmark-item.hidden {opacity: 0;visibility: hidden;-webkit-transform: translateX(-20px);transform: translateX(-20px);}
+        .bookmark-item img {flex-shrink: 0;width: 16px;height: 16px;margin-right: 16px;filter: grayscale(100%);}
+        .bookmark-item span {flex-grow: 1;line-height: 48px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+        .bookmark-item .dropdown-content {flex-shrink: 0;width: 48px;height: 100%;}
+        .bookmark-item .dropdown-content .dropdown-trigger {width: 100%;height: 100%;display: flex;justify-content: flex-end;align-items: center;padding-right: 16px;cursor: pointer;}
+        .bookmark-item .dropdown-content .dropdown {margin-right: 16px;}
+
+        .bookmark-form {display: none;padding: 20px;}
+        .layui-layer {box-shadow: none!important;}
+        #upload-favicon {margin-top: 15px;}
+        .favicon-display {display: inline-block;width: 60px;height: 60px;margin-top: 15px;margin-right: 13px;}
+
+        @media screen and (max-width: 826px) {
+            .container  {padding: 0;}
+            .container .inner {width: 100%;margin:0;border-color: transparent;}
+        }
+    </style>
 </head>
 <body>
-<div class="header"><span class="logo custom-font1">Anya'书签</span><ul class="header-menu"></ul></div>
-<div class="header-space"></div>
-<div class="sidebar">
-    <div class="sidebar-inner">
-        <div class="addBookmark" style="text-align: center;">
-            添加书签
-        </div>
-    </div>
-</div>
 <div class="main">
-<!--    <div class="bookmark-category-container">-->
-<!--        <div th:each="b,i : ${bookmarkResult.bookmarkCategories}" class="bookmark-category-item" th:text="${b.name}" th:data-cate-id="${b.bookmarkCategoryId}"></div>-->
-<!--    </div>-->
-    <div class="left-side">
-        <div th:each="s : ${bookmarkResult.shortcuts}" class="shortcut dropdown-content" th:data-id="${s.bookmarkId}" th:data-cate-id="${s.bookmarkCategoryId}">
-            <button class="dropdown-trigger">
-                <img th:src="${s.favicon.faviconUrl}"/>
-                <span th:text="${s.title}"></span>
-            </button>
-            <div class="dropdown hidden">
-                <ul class="dropdown-menu" th:data-id="${s.bookmarkId}" th:data-url="${s.url}">
-                    <li class="dropdown-item open-blank-button">新窗口打开</li>
-                    <li class="dropdown-item open-self-button">当前页打开</li>
-                    <li class="dropdown-item info-button">信息</li>
-                    <li class="dropdown-item delete-shortcut-button">删除</li>
-                </ul>
-            </div>
+    <div class="top">
+        <div class="toolbar">
+            <button class="button menu-button" title="菜单"><span class="icon"><span>Menu</span></span></button>
+            <button th:if="${user == null}" class="button" id="login" title="登录/注册"><span class="iconfont icon-login"></span></button>
+            <img th:if="${user != null}" class="avatar" th:src="${user.avatar}" alt="">
+            <button th:if="${user != null}" class="button" title="保存/更新" onclick="saveEvent()"><span class="iconfont icon-upload"></span></button>
         </div>
     </div>
-    <div class="right-side">
-        <div th:each="b : ${bookmarkResult.bookmarks}" class="bookmark-item" th:id="'bookmark-' + ${b.bookmarkId}">
-            <img th:src="${b.favicon.faviconUrl}"/>
-            <span th:text="${b.title}"></span>
-            <div class="dropdown-content">
-                <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>
-                <div class="dropdown hidden">
-                    <ul class="dropdown-menu" th:data-id="${b.bookmarkId}" th:data-url="${b.url}">
-                        <li class="dropdown-item open-blank-button">新窗口打开</li>
-                        <li class="dropdown-item open-self-button">当前页打开</li>
-                        <li class="dropdown-item info-button">信息</li>
-                        <li class="dropdown-item delete-bookmark-button">删除</li>
-                    </ul>
+    <div class="container">
+        <div class="inner">
+            <div th:each="b : ${bookmarkResult.bookmarks}" class="bookmark-item" th:id="'bookmark-' + ${b.bookmarkId}">
+                <img th:src="${b.favicon.faviconUrl}"/>
+                <span th:text="${b.title}"></span>
+                <div class="dropdown-content">
+                    <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>
+                    <div class="dropdown hidden">
+                        <ul class="dropdown-menu" th:data-id="${b.bookmarkId}" th:data-url="${b.url}">
+                            <li class="dropdown-item open-blank-button">新窗口打开</li>
+                            <li class="dropdown-item open-self-button">当前页打开</li>
+                            <li class="dropdown-item info-button">信息</li>
+                            <li class="dropdown-item delete-bookmark-button">删除</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="float-side">
-        <a class="btn-item menu" href="javascript:void(0);">
-            <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                <path class="mark" d="M716.8 848C587.2 848 480 740.8 480 611.2c0-129.6 107.2-236.8 236.8-236.8 129.6 0 236.8 107.2 236.8 236.8C955.2 740.8 848 848 716.8 848z" fill="#96E8BA"></path>
-                <path d="M896 254.4H304c-12.8 0-22.4-9.6-22.4-22.4s9.6-22.4 22.4-22.4h592c12.8 0 22.4 9.6 22.4 22.4s-9.6 22.4-22.4 22.4zM768 520H304c-12.8 0-22.4-9.6-22.4-22.4s9.6-22.4 22.4-22.4h464c12.8 0 22.4 9.6 22.4 22.4s-9.6 22.4-22.4 22.4zM640 776H304c-12.8 0-22.4-9.6-22.4-22.4s9.6-22.4 22.4-22.4h336c12.8 0 22.4 9.6 22.4 22.4s-9.6 22.4-22.4 22.4zM155.2 321.6c-19.2 0-36.8-6.4-51.2-17.6-35.2-28.8-40-80-12.8-115.2 14.4-17.6 33.6-27.2 54.4-30.4 22.4-1.6 43.2 3.2 59.2 17.6 35.2 28.8 40 80 12.8 115.2-14.4 17.6-33.6 27.2-54.4 30.4h-8z m0-118.4h-4.8c-9.6 1.6-19.2 6.4-24 12.8-12.8 16-9.6 38.4 4.8 51.2 8 6.4 17.6 9.6 27.2 8 9.6-1.6 19.2-6.4 24-12.8 12.8-16 9.6-38.4-4.8-51.2-6.4-4.8-14.4-8-22.4-8zM155.2 833.6c-19.2 0-36.8-6.4-51.2-17.6-17.6-14.4-27.2-33.6-30.4-54.4-1.6-22.4 3.2-43.2 17.6-59.2 28.8-35.2 80-40 115.2-12.8 35.2 28.8 40 80 12.8 115.2-14.4 17.6-33.6 27.2-54.4 30.4-3.2-1.6-6.4-1.6-9.6-1.6z m0-118.4c-11.2 0-20.8 4.8-28.8 14.4-6.4 8-9.6 17.6-8 27.2 1.6 9.6 6.4 19.2 12.8 24s17.6 9.6 27.2 8c9.6-1.6 19.2-6.4 24-12.8 12.8-16 9.6-38.4-4.8-51.2-6.4-8-14.4-9.6-22.4-9.6zM155.2 577.6c-19.2 0-36.8-6.4-51.2-17.6-17.6-14.4-27.2-33.6-30.4-54.4-1.6-22.4 3.2-43.2 17.6-59.2 14.4-17.6 33.6-27.2 54.4-30.4 22.4-1.6 43.2 3.2 59.2 17.6 35.2 28.8 40 80 12.8 115.2-14.4 17.6-33.6 27.2-54.4 30.4-1.6-1.6-4.8-1.6-8-1.6z m0-118.4h-4.8c-9.6 1.6-19.2 6.4-24 12.8-6.4 8-9.6 17.6-8 27.2 1.6 9.6 6.4 19.2 12.8 24 8 6.4 17.6 9.6 27.2 8 9.6-1.6 19.2-6.4 24-12.8 12.8-16 9.6-38.4-4.8-51.2-6.4-4.8-14.4-8-22.4-8z" fill="#103E26"></path>
-            </svg>
-        </a>
-    </div>
+</div>
+
+<div class="sidebar full">
+    <div class="sidebar-header"></div>
+    <div class="sidebar-inner"></div>
 </div>
 
 <form class="bookmark-form layui-form layui-form-pane" action="">
@@ -183,6 +196,292 @@
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/ivu-message.js}"></script>
 <script th:src="@{/js/common-v2.js}"></script>
-<script th:src="@{/js/bookmark.js}"></script>
+<script>
+    var layer = layui.layer
+        ,form = layui.form
+        ,laydate = layui.laydate;
+
+    var vw = $(document).width(),
+        vh = $(document).height(),
+        area = ['700px', '560px'],
+        type = 1,
+        img_input = document.querySelector("#upload-favicon"),
+        bookmarkId;
+
+    if (vw < 900) {
+        area[0] = 0.9 * vw + 'px';
+        area[1] = 0.8 * vh + 'px';
+    }
+
+    setButton();
+    commom.setDropdown();
+    commom.setMenuButton({
+        menuClass: 'menu',
+        menuActiveClass: 'menu-active'
+    });
+    laydate.render({
+        elem: '#createDate'
+        ,type: 'datetime'
+    });
+
+    function deleteBook (id, success) {
+        $.ajax({
+            url: '/bookmark/delete',
+            type: 'post',
+            data: {
+                bookmarkId: id
+            },
+            success: function (data) {
+                if (data.code === '000') {
+                    success();
+                    notice.success({title: '成功删除书签'});
+                } else {
+                    notice.fail({title: '发生错误', desc: data.msg});
+                }
+            }
+        });
+    }
+
+    function setForm ($form, result, parent) {
+        var value;
+        for (i in result) {
+            if (result.hasOwnProperty(i)) {
+                value = result[i];
+                if (value == null) break;
+                if (typeof value == 'object' && value.constructor === Object) {
+                    setForm($form, value, i);
+                } else {
+                    if (parent.length > 0) {
+                        $form.find('[name="' + parent + '.' + i + '"]').val(value);
+                    } else {
+                        var ele = $form.find('[name="' + i + '"]');
+                        if (ele.prop('type') === 'checkbox') {
+                            if (value === 1) {
+                                ele.prop('checked', true);
+                            } else {
+                                ele.prop('checked', false);
+                            }
+                        } else {
+                            ele.val(value);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function setFavicon (result) {
+        $('#faviconUrl').prop('src', result ? result.favicon.faviconUrl : '');
+        $('#faviconBlurUrl').prop('src', result ? result.favicon.faviconBlurUrl : '');
+        $('#faviconOriginalUrl').prop('src', result ? result.favicon.faviconOriginalUrl : '');
+    }
+
+    img_input.addEventListener('change', function (e) {
+        var files = this.files;
+        if (files.length) {
+            var file = files[0];
+            var reader = new FileReader();
+            if(!/image\/\w+/.test(file.type)){
+                notice.fail({title: '请选择图片文件'});
+                return false;
+            }
+            reader.onload = function (e) {
+                $('#faviconOriginalUrl').prop('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function uploadFavicon() {
+        if (!bookmarkId) return;
+        if (img_input.files.length === 0) {
+            notice.open({duration: 5, content: '<div class="notice-title">请选择文件</div>'});
+        } else {
+            var form = new FormData();
+            form.append("file", img_input.files.item(0));
+            form.append("bookmarkId", bookmarkId);
+            $.ajax({
+                url: '/bookmark/uploadFavicon',
+                type: 'post',
+                data: form,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.code === '000') {
+                        notice.success({title: '成功修改图标'});
+                        setForm($('.bookmark-form'), data.result, '');
+                        setFavicon(data.result);
+                    } else {
+                        notice.fail({title: '发生错误', desc: data.msg});
+                    }
+                }
+            })
+        }
+    }
+
+    function setButton () {
+        $('.delete-bookmark-button').click(function () {
+            var id  = $(this).parent().data('id');
+            var $parent = $('#bookmark-' + id);
+            layer.confirm('确定删除该书签？', {
+                btn: ['确定','取消'],
+                move: false,
+                shadeClose: true,
+            }, function(){
+                deleteBook(id, function () {
+                    layer.close(layer.index);
+                    $parent.addClass('hidden');
+                    setTimeout(function () {
+                        $parent.remove();
+                    }, 300);
+                });
+            });
+        });
+
+        $('.delete-shortcut-button').click(function () {
+            var id  = $(this).parent().data('id');
+            layer.confirm('确定删除该书签？', {
+                btn: ['确定','取消'],
+                move: false,
+                shadeClose: true,
+            }, function(){
+                deleteBook(id, function () {
+                    layer.close(layer.index);
+                    // for (var i = 0; i < s.slides.length; i++) {
+                    //     if ($(s.slides[i]).data('id') === id) {
+                    //         s.removeSlide(i);
+                    //         break;
+                    //     }
+                    // }
+                });
+            });
+        });
+
+        $('.info-button').click(function () {
+            var id  = $(this).parent().data('id');
+            $.ajax({
+                url: '/bookmark/findById',
+                type: 'post',
+                data: {
+                    bookmarkId: parseInt(id)
+                },
+                success: function (data) {
+                    if (data.code === '000') {
+                        type = 2;
+                        $('#commitForm').text('提交修改');
+                        layer.open({
+                            type: 1,
+                            area: area,
+                            title: '书签',
+                            content: $('.bookmark-form'),
+                            end: function () {
+                                document.querySelector(".bookmark-form").reset();
+                                setFavicon();
+                            }
+                        });
+                        setForm($('.bookmark-form'), data.result, '');
+                        setFavicon(data.result);
+                        bookmarkId = data.result.bookmarkId;
+                        form.render();
+                    }
+                }
+            });
+        });
+
+        $('.open-blank-button').click(function () {
+            window.open($(this).parent().data('url'), '_blank');
+        });
+
+        $('.open-self-button').click(function () {
+            window.location.href = $(this).parent().data('url');
+        });
+    }
+
+    document.getElementById('set-button').addEventListener('click', function () {
+        if (!bookmarkId) return;
+        var faviconUrl = $('input[name="favicon.faviconOriginalUrl"]').val();
+        layer.confirm('确定变更faviconUrl:' + faviconUrl + '？', {
+            btn: ['确定','取消'],
+            move: false,
+            shadeClose: true,
+        }, function(){
+            $.ajax({
+                url: '/bookmark/changeFavicon',
+                type: 'post',
+                data: {
+                    bookmarkId: bookmarkId,
+                    faviconUrl: faviconUrl
+                },
+                success: function (data) {
+                    layer.close(layer.index);
+                    if (data.code === '000') {
+                        notice.success({title: '成功修改图标'});
+                        setForm($('.bookmark-form'), data.result, '');
+                        setFavicon(data.result);
+                    } else {
+                        notice.fail({title: '发生错误', desc: data.msg});
+                    }
+                }
+            });
+        });
+    });
+
+    $('.addBookmark').click(function () {
+        type = 1;
+        $('#commitForm').text('提交');
+        layer.open({
+            type: 1,
+            area: area,
+            title: '书签',
+            scrollbar: false,
+            content: $('.bookmark-form'),
+            end: function () {
+                document.querySelector(".bookmark-form").reset();
+                setFavicon();
+            }
+        });
+    });
+
+    //监听提交
+    form.on('submit', function (data) {
+        if (type === 1) {
+            $.ajax({
+                url: '/bookmark/add',
+                type: 'post',
+                data: data.field,
+                success: function (data) {
+                    if (data.code === '000') {
+                        type = 2;
+                        $('#commitForm').text('提交修改');
+                        notice.success({title: '成功添加书签'});
+                        setForm($('.bookmark-form'), data.result, '');
+                        setFavicon(data.result);
+                        bookmarkId = data.result.bookmarkId;
+                        form.render();
+                    } else {
+                        notice.fail({title: '发生错误', desc: data.msg});
+                    }
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/bookmark/update',
+                type: 'post',
+                data: data.field,
+                success: function (data) {
+                    if (data.code === '000') {
+                        notice.success({title: '成功修改书签'});
+                        setForm($('.bookmark-form'), data.result, '');
+                        form.render();
+                    } else {
+                        notice.fail({title: '发生错误', desc: data.msg});
+                    }
+                }
+            });
+        }
+
+        return false;
+    });
+</script>
 </body>
 </html>

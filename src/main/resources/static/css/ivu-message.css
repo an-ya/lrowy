@@ -53,12 +53,10 @@
     pointer-events: all;
 }
 
-.ivu-message-notice-content img {
-    display: inline-block;
+.ivu-message-notice-content .icon {
     width: 30px;
     height: 30px;
     margin-right: 16px;
-    vertical-align: middle;
 }
 
 .ivu-message-notice-content span {

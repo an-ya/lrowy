@@ -53,7 +53,7 @@ body {overflow-x: hidden;}
 .to-top .icon {width: 25px;height: 25px;}
 
 .editor-container {position: relative;}
-.editor-container .tip {position: absolute;top: 0;left: 0;right: 0;bottom: 0;text-align: center;vertical-align: middle;border-color: #eee;border-style: solid;border-width: 1px 0 1px 1px;background: rgba(255, 255, 255, .6);z-index: 1000;}
+.editor-container .tip {position: absolute;top: 0;left: 0;right: 0;bottom: 0;text-align: center;vertical-align: middle;border-color: #eee;border-style: solid;border-width: 1px 0 1px 1px;background: rgba(255, 255, 255, .6);z-index: 999;}
 .editor-container .tip a:link {color: #2979ff;}
 .editor-container .ck-editor {transform: translateX(1px);}
 .editor-container .ck-content {min-height: 160px;}

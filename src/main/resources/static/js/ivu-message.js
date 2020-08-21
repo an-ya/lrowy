@@ -37,7 +37,7 @@
         },
         loading: function (params) {
             if (!params) params = {};
-            params.content = '<img src="images/loading.gif" alt="loading"/><span>loading . . .</span>';
+            params.content = '<span class="loading icon"/><span>loading . . .</span>';
             return this.open(params);
         },
         success: function (params) {
