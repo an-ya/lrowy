@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -56,13 +55,11 @@ public class ImageService {
 
     void saveAvatar(String url, int id) throws Exception {
         HttpResult hr;
-        hr = httpAPIService.doGet(url, false);
-        if (hr.getCode() == 200) {
-            InputStream inputStream  = hr.getEntityContent();
-            String suffix =  url.substring(url.lastIndexOf(".") + 1);
-            BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
-            saveAvatar(image, id);
-        }
+        hr = httpAPIService.doGet(url);
+        InputStream inputStream  = hr.getEntityContent();
+        String suffix =  url.substring(url.lastIndexOf(".") + 1);
+        BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
+        saveAvatar(image, id);
     }
 
     public String saveCommentImage(MultipartFile file) {

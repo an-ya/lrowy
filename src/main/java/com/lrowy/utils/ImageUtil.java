@@ -1,12 +1,11 @@
 package com.lrowy.utils;
 
-import com.jhlabs.image.GaussianFilter;
 import net.sf.image4j.codec.bmp.BMPDecoder;
 import net.sf.image4j.codec.ico.ICODecoder;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
@@ -86,21 +85,6 @@ public class ImageUtil {
         ImageIO.write(image, format, new File(path));
     }
 
-    public static BufferedImage customGaussianBlur(BufferedImage image) {
-        BufferedImage ScaleImage = new BufferedImage(180, 180, BufferedImage.TYPE_INT_RGB);
-        Graphics g = ScaleImage.getGraphics();
-        g.setColor(Color.WHITE);
-        g.fillRect(0,0,180,180);
-        g.drawImage(image, 40, 40, 100, 100, null);
-
-        BufferedImage blurImage = new BufferedImage(ScaleImage.getWidth(), ScaleImage.getHeight(), BufferedImage.TYPE_INT_RGB);
-        GaussianFilter gaussianFilter = new GaussianFilter();
-        gaussianFilter.setRadius(60);
-        gaussianFilter.filter(ScaleImage, blurImage);
-
-        return blurImage.getSubimage(40, 40, 100, 100);
-    }
-
     public static BufferedImage imageTailor(BufferedImage image, float ratio) {
         int x, y, w = image.getWidth(), h = image.getHeight();
         float r = (float) w / (float) h;
@@ -115,5 +99,12 @@ public class ImageUtil {
         }
 
         return image.getSubimage(x, y, w, h);
+    }
+
+    public static String encodeImgageToBase64 (BufferedImage image) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", outputStream);
+        BASE64Encoder encoder = new BASE64Encoder();
+        return "data:image/png;base64," + encoder.encode(outputStream.toByteArray());
     }
 }

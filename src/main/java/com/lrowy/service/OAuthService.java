@@ -44,7 +44,7 @@ public class OAuthService {
     public User initUser(String code) throws Exception {
         String paramsString = getToken(code);
         Map<String, Object> params = UrlUtil.parse(paramsString);
-        HttpResult hr = httpAPIService.doGet("https://api.github.com/user", params, false);
+        HttpResult hr = httpAPIService.doGet("https://api.github.com/user", params);
         String content = hr.getEntityString();
         GithubUser githubUser = deserialize(content);
         User user = userDao.findUserByOrigin("Github", githubUser.getId());
@@ -59,9 +59,7 @@ public class OAuthService {
             user.setAvatarVersion(1);
             userDao.saveUser(user);
             imageService.saveAvatar(githubUser.getAvatar_url(), user.getUserId());
-            return user;
-        } else {
-            return user;
         }
+        return user;
     }
 }

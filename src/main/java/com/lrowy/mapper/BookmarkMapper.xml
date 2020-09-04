@@ -6,100 +6,42 @@
         <result column="bookmarkCategoryId" property="bookmarkCategoryId"/>
         <result column="description" property="description"/>
         <result column="title" property="title"/>
-        <result column="state" property="state"/>
         <result column="url" property="url"/>
-        <result column="baseUrl" property="baseUrl"/>
+        <result column="favicon" property="favicon"/>
         <result column="visits" property="visits"/>
         <result column="delFlag" property="delFlag"/>
         <result column="hiddenFlag" property="hiddenFlag"/>
-        <result column="isAccessible" property="isAccessible"/>
-        <result column="shortcutFlag" property="shortcutFlag"/>
         <result column="createDate" property="createDate"/>
-        <association property="favicon" javaType="com.lrowy.pojo.bookmark.Favicon">
-            <id column="faviconId" property="faviconId"/>
-            <result column="domain" property="domain"/>
-            <result column="topDomain" property="topDomain"/>
-            <result column="faviconUrl" property="faviconUrl"/>
-            <result column="faviconBlurUrl" property="faviconBlurUrl"/>
-            <result column="faviconOriginalUrl" property="faviconOriginalUrl"/>
-        </association>
     </resultMap>
 
     <insert id="saveBookmark" parameterType="com.lrowy.pojo.bookmark.Bookmark">
         <selectKey keyProperty="bookmarkId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>
-        INSERT INTO bookmark (bookmarkCategoryId,description,title,state,url,baseUrl,visits,delFlag,hiddenFlag,isAccessible,shortcutFlag,extraNetFlag,createDate) VALUE (#{bookmarkCategoryId},#{description},#{title},#{state},#{url},#{baseUrl},#{visits},#{delFlag},#{hiddenFlag},#{isAccessible},#{shortcutFlag},#{extraNetFlag},#{createDate});
+        INSERT INTO bookmark (bookmarkCategoryId,description,title,url,favicon,visits,delFlag,hiddenFlag,createDate) VALUE (#{bookmarkCategoryId},#{description},#{title},#{url},#{favicon},#{visits},#{delFlag},#{hiddenFlag},#{createDate});
     </insert>
-
-    <select id="findShortcut" resultMap="bookmark">
-        SELECT *
-        FROM bookmark
-        JOIN bookmark_favicon ON bookmark.bookmarkId=bookmark_favicon.bookmarkId
-        JOIN favicon ON favicon.faviconId=bookmark_favicon.faviconId
-        WHERE shortcutFlag=1
-        ORDER BY bookmark.bookmarkCategoryId;
-    </select>
 
     <select id="findBookmark" resultMap="bookmark">
         SELECT *
         FROM bookmark
-        JOIN bookmark_favicon ON bookmark.bookmarkId=bookmark_favicon.bookmarkId
-        JOIN favicon ON favicon.faviconId=bookmark_favicon.faviconId
-        WHERE shortcutFlag=0
-        ORDER BY bookmark.bookmarkCategoryId;
+        ORDER BY bookmark.createDate DESC;
     </select>
 
     <select id="findBookmarkByBookmarkId" resultMap="bookmark">
         SELECT *
         FROM bookmark
-        JOIN bookmark_favicon ON bookmark.bookmarkId=bookmark_favicon.bookmarkId
-        JOIN favicon ON favicon.faviconId=bookmark_favicon.faviconId
         WHERE bookmark.bookmarkId=#{bookmarkId};
     </select>
 
     <update id="updateBookmark" parameterType="com.lrowy.pojo.bookmark.Bookmark">
-        UPDATE bookmark SET bookmarkCategoryId=#{bookmarkCategoryId},description=#{description},title=#{title},state=#{state},url=#{url},baseUrl=#{baseUrl},visits=#{visits},delFlag=#{delFlag},hiddenFlag=#{hiddenFlag},isAccessible=#{isAccessible},shortcutFlag=#{shortcutFlag},extraNetFlag=#{extraNetFlag},createDate=#{createDate} where bookmarkId=#{bookmarkId}
+        UPDATE bookmark SET title=#{title},url=#{url},description=#{description},bookmarkCategoryId=#{bookmarkCategoryId} where bookmarkId=#{bookmarkId}
     </update>
 
     <delete id="deleteBookmark" parameterType="java.lang.Integer">
         DELETE FROM bookmark WHERE bookmarkId=#{bookmarkId};
     </delete>
 
-    <insert id="saveFavicon" parameterType="com.lrowy.pojo.bookmark.Favicon">
-        <selectKey keyProperty="faviconId" order="AFTER" resultType="java.lang.Integer">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
-        INSERT INTO favicon (domain,topDomain,faviconUrl,faviconBlurUrl,faviconOriginalUrl) VALUE (#{domain},#{topDomain},#{faviconUrl},#{faviconBlurUrl},#{faviconOriginalUrl});
-    </insert>
-
-    <select id="findFaviconByDomain" parameterType="java.lang.String" resultType="com.lrowy.pojo.bookmark.Favicon">
-        SELECT * FROM favicon WHERE domain=#{domain} LIMIT 1;
-    </select>
-
-    <select id="findFaviconByBookmarkId" parameterType="java.lang.Integer" resultType="com.lrowy.pojo.bookmark.Favicon">
-        SELECT favicon.faviconId,favicon.domain,favicon.topDomain,faviconUrl,favicon.faviconBlurUrl,favicon.faviconOriginalUrl
-        FROM bookmark_favicon,favicon
-        WHERE bookmark_favicon.bookmarkId=#{bookmarkId} AND bookmark_favicon.faviconId=favicon.faviconId LIMIT 1;
-    </select>
-
-    <update id="updateFavicon" parameterType="com.lrowy.pojo.bookmark.Favicon">
-        UPDATE favicon SET domain=#{domain},topDomain=#{topDomain},faviconUrl=#{faviconUrl},faviconBlurUrl=#{faviconBlurUrl},faviconOriginalUrl=#{faviconOriginalUrl} WHERE faviconId=#{faviconId}
-    </update>
-
-    <delete id="deleteFavicon" parameterType="java.lang.Integer">
-        DELETE FROM favicon WHERE faviconId=#{faviconId} AND 0=(SELECT COUNT(*) FROM bookmark_favicon WHERE faviconId=#{faviconId});
-    </delete>
-
-    <insert id="saveBookmarkFavicon" parameterType="com.lrowy.pojo.bookmark.Bookmark">
-        INSERT INTO bookmark_favicon (bookmarkId,faviconId) VALUE (#{bookmarkId},#{favicon.faviconId});
-    </insert>
-
-    <delete id="deleteBookmarkFavicon" parameterType="java.lang.Integer">
-        DELETE FROM bookmark_favicon WHERE bookmarkId=#{bookmarkId};
-    </delete>
-
-    <insert id="save" parameterType="com.lrowy.pojo.bookmark.BookmarkCategory">
+    <insert id="saveBookmarkCategory" parameterType="com.lrowy.pojo.bookmark.BookmarkCategory">
         <selectKey keyProperty="bookmarkCategoryId" order="AFTER" resultType="java.lang.Integer">
             SELECT LAST_INSERT_ID()
         </selectKey>

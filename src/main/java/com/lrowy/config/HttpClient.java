@@ -88,24 +88,12 @@ public class HttpClient {
     }
 
     /**
-     * 内网配置
+     * 配置
      * @param builder
      * @return
      */
-    @Bean(name = "intraNetConfig")
+    @Bean(name = "config")
     public RequestConfig getIntraNetConfig(@Qualifier("builder") RequestConfig.Builder builder){
-        return builder.build();
-    }
-
-    /**
-     * 外网配置
-     * @param builder
-     * @return
-     */
-    @Bean(name = "extraNetConfig")
-    public RequestConfig getExtraNetConfig(@Qualifier("builder") RequestConfig.Builder builder){
-        HttpHost h = new HttpHost("127.0.0.1", 60119);
-        builder.setProxy(h);
         return builder.build();
     }
 }

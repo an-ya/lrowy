@@ -7,17 +7,12 @@ public class Bookmark {
     private int bookmarkCategoryId;
     private String description;
     private String title;
-    private String state;
     private String url;
-    private String baseUrl;
+    private String favicon;
     private int visits;
     private int delFlag;
     private int hiddenFlag;
-    private int isAccessible;
-    private int shortcutFlag;
-    private int extraNetFlag;
     private Date createDate;
-    private Favicon favicon;
 
     public Bookmark() {
 
@@ -26,7 +21,6 @@ public class Bookmark {
     public Bookmark(String url) {
         this.url = url;
         this.createDate = new Date();
-        this.isAccessible = 1;
     }
 
     public int getBookmarkId() {
@@ -61,14 +55,6 @@ public class Bookmark {
         this.title = title;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -77,12 +63,12 @@ public class Bookmark {
         this.url = url;
     }
 
-    public String getBaseUrl() {
-        return baseUrl;
+    public String getFavicon() {
+        return favicon;
     }
 
-    public void setBaseUrl(String baseUrl) {
-        this.baseUrl = baseUrl;
+    public void setFavicon(String favicon) {
+        this.favicon = favicon;
     }
 
     public int getVisits() {
@@ -109,43 +95,11 @@ public class Bookmark {
         this.hiddenFlag = hiddenFlag;
     }
 
-    public int getIsAccessible() {
-        return isAccessible;
-    }
-
-    public void setIsAccessible(int isAccessible) {
-        this.isAccessible = isAccessible;
-    }
-
-    public int getShortcutFlag() {
-        return shortcutFlag;
-    }
-
-    public void setShortcutFlag(int shortcutFlag) {
-        this.shortcutFlag = shortcutFlag;
-    }
-
-    public int getExtraNetFlag() {
-        return extraNetFlag;
-    }
-
-    public void setExtraNetFlag(int extraNetFlag) {
-        this.extraNetFlag = extraNetFlag;
-    }
-
     public Date getCreateDate() {
         return createDate;
     }
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
-    }
-
-    public Favicon getFavicon() {
-        return favicon;
-    }
-
-    public void setFavicon(Favicon favicon) {
-        this.favicon = favicon;
     }
 }

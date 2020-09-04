@@ -35,7 +35,7 @@ public class LrowyApplicationTests {
     @Test
     public void testHttpClient() {
         try {
-            HttpResult hr = httpAPIService.doGet("https://common.cnblogs.com/favicon.ico", false);
+            HttpResult hr = httpAPIService.doGet("https://common.cnblogs.com/favicon.ico");
             System.out.println(hr.getCode());
         } catch (Exception e) {
 //            e.printStackTrace();

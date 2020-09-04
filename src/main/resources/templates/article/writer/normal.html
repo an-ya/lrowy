@@ -28,7 +28,16 @@
         .toolbar .avatar {flex-shrink: 0;width: 28px;height: 28px;margin: 0 6px;border: 1px solid #eee;border-radius: 2px;}
         .toolbar-right .ck.ck-toolbar {border: 0;}
         .container {flex-grow: 1;padding: 0 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
-        .container .ck.ck-editor__editable, .container .content {display: none;width: 680px;margin: 66px auto;line-height: 1.6;background: #fff;border-top: 1px solid #eee;}
+        .container .ck.ck-editor__editable, .container .content {width: 680px;margin: 66px auto;padding: 0 8px;line-height: 1.6;background: #fff;border-top: 1px solid #eee;}
+        .container .editor-container, .container .content {display: none;}
+
+        .container .content {line-height: 1.6;}
+        .container .content p {padding: 0 25px;margin: 1em 0;}
+        .container .content pre {margin: 1em 0;}
+        .container .content ul {padding: 0 25px;}
+        .container .content h1,h2,h3,h4,h5,h6 {padding: 0 25px;}
+        .container .content figure {margin: 1em 0;}
+        .container .content figure img {max-width: 100%;}
 
         .tag {display: inline-block;height: 20px;padding: 0 10px;margin-right: 8px;line-height: 20px;border-radius: 10px;background: #eee;}
         .tag i {margin-left: 6px;font-size: 12px;cursor: pointer;}
@@ -61,7 +70,7 @@
             .toolbar {flex-direction: column;width: auto;padding: 40px 6px 4px;}
             .toolbar .avatar {margin: 0;}
             .container {padding: 0;}
-            .container .ck.ck-editor__editable, .container .content {width: 100%;margin:0;border-color: transparent;}
+            .container .ck.ck-editor__editable, .container .content {width: 100%;margin: 0;border-color: transparent;}
         }
     </style>
 </head>
@@ -71,13 +80,13 @@
         <div class="toolbar">
             <button class="button menu-button" title="菜单"><span class="icon"><span>Menu</span></span></button>
             <button th:if="${user == null}" class="button" id="login" title="登录/注册"><span class="iconfont icon-login"></span></button>
-            <img th:if="${user != null}" class="avatar" th:src="${user.avatar}" alt="">
+            <img th:if="${user != null}" class="avatar" th:src="${user.avatar}" alt=""/>
             <button th:if="${user != null}" class="button" title="保存/更新" onclick="saveEvent()"><span class="iconfont icon-upload"></span></button>
         </div>
         <div class="toolbar-right"></div>
     </div>
     <div class="container">
-        <div id="editor"></div>
+        <div class="editor-container"><div id="editor"></div></div>
         <div class="content" id="read"></div>
     </div>
 </div>
@@ -190,6 +199,7 @@
 <script th:src="@{/js/ivu-message.js}"></script>
 <script th:src="@{/js/md-ripple.js}"></script>
 <script th:src="@{/js/ckeditor.js}"></script>
+<script th:src="@{/js/highlight.pack.js}"></script>
 <script>
     var editor,
         mode = 0,
@@ -458,6 +468,13 @@
         CKEDITOR.DecoupledEditor
             .create(document.querySelector('#editor'), config)
             .then(function (editor) {
+                if (editor.isReadOnly) {
+                    $('#read').html(editor.getData());
+                    highLightCode();
+                    $('#read').show();
+                } else {
+                    $('.container .editor-container').show();
+                }
                 window.editor = editor;
                 document.querySelector('.toolbar-right').appendChild(editor.ui.view.toolbar.element);
                 document.querySelector('.ck-toolbar').classList.add('ck-reset_all');
@@ -516,9 +533,24 @@
         });
     }
 
+    function highLightCode() {
+        $('.container .content pre code').each(function () {
+            hljs.highlightBlock(this);
+        });
+    }
+
     function writerOrRead() {
-        if ()
-        editor.isReadOnly = editor.isReadOnly !== true;
+        if (editor.isReadOnly) {
+            editor.isReadOnly = false;
+            $('.container .editor-container').show();
+            $('#read').hide();
+        } else {
+            editor.isReadOnly = true;
+            $('#read').html(editor.getData());
+            highLightCode();
+            $('#read').show();
+            $('.container .editor-container').hide();
+        }
     }
 
     function saveEvent() {

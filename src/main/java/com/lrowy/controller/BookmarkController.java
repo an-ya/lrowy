@@ -27,7 +27,6 @@ public class BookmarkController extends BaseController {
         model.addAttribute("user", user);
 
         BookmarkResult br = new BookmarkResult();
-        br.setShortcuts(bookmarkDao.findShortcut());
         br.setBookmarks(bookmarkDao.findBookmark());
         br.setBookmarkCategories(bookmarkDao.findBookmarkCategory());
         model.addAttribute("bookmarkResult", br);
@@ -39,7 +38,6 @@ public class BookmarkController extends BaseController {
     public BaseResponse<BookmarkResult> init() {
         BaseResponse<BookmarkResult> res = new BaseResponse<>();
         BookmarkResult br = new BookmarkResult();
-        br.setShortcuts(bookmarkDao.findShortcut());
         br.setBookmarks(bookmarkDao.findBookmark());
         br.setBookmarkCategories(bookmarkDao.findBookmarkCategory());
         res.setResult(br);
