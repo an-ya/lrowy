@@ -9,6 +9,7 @@ import com.lrowy.pojo.common.http.HttpResult;
 import com.lrowy.service.CommentService;
 import com.lrowy.service.HttpAPIService;
 import com.lrowy.utils.JsonUtil;
+import com.lrowy.utils.UrlUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,10 @@ public class LrowyApplicationTests {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testUrl() {
+        System.out.println(UrlUtil.isUrl("www.google.com"));
     }
 }

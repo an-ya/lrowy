@@ -16,10 +16,7 @@ public class MD5Util {
         m.update(dataStr.getBytes(StandardCharsets.UTF_8));
         byte[] s = m.digest();
         StringBuilder result = new StringBuilder();
-        for (byte b : s) {
-            result.append(Integer.toHexString((0x000000FF & b) | 0xFFFFFF00)
-                    .substring(6));
-        }
+        for (byte b : s) result.append(Integer.toHexString((0x000000FF & b) | 0xFFFFFF00).substring(6));
         return result.toString();
     }
 }

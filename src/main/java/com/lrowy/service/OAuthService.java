@@ -58,7 +58,7 @@ public class OAuthService {
             user.setOriginId(githubUser.getId());
             user.setAvatarVersion(1);
             userDao.saveUser(user);
-            imageService.saveAvatar(githubUser.getAvatar_url(), user.getUserId());
+            imageService.saveAvatar(user.getUserId(), githubUser.getAvatar_url());
         }
         return user;
     }

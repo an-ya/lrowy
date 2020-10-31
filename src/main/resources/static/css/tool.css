@@ -177,7 +177,7 @@
     width: 100%;
     height: 100%;
     opacity: .7;
-    background: rgba(0, 0, 0, .5);
+    background: rgba(255, 255, 255, .6);
 }
 
 .modal-inner {
@@ -200,6 +200,7 @@
     margin: 12px 25px;
     background-color: #fff;
     border-radius: 6px;
+    border: 1px solid #e8eaec;
 }
 
 .modal-close {
@@ -388,7 +389,7 @@
 }
 
 @media screen and (max-width: 900px) {
-    .notice  {
+    .notice {
         top: 60px;
         width: 200px;
     }

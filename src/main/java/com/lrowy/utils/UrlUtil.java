@@ -6,8 +6,19 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 public class UrlUtil {
-    private final static Set<String> PublicSuffixSet = new HashSet<String>(Arrays.asList(new String("com|org|net|gov|edu|co|tv|mobi|info|asia|xxx|onion|cn|com.cn|edu.cn|gov.cn|net.cn|org.cn|jp|kr|tw|com.hk|hk|com.hk|org.hk|se|com.se|org.se").split("\\|")));
-    private static Pattern IP_PATTERN = Pattern.compile("(\\d{1,3}\\.){3}(\\d{1,3})");
+    public static Boolean isUrl(String url) {
+        url = url.toLowerCase();
+        String regex = "^((https|http)://)"  // 协议
+                + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IPv4地址
+                + "|" // 允许IP或域名
+                + "([0-9a-z_!~*'()-]+\\.)*" // 主机名.
+                + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名
+                + "[a-z]{2,6})" // 一级域名
+                + "(:[0-9]{1,5})?" // 端口号，最大为65535，5位数
+                + "((/?)|" // 斜杆
+                + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
+        return url.matches(regex);
+    }
 
     public static Map<String, Object> parse(String paramsString) {
         Map<String, Object> result = new HashMap<>();
@@ -34,7 +45,7 @@ public class UrlUtil {
         return BaseUrl.toString();
     }
 
-    public static String getRescFullPath(String BaseUrl, String href) throws MalformedURLException {
+    public static String getFullPath(String BaseUrl, String href) throws MalformedURLException {
         URL url = new URL(BaseUrl);
         StringBuilder fullUrl = new StringBuilder();
         if (!Pattern.matches("(http://|https://).*", href)) {
@@ -50,32 +61,5 @@ public class UrlUtil {
         }
         fullUrl.append(href);
         return fullUrl.toString();
-    }
-
-    public static String getDomainName(String url) throws MalformedURLException {
-        URL u = new URL(url);
-        return u.getHost();
-    }
-
-    public static String getTopDomainName(String url) throws MalformedURLException {
-        URL u = new URL(url);
-        String host = u.getHost();
-        if (host.endsWith(".")){
-            host = host.substring(0, host.length() - 1);
-        }
-        if (IP_PATTERN.matcher(host).matches()){
-            return host;
-        }
-        int index = 0;
-        String candidate = host;
-        for (; index >= 0;) {
-            index = candidate.indexOf('.');
-            String subCandidate = candidate.substring(index + 1);
-            if (PublicSuffixSet.contains(subCandidate)) {
-                return candidate;
-            }
-            candidate = subCandidate;
-        }
-        return candidate;
     }
 }

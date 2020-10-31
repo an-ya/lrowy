@@ -6,229 +6,154 @@
     <meta name="renderer" content="webkit">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" href="/layui-v2.5.4/css/layui.css">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/tool.css}">
     <style>
         html {font-size: 16px;}
         html, body {height: 100%;overflow: hidden;}
-
-        .sidebar:after {content: none;}
-        .sidebar .sidebar-header {flex-shrink: 0;height: 39px;border-bottom: 1px solid #eee;}
+        input[disabled] {background-color: #efefef;}
+        input[type='file'] {position: absolute;width: 50px;clip: rect(0 0 0 0);}
 
         .main {box-sizing: border-box;display: flex;flex-direction: column;height: 100%;width: 100%;margin-top: 0;overflow-x: hidden;overflow-y: auto;background-color: #fafafa;}
         .main .top {display: flex;height: 38px;padding: 4px 6px;}
         .main .top .button {display: flex;justify-content: center;align-items: center;width: 30px;height: 30px;padding: 0;font-size: 1.6rem;}
 
-        .container {flex-grow: 1;padding: 0 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
+        .container {position: relative;flex-grow: 1;padding: 0 66px;background-color: #fafafa;border-top: 1px solid #eee;overflow: auto;}
         .container .inner {width: 680px;margin: 66px auto;line-height: 1.6;background: #fff;}
 
-        .bookmark {padding: 12px 0;-webkit-transition: .3s;transition: .3s;outline: none;}
-        .bookmark .main_info {position: relative;display: flex;align-items: center;height: 24px;}
-        .bookmark .main_info img {flex-shrink: 0;width: 16px;height: 16px;margin: 0 16px;filter: grayscale(100%);}
-        .bookmark .main_info .title {flex-grow: 1;height: 18px;line-height: 18px;background: transparent;border: 0;}
-        .bookmark .tool {position: absolute;top: 0;right: 0;font-size: 0;}
-        .bookmark .button {position: relative;width: 48px;height: 24px;padding: 0;font-size: 13px;line-height: 24px;}
+        .checkbox-group {display: flex;align-items: center;}
+        .checkbox {margin-right: 8px;cursor: pointer;}
+        .checkbox:before {display: inline-block;margin-right: 6px;content: '\e61b';color: #fff;font-size: 15px;font-family: 'iconfont', sans-serif;width: 18px;height: 18px;line-height: 18px;text-align: center;background: rgba(30, 159, 255, 0);border-radius: 50%;border: 1px solid #dcdee2;-webkit-transition: .3s;transition: .3s;}
+        .checkbox.checked:before {background: rgba(30, 159, 255, 1);}
+
+        .bookmark {position: relative;padding: 9px 0;-webkit-transition: .3s;transition: .3s;outline: none;}
+        .bookmark .main-info {position: relative;display: flex;align-items: center;height: 30px;}
+        .bookmark .main-info .favicon img {display: block;width: 16px;height: 16px;margin: 7px;background: #fafafa;}
+        .bookmark .main-info .title {flex-grow: 1;height: 18px;line-height: 18px;background: transparent;border: 0;}
+        .bookmark .button {position: relative;width: 30px;height: 30px;padding: 0;margin: 0 9px;font-size: 13px;line-height: 30px;text-align: center;}
         .bookmark .button:after {content: '';position: absolute;top: 50%;left: 50%;width: 30px;height: 30px;background-color: #000;border-radius: 15px;-webkit-transform: translate(-15px, -15px) scale(.8);transform: translate(-15px, -15px) scale(.8);-webkit-transition: .3s;transition: .3s;opacity: 0;}
-        .bookmark .button:hover:after {-webkit-transform: translate(-15px, -15px);transform: translate(-15px, -15px);opacity: .1;}
-        .bookmark .delete {opacity: 0;visibility: hidden;-webkit-transform: translateX(10px);transform: translateX(10px);-webkit-transition: .3s;transition: .3s;}
+        .bookmark .button:hover:after, .bookmark .button.load:after {-webkit-transform: translate(-15px, -15px) scale(1);transform: translate(-15px, -15px) scale(1);opacity: .1;}
+        .bookmark .button.load {pointer-events: none;}
+        .bookmark .button.index {z-index: 1000;}
+        .bookmark .button .anim {position: absolute;top: 0;left: 0;right: 0;bottom: 0;z-index: 1;}
+        .bookmark .menu {position: absolute;top: 0;right: 0;}
+        .bookmark .delete {position: absolute;top: 0;right: 48px;opacity: 0;visibility: hidden;-webkit-transform: translateX(10px);transform: translateX(10px);-webkit-transition: .3s;transition: .3s;}
         .bookmark .right {position: absolute;top: 0;left: 0;height: 36px;font-size: 18px;line-height: 36px;opacity: 0;visibility: hidden;-webkit-transition: .3s;transition: .3s;}
         .bookmark .right.show {opacity: 1;visibility: visible;-webkit-transform: translateX(0);transform: translateX(0);}
         .bookmark .refresh {-webkit-transform: translateX(10px);transform: translateX(10px);}
         .bookmark .upload {-webkit-transform: translateX(-10px);transform: translateX(-10px);}
-        .bookmark .other_info {position: relative;display: grid;grid-template-columns: 4fr 3fr 2fr 1fr;grid-row-gap: 1px;justify-content: stretch;height: 0;padding-left: 48px;margin-top: 0;-webkit-transition: .3s;transition: .3s;opacity: 0;overflow: hidden;}
-        .bookmark .other_info .item {width:100%;height: 36px;padding: 0 6px;line-height: 36px;border: 0;border-right: 1px solid rgba(56, 103, 214, .12);}
+        .bookmark .drawer {position: relative;height: 0;opacity: 0;overflow: hidden;-webkit-transition: .3s opacity, .3s height;transition: .3s opacity, .3s height;}
+        .bookmark .drawer.open {overflow: visible;}
+        .bookmark .other-info {position: absolute;left: 0;top: 6px;width: 100%;display: grid;grid-template-columns: 4fr 3fr 2fr 1fr;grid-row-gap: 1px;height: 36px;padding-left: 48px;}
+        .bookmark .other-info .item {width:100%;height: 36px;padding: 0 6px;line-height: 36px;border: 0;border-right: 1px solid rgba(56, 103, 214, .12);}
         .bookmark.unfold {background: rgba(56, 103, 214, .12);}
-        .bookmark.unfold .delete {opacity: 1;visibility: visible;-webkit-transform: translateX(0);transform: translateX(0);}
+        .bookmark.unfold .delete, .bookmark .delete.load {opacity: 1;visibility: visible;-webkit-transform: translateX(0);transform: translateX(0);}
         .bookmark.unfold .menu:after {-webkit-transform: translate(-15px, -15px);transform: translate(-15px, -15px);opacity: .1;}
-        .bookmark.unfold .other_info {height: 36px;margin-top: 8px;opacity: 1;overflow: visible;}
-        .bookmark.hidden {opacity: 0;visibility: hidden;-webkit-transform: translateX(-20px);transform: translateX(-20px);}
+        .bookmark.unfold .drawer {height: 42px;opacity: 1;}
+        .bookmark.hidden {padding: 0;opacity: 0;visibility: hidden;-webkit-transform: translateX(-20px);transform: translateX(-20px);overflow: hidden;}
         .bookmark.add {border-bottom: 1px solid #eee;}
+        .bookmark.none {display: none;}
+        .bookmark:before {content: '';position: absolute;top: 0;left: 0;right: 0;bottom: 0;background: rgba(255, 255, 255, .6);opacity: 0;visibility: hidden;-webkit-transition: .3s;transition: .3s;z-index: 999;}
+        .bookmark.load:before {opacity: 1;visibility: visible;}
 
-        .bookmark-form {padding: 20px;}
-        .layui-layer {box-shadow: none!important;}
-        #upload-favicon {margin-top: 15px;}
-        .favicon-display {display: inline-block;width: 60px;height: 60px;margin-top: 15px;margin-right: 13px;}
+        .upload-box {display: flex;flex-direction: column;align-items: center;justify-content: center;width: 200px;height: 200px;border: 1px dashed #afafaf;}
+        .upload-box i {font-size: 30px;}
 
         @media screen and (max-width: 826px) {
             .container  {padding: 0;}
             .container .inner {width: 100%;margin:0;}
-            .bookmark .other_info {grid-template-columns: 2fr 1fr;}
-            .bookmark.unfold .other_info {height: 72px;}
+            .bookmark .other-info {grid-template-columns: 2fr 1fr;}
+            .bookmark.unfold .drawer {height: 78px;}
+            .bookmark.unfold .other-info {height: 72px;}
         }
     </style>
 </head>
 <body>
 <div class="main">
-    <div class="top">
-<!--        <button class="button" onclick="addBookmark()"><i class="iconfont">&#xe61e;</i></button>-->
-    </div>
+    <div class="top"></div>
     <div class="container">
         <div class="inner">
             <div class="bookmark add" id="bookmark-0">
-                <div class="main_info">
-                    <div class="tool">
-                        <button class="button menu"><i class="iconfont icon-plus"></i></button>
+                <div class="main-info">
+                    <button class="button menu"><i class="iconfont icon-plus"></i></button>
+                </div>
+                <div class="drawer">
+                    <div class="other-info">
+                        <button class="button right refresh"><i class="iconfont icon-refresh"></i></button>
+                        <button class="button right upload show"><i class="iconfont icon-upload"></i></button>
+                        <input class="item href" placeholder="网址"/>
+                        <input class="item desc" placeholder="描述"/>
+                        <input class="item date" placeholder="日期" disabled/>
+                        <div class="item select cate">
+                            <div class="value"></div>
+                            <dl class="options">
+                                <dd class="option" th:each="c : ${bookmarkResult.bookmarkCategories}" th:value="${c.bookmarkCategoryId}" th:text="${c.name}"></dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
-                <div class="other_info">
-                    <button class="button right refresh"><i class="iconfont icon-refresh"></i></button>
-                    <button class="button right upload show"><i class="iconfont icon-upload"></i></button>
-                    <input class="item href" placeholder="网址"/>
-                    <input class="item desc" placeholder="描述"/>
-                    <input class="item date" placeholder="日期" disabled/>
-                    <div class="item select cate">
-                        <div class="value"></div>
-                        <dl class="options">
-                            <dd class="option" th:each="c : ${bookmarkResult.bookmarkCategories}" th:value="${c.bookmarkCategoryId}" th:text="${c.name}"></dd>
-                        </dl>
+            </div>
+            <div class="bookmark none">
+                <div class="main-info">
+                    <div class="button favicon"><img src="" alt=""/></div>
+                    <input class="title" value="" placeholder="标题" disabled/>
+                    <button class="button delete"><i class="iconfont icon-close"></i></button>
+                    <button class="button menu"><i class="iconfont icon-menu"></i></button>
+                </div>
+                <div class="drawer">
+                    <div class="other-info">
+                        <button class="button right refresh show"><i class="iconfont icon-refresh"></i></button>
+                        <button class="button right upload"><i class="iconfont icon-upload"></i></button>
+                        <input class="item href" value="" placeholder="网址"/>
+                        <input class="item desc" value="" placeholder="描述"/>
+                        <input class="item date" value="" placeholder="日期" disabled/>
+                        <div class="item select cate">
+                            <div class="value"></div>
+                            <dl class="options">
+                                <dd class="option" th:each="c : ${bookmarkResult.bookmarkCategories}" th:value="${c.bookmarkCategoryId}" th:text="${c.name}"></dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
             </div>
             <div th:each="b,i : ${bookmarkResult.bookmarks}" class="bookmark" th:id="'bookmark-' + ${b.bookmarkId}">
-                <div class="main_info">
-                    <img th:src="${b.favicon}" alt=""/>
+                <div class="main-info">
+                    <div class="button favicon"><img th:src="${b.favicon}" alt=""/></div>
                     <input class="title" th:value="${b.title}" placeholder="标题" disabled/>
-                    <div class="tool">
-                        <button class="button delete"><i class="iconfont icon-close"></i></button>
-                        <button class="button menu"><i class="iconfont icon-menu"></i></button>
+                    <button class="button delete"><i class="iconfont icon-close"></i></button>
+                    <button class="button menu"><i class="iconfont icon-menu"></i></button>
+                </div>
+                <div class="drawer">
+                    <div class="other-info">
+                        <button class="button right refresh show"><i class="iconfont icon-refresh"></i></button>
+                        <button class="button right upload"><i class="iconfont icon-upload"></i></button>
+                        <input class="item href" th:value="${b.url}" placeholder="网址"/>
+                        <input class="item desc" th:value="${b.description}" placeholder="描述"/>
+                        <input class="item date" th:value="${#dates.format(b.createDate, 'yyyy-MM-dd')}" placeholder="日期" disabled/>
+                        <div class="item select cate">
+                            <div class="value"></div>
+                            <dl class="options">
+                                <dd class="option" th:each="c : ${bookmarkResult.bookmarkCategories}" th:value="${c.bookmarkCategoryId}" th:text="${c.name}" th:selected="${b.bookmarkCategoryId == c.bookmarkCategoryId}"></dd>
+                            </dl>
+                        </div>
                     </div>
                 </div>
-                <div class="other_info">
-                    <button class="button right refresh show"><i class="iconfont icon-refresh"></i></button>
-                    <button class="button right upload"><i class="iconfont icon-upload"></i></button>
-                    <input class="item href" th:value="${b.url}" placeholder="网址"/>
-                    <input class="item desc" th:value="${b.description}" placeholder="描述"/>
-                    <input class="item date" th:value="${#dates.format(b.createDate, 'yyyy-MM-dd')}" placeholder="日期" disabled/>
-                    <div class="item select cate">
-                        <div class="value"></div>
-                        <dl class="options">
-                            <dd class="option" th:each="c : ${bookmarkResult.bookmarkCategories}" th:value="${c.bookmarkCategoryId}" th:text="${c.name}" th:selected="${b.bookmarkCategoryId == c.bookmarkCategoryId}"></dd>
-                        </dl>
-                    </div>
-                </div>
-<!--                <div class="dropdown-content">-->
-<!--                    <button class="dropdown-trigger"><i class="iconfont">&#xe619;</i></button>-->
-<!--                    <div class="dropdown hidden">-->
-<!--                        <ul class="dropdown-menu" th:data-id="${b.bookmarkId}" th:data-url="${b.url}">-->
-<!--                            <li class="dropdown-item open-blank-button">新窗口打开</li>-->
-<!--                            <li class="dropdown-item open-self-button">当前页打开</li>-->
-<!--                            <li class="dropdown-item info-button">信息</li>-->
-<!--                            <li class="dropdown-item delete-bookmark-button">删除</li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
         </div>
     </div>
 </div>
 
-<div class="sidebar full">
-    <div class="sidebar-header"></div>
-    <div class="sidebar-inner">
-        <form class="bookmark-form layui-form layui-form-pane" action="">
-            <div class="layui-form-item">
-                <label class="layui-form-label">编号</label>
-                <div class="layui-input-block">
-                    <input type="text" name="bookmarkId" value="0" readonly class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">标题</label>
-                <div class="layui-input-block">
-                    <input type="text" name="title" value="" class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">描述</label>
-                <div class="layui-input-block">
-                    <input type="text" name="description" value="" class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">路径</label>
-                <div class="layui-input-block">
-                    <input type="text" name="url" value="" required lay-verify="required" class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">图标路径</label>
-                <div class="layui-input-block">
-                    <input type="text" name="favicon.faviconUrl" value="" readonly class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">图标原路径</label>
-                <div class="layui-input-block favicon-control">
-                    <input type="text" name="favicon.faviconOriginalUrl" value="" class="layui-input"/>
-                    <button type="button" id="set-button">设置</button>
-                    <button type="button" id="upload-button" onclick="uploadFavicon()">上传</button>
-                    <input type="file" id="upload-favicon">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">访问数</label>
-                <div class="layui-input-block">
-                    <input type="text" name="visits" value="0" readonly class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">分类</label>
-                <div class="layui-input-block">
-                    <select name="bookmarkCategoryId" lay-verify="required">
-                        <option value=""></option>
-                        <option th:each="b,i : ${bookmarkResult.bookmarkCategories}" th:value="${b.bookmarkCategoryId}" th:text="${b.name}"></option>
-                    </select>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">是否</label>
-                <div class="layui-input-block">
-                    <input type="checkbox" name="delFlag" title="删除" lay-skin="primary" value="1"/>
-                    <input type="checkbox" name="hiddenFlag" title="隐藏" lay-skin="primary" value="1"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">创建日期</label>
-                <div class="layui-input-block">
-                    <input type="text" id="createDate" name="createDate" value="" class="layui-input"/>
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button id="commitForm" class="layui-btn" lay-submit lay-filter="form">提交</button>
-                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+<div class="checkbox-group" id="checkbox" style="display: none;"><div class="checkbox">不再提示</div></div>
+<div class="upload-main" style="display: none;"><label class="upload-box" for="upload-box"><i class="iconfont">&#xe79e;</i>上传图标</label><input id="upload-box" type="file"/></div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
-<script src="/layui-v2.5.4//layui.all.js"></script>
-<script>layui.config({base: '/layui-v2.5.4/lay.modules/'}).use(['layer', 'form', 'laydate']);</script>
 <script th:src="@{/js/tool.js}"></script>
 <script th:src="@{/js/common-v2.js}"></script>
+<script th:src="@{/js/lottie.min.js}"></script>
 <script>
-    var layer = layui.layer
-        ,form = layui.form
-        ,laydate = layui.laydate;
+    var DontPrompt = false;
 
-    var vw = $(document).width(),
-        vh = $(document).height(),
-        area = ['700px', '560px'],
-        type = 1,
-        img_input = document.querySelector("#upload-favicon"),
-        bookmarkId;
-
-    if (vw < 900) {
-        area[0] = 0.9 * vw + 'px';
-        area[1] = 0.8 * vh + 'px';
-    }
-
-    setButton();
-    laydate.render({
-        elem: '#createDate'
-        ,type: 'datetime'
+    $('.checkbox').click(function () {
+        $(this).toggleClass('checked');
     });
 
     $('.select .option').each(function () {
@@ -253,30 +178,94 @@
     });
 
     $('.select').click(function () {
-       $(this).toggleClass('focus');
+        $(this).toggleClass('focus');
+        $(this).parents('.drawer').toggleClass('open');
     });
 
     $('.bookmark .menu').click(function () {
         var $bookmark = $(this).parents('.bookmark');
         if ($bookmark.hasClass('unfold')) {
             $bookmark.find('.select').removeClass('focus');
+            $bookmark.find('.drawer').removeClass('open');
             $bookmark.find('.title').prop('disabled', true);
             $bookmark.removeClass('unfold');
         } else {
+            $('.select').removeClass('focus');
+            $('.drawer').removeClass('open');
             $('.bookmark').removeClass('unfold');
             $bookmark.find('.title').prop('disabled', false);
             $bookmark.addClass('unfold');
         }
     });
 
-    $('.bookmark input').change(function () {
+    $('.container .inner').click(function (e) {
+        e.stopPropagation();
+    });
+
+    $('.container').click(function () {
+        $('.select').removeClass('focus');
+        $('.drawer').removeClass('open');
+        $('.bookmark').removeClass('unfold');
+        $('.bookmark .title').prop('disabled', true);
+    });
+
+    $('.bookmark input').on('input', function () {
         var $bookmark = $(this).parents('.bookmark');
         $bookmark.find('.refresh').removeClass('show');
         $bookmark.find('.upload').addClass('show');
     });
 
+    function buttonLoad($button, complete) {
+        var $anim = $('<div class="anim"></div>');
+        $button.append($anim);
+        $button.addClass('index');
+        $button.addClass('load');
+
+        var anim = lottie.loadAnimation({
+            path: '/images/loading.json',
+            loop: true,
+            autoplay: true,
+            renderer: 'canvas',
+            container: $anim.get(0)
+        });
+        anim.state = 0;
+        anim.addEventListener('loopComplete', function () {
+            if (anim.state) {
+                anim.destroy();
+                $anim.remove();
+                $button.removeClass('load');
+                setTimeout(function () {
+                    $button.removeClass('index');
+                }, 300);
+                complete();
+            }
+        });
+        return anim;
+    }
+
     $('.upload').click(function () {
         var $bookmark = $(this).parents('.bookmark');
+        $bookmark.addClass('load');
+
+        var anim = buttonLoad($(this), function () {
+            $bookmark.removeClass('load');
+            var data = anim.data;
+            if (!data.code) {
+                message.fail({content: '请求出错'});
+            } else {
+                if (data.code === '000') {
+                    if ($bookmark.hasClass('add')) {
+                        message.success({content: '成功添加书签，<a href="javascript:void(0);" onclick="window.location.reload()">刷新</a>'});
+                    } else {
+                        $bookmark.find('.refresh').addClass('show');
+                        $bookmark.find('.upload').removeClass('show');
+                        message.success({content: '成功更新书签'});
+                    }
+                } else {
+                    message.fail({content: data.msg});
+                }
+            }
+        });
         $.ajax({
             url: $bookmark.hasClass('add') ? '/bookmark/add' : '/bookmark/update',
             type: 'post',
@@ -288,112 +277,139 @@
                 bookmarkCategoryId: $bookmark.find('.cate').data('value')
             },
             success: function (data) {
-                if (data.code === '000') {
-                    if ($bookmark.hasClass('add')) {
-                        message.success({content: '成功添加书签，<a href="javascript:void(0);" onclick="window.location.reload()">刷新</a>'});
-                    } else {
-                        message.success({content: '成功更新书签'});
-                    }
-                } else {
-                    message.fail({content: data.msg});
-                }
+                anim.state = 1;
+                anim.data = data;
+            },
+            fail: function () {
+                anim.state = 1;
+                anim.data = {};
             }
         });
     });
 
-    $('.container .inner').click(function (e) {
-        e.stopPropagation();
-    });
+    $('.refresh').click(function () {
+        var $bookmark = $(this).parents('.bookmark');
+        $bookmark.addClass('load');
 
-    $('.container').click(function () {
-        $('.select').removeClass('focus');
-        $('.bookmark').removeClass('unfold');
-        $('.bookmark .title').prop('disabled', true);
-    });
-
-    function addBookmark() {
-        modal.open({
-            title: '输入网址',
-            content: '<input placeholder="链接"/>',
-            confirm: function () {
-                $.ajax({
-                    url: '/bookmark/add',
-                    type: 'post',
-                    data: {
-                        url: $('.modal-content input').val()
-                    },
-                    success: function (data) {
-                        if (data.code === '000') {
-                            notice.success({title: '成功', desc: '添加书签'});
-                        } else {
-                            notice.fail({title: '发生错误', desc: data.msg});
-                        }
-                    }
-                });
+        var anim = buttonLoad($(this), function () {
+            $bookmark.removeClass('load');
+            var data = anim.data;
+            if (!data.code) {
+                message.fail({content: '请求出错'});
+            } else {
+                if (data.code !== '000') message.fail({content: data.msg});
+                if (data.result) {
+                    $bookmark.find('.title').val(data.result.title);
+                    $bookmark.find('img').attr('src', data.result.favicon);
+                    message.success({content: '成功刷新书签'});
+                }
             }
-        })
-    }
-
-    function deleteBook (id, success) {
+        });
         $.ajax({
-            url: '/bookmark/delete',
+            url: '/bookmark/refresh',
             type: 'post',
             data: {
-                bookmarkId: id
+                bookmarkId: $bookmark.attr('id').replace('bookmark-', ''),
             },
             success: function (data) {
-                if (data.code === '000') {
-                    success();
-                    notice.success({title: '成功删除书签'});
-                } else {
-                    notice.fail({title: '发生错误', desc: data.msg});
-                }
+                anim.state = 1;
+                anim.data = data;
+            },
+            fail: function () {
+                anim.state = 1;
+                anim.data = {};
             }
         });
-    }
+    });
 
-    function setForm ($form, result, parent) {
-        var value;
-        for (i in result) {
-            if (result.hasOwnProperty(i)) {
-                value = result[i];
-                if (value == null) break;
-                if (typeof value == 'object' && value.constructor === Object) {
-                    setForm($form, value, i);
+    $('.delete').click(function () {
+        var $bookmark = $(this).parents('.bookmark'),
+            $delete = $bookmark.find('.delete');
+        $bookmark.addClass('load');
+
+        var confirm = function () {
+            var anim = buttonLoad($delete, function () {
+                var data = anim.data;
+                if (!data.code) {
+                    $bookmark.removeClass('load');
+                    message.fail({content: '请求出错'});
                 } else {
-                    if (parent.length > 0) {
-                        $form.find('[name="' + parent + '.' + i + '"]').val(value);
+                    if (data.code === '000') {
+                        message.success({content: '成功删除书签'});
+                        $bookmark.css('height', $bookmark.outerHeight());
+                        setTimeout(function () {
+                            $bookmark.css('height', 0);
+                            $bookmark.addClass('hidden');
+                            setTimeout(function () {
+                                $bookmark.remove();
+                            }, 300);
+                        }, 14);
                     } else {
-                        var ele = $form.find('[name="' + i + '"]');
-                        if (ele.prop('type') === 'checkbox') {
-                            if (value === 1) {
-                                ele.prop('checked', true);
-                            } else {
-                                ele.prop('checked', false);
-                            }
-                        } else {
-                            ele.val(value);
-                        }
+                        $bookmark.removeClass('load');
+                        message.fail({content: data.msg});
                     }
                 }
-            }
+            });
+            $.ajax({
+                url: '/bookmark/delete',
+                type: 'post',
+                data: {
+                    bookmarkId: $bookmark.attr('id').replace('bookmark-', ''),
+                },
+                success: function (data) {
+                    anim.state = 1;
+                    anim.data = data;
+                },
+                fail: function () {
+                    anim.state = 1;
+                    anim.data = {};
+                }
+            });
+        };
+        if (DontPrompt) {
+            confirm();
+        } else {
+            modal.open({
+                title: '确认删除？',
+                content: $('#checkbox'),
+                confirm: function () {
+                    if ($('.modal-container .checkbox').hasClass('checked')) DontPrompt = true;
+                    confirm();
+                },
+                cancel: function () {
+                    $bookmark.removeClass('load');
+                }
+            });
         }
-    }
+    });
 
-    img_input.addEventListener('change', function (e) {
-        var files = this.files;
-        if (files.length) {
-            var file = files[0];
-            var reader = new FileReader();
-            if(!/image\/\w+/.test(file.type)){
-                notice.fail({title: '请选择图片文件'});
-                return false;
+    $('body').bind('drop', function (e) {
+        e.preventDefault();
+        console.log(e.originalEvent);
+        console.log(e.originalEvent.dataTransfer.files.item(0));
+    });
+    $('body').bind('dragover', function (e) {
+        e.preventDefault();
+    });
+
+    $('.favicon').click(function () {
+        var $favicon = $(this);
+        $favicon.addClass('load');
+        modal.open({
+            title: '更新图标',
+            content: $('.upload-main'),
+            confirm: function () {
+                var anim = buttonLoad($favicon, function () {
+
+                });
+                setTimeout(function () {
+                    anim.state = 1;
+                }, 1000);
+            },
+            cancel: function () {
+                $favicon.removeClass('load');
             }
-            reader.onload = function (e) {
-                $('#faviconOriginalUrl').prop('src', e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
+        });
     });
 
     function uploadFavicon() {
@@ -421,157 +437,6 @@
             })
         }
     }
-
-    function setButton () {
-        $('.delete-bookmark-button').click(function () {
-            var id  = $(this).parent().data('id');
-            var $parent = $('#bookmark-' + id);
-            layer.confirm('确定删除该书签？', {
-                btn: ['确定','取消'],
-                move: false,
-                shadeClose: true,
-            }, function(){
-                deleteBook(id, function () {
-                    layer.close(layer.index);
-                    $parent.addClass('hidden');
-                    setTimeout(function () {
-                        $parent.remove();
-                    }, 300);
-                });
-            });
-        });
-
-        $('.delete-shortcut-button').click(function () {
-            var id  = $(this).parent().data('id');
-            layer.confirm('确定删除该书签？', {
-                btn: ['确定','取消'],
-                move: false,
-                shadeClose: true,
-            }, function(){
-                deleteBook(id, function () {
-                    layer.close(layer.index);
-                    // for (var i = 0; i < s.slides.length; i++) {
-                    //     if ($(s.slides[i]).data('id') === id) {
-                    //         s.removeSlide(i);
-                    //         break;
-                    //     }
-                    // }
-                });
-            });
-        });
-
-        $('.info-button').click(function () {
-            var id  = $(this).parent().data('id');
-            $.ajax({
-                url: '/bookmark/findById',
-                type: 'post',
-                data: {
-                    bookmarkId: parseInt(id)
-                },
-                success: function (data) {
-                    if (data.code === '000') {
-                        type = 2;
-                        $('#commitForm').text('提交修改');
-                        layer.open({
-                            type: 1,
-                            area: area,
-                            title: '书签',
-                            content: $('.bookmark-form'),
-                            end: function () {
-                                document.querySelector(".bookmark-form").reset();
-                            }
-                        });
-                        setForm($('.bookmark-form'), data.result, '');
-                        bookmarkId = data.result.bookmarkId;
-                        form.render();
-                    }
-                }
-            });
-        });
-    }
-
-    document.getElementById('set-button').addEventListener('click', function () {
-        if (!bookmarkId) return;
-        var faviconUrl = $('input[name="favicon.faviconOriginalUrl"]').val();
-        layer.confirm('确定变更faviconUrl:' + faviconUrl + '？', {
-            btn: ['确定','取消'],
-            move: false,
-            shadeClose: true,
-        }, function(){
-            $.ajax({
-                url: '/bookmark/changeFavicon',
-                type: 'post',
-                data: {
-                    bookmarkId: bookmarkId,
-                    faviconUrl: faviconUrl
-                },
-                success: function (data) {
-                    layer.close(layer.index);
-                    if (data.code === '000') {
-                        notice.success({title: '成功修改图标'});
-                        setForm($('.bookmark-form'), data.result, '');
-                    } else {
-                        notice.fail({title: '发生错误', desc: data.msg});
-                    }
-                }
-            });
-        });
-    });
-
-    $('.addBookmark').click(function () {
-        type = 1;
-        $('#commitForm').text('提交');
-        layer.open({
-            type: 1,
-            area: area,
-            title: '书签',
-            scrollbar: false,
-            content: $('.bookmark-form'),
-            end: function () {
-                document.querySelector(".bookmark-form").reset();
-            }
-        });
-    });
-
-    //监听提交
-    form.on('submit', function (data) {
-        if (type === 1) {
-            $.ajax({
-                url: '/bookmark/add',
-                type: 'post',
-                data: data.field,
-                success: function (data) {
-                    if (data.code === '000') {
-                        type = 2;
-                        $('#commitForm').text('提交修改');
-                        notice.success({title: '成功添加书签'});
-                        setForm($('.bookmark-form'), data.result, '');
-                        bookmarkId = data.result.bookmarkId;
-                        form.render();
-                    } else {
-                        notice.fail({title: '发生错误', desc: data.msg});
-                    }
-                }
-            });
-        } else {
-            $.ajax({
-                url: '/bookmark/update',
-                type: 'post',
-                data: data.field,
-                success: function (data) {
-                    if (data.code === '000') {
-                        notice.success({title: '成功修改书签'});
-                        setForm($('.bookmark-form'), data.result, '');
-                        form.render();
-                    } else {
-                        notice.fail({title: '发生错误', desc: data.msg});
-                    }
-                }
-            });
-        }
-
-        return false;
-    });
 </script>
 </body>
 </html>

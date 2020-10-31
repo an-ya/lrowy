@@ -136,7 +136,7 @@
 }
 
 @media screen and (max-width: 900px) {
-    .notice  {
+    .notice {
         top: 60px;
         width: 200px;
     }

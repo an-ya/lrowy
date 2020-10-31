@@ -83,6 +83,7 @@
 
     window.modal = {
         open: function (params) {
+            var that = this;
             if (!params) params = {};
             if (params.title) $header.html(params.title);
             if (params.content) {
@@ -96,16 +97,21 @@
             }
             if (params.confirm && params.confirm instanceof Function) {
                 $footer.show();
-                var that = this;
-                $btn.unbind('click').bind('click', function () {
+                $btn.unbind('click').click(function () {
                     params.confirm();
                     that.close();
                 });
             } else {
                 $footer.hide();
             }
-            $mask.click(this.close);
-            $close.click(this.close);
+            var cancel = function () {
+                if (params.cancel && params.cancel instanceof Function) {
+                    params.cancel();
+                }
+                that.close();
+            };
+            $mask.unbind('click').click(cancel);
+            $close.unbind('click').click(cancel);
             $container.addClass('show');
         },
         close: function () {

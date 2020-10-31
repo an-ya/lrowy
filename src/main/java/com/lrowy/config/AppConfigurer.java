@@ -20,16 +20,6 @@ public class AppConfigurer extends WebMvcConfigurerAdapter {
         return new LoginInterceptor();
     }
 
-//    @Bean
-//    public MultipartResolver multipartResolver() {
-//        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-//        multipartResolver.setDefaultEncoding("utf-8");
-//        multipartResolver.setMaxUploadSize(10485760);
-//        multipartResolver.setMaxInMemorySize(4096);
-//        multipartResolver.setResolveLazily(true);
-//        return multipartResolver;
-//    }
-
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getMyInterceptor()).addPathPatterns("/**");

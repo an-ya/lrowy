@@ -10,9 +10,6 @@ import java.io.IOException;
 // github地址https://github.com/coobird/thumbnailator
 public class ThumbnailUtil {
     public static void CompressPicture(String filePathName, String thumbnailFilePathName, float level) throws IOException {
-        Thumbnails.of(filePathName)
-                .scale(1f)
-                .outputQuality(level)
-                .toFile(thumbnailFilePathName);
+        Thumbnails.of(filePathName).scale(1f).outputQuality(level).toFile(thumbnailFilePathName);
     }
 }

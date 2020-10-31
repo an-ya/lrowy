@@ -24,6 +24,7 @@
     <select id="findBookmark" resultMap="bookmark">
         SELECT *
         FROM bookmark
+        WHERE bookmark.delFlag=0 AND bookmark.hiddenFlag=0
         ORDER BY bookmark.createDate DESC;
     </select>
 
@@ -37,8 +38,12 @@
         UPDATE bookmark SET title=#{title},url=#{url},description=#{description},bookmarkCategoryId=#{bookmarkCategoryId} where bookmarkId=#{bookmarkId}
     </update>
 
+    <update id="updateFavicon" parameterType="com.lrowy.pojo.bookmark.Bookmark">
+        UPDATE bookmark SET favicon=#{favicon} where bookmarkId=#{bookmarkId}
+    </update>
+
     <delete id="deleteBookmark" parameterType="java.lang.Integer">
-        DELETE FROM bookmark WHERE bookmarkId=#{bookmarkId};
+        UPDATE bookmark SET delFlag=1 where bookmarkId=#{bookmarkId};
     </delete>
 
     <insert id="saveBookmarkCategory" parameterType="com.lrowy.pojo.bookmark.BookmarkCategory">

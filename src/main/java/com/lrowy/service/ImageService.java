@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -20,14 +19,24 @@ public class ImageService {
     @Resource
     private HttpAPIService httpAPIService;
 
-    private void saveAvatar(BufferedImage image, int id) throws IOException {
+    private void saveAvatar(int id, BufferedImage image) throws IOException {
         String directory = "avatar/";
         File folder = new File(uploadPath + directory);
         if (!folder.exists()) if (!folder.mkdirs()) return;
         if (image != null) {
             image = ImageUtil.imageTailor(image, 1.0f);
-            ImageUtil.write(image, "png", uploadPath + directory + id + ".png");
+            ImageUtil.writeImage(image, "png", uploadPath + directory + id + ".png");
         }
+    }
+
+    public void saveAvatar(int id, MultipartFile file) throws IOException {
+        saveAvatar(id, ImageUtil.readImage(file));
+    }
+
+    public void saveAvatar(int id, String url) throws Exception {
+        HttpResult hr = httpAPIService.doGet(url);
+        BufferedImage image = ImageUtil.readImage(url.substring(url.lastIndexOf(".") + 1), hr.getEntityContent());
+        saveAvatar(id, image);
     }
 
     private String saveImage(MultipartFile file, String directory) {
@@ -38,28 +47,15 @@ public class ImageService {
             File folder = new File(uploadPath + directory);
             if (!folder.exists()) if (!folder.mkdirs()) return "{\"error\":{\"message\":\"文件创建失败。\"}}";
             try {
-                BufferedImage image = ImageUtil.readMultipartFile(file);
+                BufferedImage image = ImageUtil.readImage(file);
                 String uuid = UUID.randomUUID().toString().replace("-", "");
-                ImageUtil.write(image, "png", uploadPath + directory + uuid + ".png");
+                ImageUtil.writeImage(image, "png", uploadPath + directory + uuid + ".png");
                 return "{\"uploaded\":1,\"url\":\"" + "/upload/" + directory + uuid + ".png" + "\"}";
             } catch (IOException e) {
                 e.printStackTrace();
                 return "{\"error\":{\"message\":\"图片读取失败。\"}}";
             }
         }
-    }
-
-    public void saveAvatar(MultipartFile file, int id) throws IOException {
-        saveAvatar(ImageUtil.readMultipartFile(file), id);
-    }
-
-    void saveAvatar(String url, int id) throws Exception {
-        HttpResult hr;
-        hr = httpAPIService.doGet(url);
-        InputStream inputStream  = hr.getEntityContent();
-        String suffix =  url.substring(url.lastIndexOf(".") + 1);
-        BufferedImage image = ImageUtil.readImageStream(suffix, inputStream);
-        saveAvatar(image, id);
     }
 
     public String saveCommentImage(MultipartFile file) {

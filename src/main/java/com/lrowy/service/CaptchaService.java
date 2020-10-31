@@ -64,20 +64,18 @@ public class CaptchaService {
                     context.setVariable("title", "From www.Lrowy.com To" + email);
                     context.setVariable("content", captcha.getCode());
                     try {
-                        int id = emailService.sendTemplateMail(email, "我的激活码", "/email", context);
-                        captcha.setSendId(id);
+                        captcha.setSendId(emailService.sendTemplateMail(email, "我的激活码", "/email", context));
                         captchaDao.saveCaptcha(captcha);
-                        br.setResult(captcha);
                     } catch (MessagingException e) {
-                        br.setInfo(SystemConstant.EMAIL_SEND_ERROR);
                         e.printStackTrace();
+                        br.setInfo(SystemConstant.EMAIL_SEND_ERROR);
                     }
                 } else {
                     br.setInfo(SystemConstant.RECAPTCHA_AUTHENTICATION_FAIL);
                 }
             } catch (Exception e) {
-                br.setInfo(SystemConstant.HTTPCLIENT_ERROR);
                 e.printStackTrace();
+                br.setInfo(SystemConstant.HTTPCLIENT_ERROR);
             }
         }
         return br;

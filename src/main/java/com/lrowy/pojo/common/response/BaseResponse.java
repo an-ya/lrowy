@@ -2,7 +2,6 @@ package com.lrowy.pojo.common.response;
 
 import com.lrowy.pojo.common.enums.SystemConstant;
 import java.io.Serializable;
-import java.util.List;
 
 public class BaseResponse<T> implements Serializable {
     private static final long serialVersionUID = 1234567890123456789L;

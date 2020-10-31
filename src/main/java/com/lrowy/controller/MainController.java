@@ -94,7 +94,6 @@ public class MainController extends BaseController {
                 e.printStackTrace();
             }
         }
-
         return br;
     }
 
@@ -137,7 +136,7 @@ public class MainController extends BaseController {
                         user.setAvatarVersion(1);
                         userDao.saveUser(user);
                         try {
-                            if (avatar != null) imageService.saveAvatar(avatar, user.getUserId());
+                            if (avatar != null) imageService.saveAvatar(user.getUserId(), avatar);
                             user.initAvatar();
                         } catch (IOException e) {
                             e.printStackTrace();

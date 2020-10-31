@@ -26,8 +26,8 @@ public enum SystemConstant {
     MKDIR_ERROR("601", "文件夹创建失败"),
     DELETE_FILE_ERROR("602", "删除文件失败"),
     IMAGE_TYPE_ERROR("603", "图片类型不支持"),
-    IO_ERROR("604", "IO出错");
-
+    IO_ERROR("604", "IO出错"),
+    MALFORMED_URL("605", "URL格式错误");
 
     /** 枚举编号 */
     private String code;
