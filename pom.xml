@@ -33,7 +33,7 @@
         <!-- httpclient版本号 -->
         <httpclient.version>4.3.6</httpclient.version>
         <!-- jsoup版本号 -->
-        <jsoup.version>1.7.2</jsoup.version>
+        <jsoup.version>1.14.2</jsoup.version>
     </properties>
 
     <repositories>
