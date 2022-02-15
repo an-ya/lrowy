@@ -67,7 +67,7 @@ CREATE TABLE captcha (
   captchaId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   sendId int(10) NOT NULL,
   sendMode varchar(32) NOT NULL,
-  sendTo varchar(32) NOT NULL,
+  sendTarget varchar(32) NOT NULL,
   ip varchar(32) NOT NULL,
   code varchar(64) NOT NULL,
   createDate datetime NOT NULL
@@ -76,7 +76,6 @@ CREATE TABLE email (
   emailId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   content text NOT NULL,
   subject varchar(64) NOT NULL,
-  sendType varchar(16) NOT NULL,
   sendFrom varchar(32) NOT NULL,
   sendTo varchar(32) NOT NULL,
   sendDate datetime NOT NULL

@@ -3,7 +3,7 @@ package com.lrowy.utils;
 import net.sf.image4j.codec.bmp.BMPDecoder;
 import net.sf.image4j.codec.ico.ICODecoder;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -71,7 +71,6 @@ public class ImageUtil {
     public static String encodeImageToBase64 (BufferedImage image) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         ImageIO.write(image, "png", outputStream);
-        BASE64Encoder encoder = new BASE64Encoder();
-        return "data:image/png;base64," + encoder.encode(outputStream.toByteArray());
+        return "data:image/png;base64," + Base64.encodeBase64String(outputStream.toByteArray());
     }
 }
