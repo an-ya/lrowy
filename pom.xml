@@ -24,16 +24,16 @@
         <!-- 高斯模糊过滤器 -->
         <jhlabs-filter.version>2.0.235-1</jhlabs-filter.version>
         <!-- commons-io版本号 -->
-        <commons-io.version>2.6</commons-io.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <!-- 压缩图片插件thumbnailator版本号 -->
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <!-- jjwt token认证版本号 -->
         <jjwt.version>0.7.0</jjwt.version>
         <!-- httpclient版本号 -->
-        <httpclient.version>4.3.6</httpclient.version>
+        <httpclient.version>4.5.13</httpclient.version>
         <!-- jsoup版本号 -->
-        <jsoup.version>1.7.2</jsoup.version>
+        <jsoup.version>1.14.2</jsoup.version>
     </properties>
 
     <repositories>
