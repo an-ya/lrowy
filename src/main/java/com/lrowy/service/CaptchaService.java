@@ -66,6 +66,7 @@ public class CaptchaService {
                     try {
                         captcha.setSendId(emailService.sendTemplateMail(email, "我的激活码", "/email", context));
                         captchaDao.saveCaptcha(captcha);
+                        br.setResult(captcha);
                     } catch (MessagingException e) {
                         e.printStackTrace();
                         br.setInfo(SystemConstant.EMAIL_SEND_ERROR);

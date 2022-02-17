@@ -66,7 +66,7 @@ public class EmailService {
         mimeMessageHelper.setSubject(subject);
         String t = templateEngine.process(template, context);
         mimeMessageHelper.setText(t, true);
-//        mailSender.send(message);
+        mailSender.send(message);
         return this.saveEmail(t, subject, workEmail, to);
     }
 }
