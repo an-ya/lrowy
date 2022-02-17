@@ -1,0 +1,30 @@
+/** base **/
+* {-webkit-tap-highlight-color: transparent;box-sizing: border-box;}
+html {font-size: 20px;}
+body {margin: 0;color: #304455;font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;background-color: #fff;}
+p {margin: 0;padding: 0;}
+a:link, a:active, a:visited {color: #304455;text-decoration: none;}
+a:hover {color: #2979ff;text-decoration: none;}
+dl, dt, dd, ul, ol, li {margin: 0;padding: 0;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+input {font: 14px Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif;outline: none;}
+select {outline: none;}
+
+/** font **/
+@font-face {
+    font-family: 'iconfont';  /* project id 1286797 */
+    src: url('//at.alicdn.com/t/font_1286797_0vm0vafestfj.eot');
+    src: url('//at.alicdn.com/t/font_1286797_0vm0vafestfj.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1286797_0vm0vafestfj.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1286797_0vm0vafestfj.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1286797_0vm0vafestfj.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1286797_0vm0vafestfj.svg#iconfont') format('svg');
+}
+
+/** iconfont **/
+.iconfont {font-family: 'iconfont', sans-serif;font-style: normal;-webkit-font-smoothing: antialiased;-webkit-text-stroke-width: .2px;-moz-osx-font-smoothing: grayscale;}
+.icon-close:before {content: '\e611';}
+.icon-login:before {content: '\e616';}
+.icon-menu:before {content: '\e619';}
+.icon-plus:before {content: '\e61e';}
+.icon-refresh:before {content: '\e64e';}
+.icon-upload:before {content: '\e662';}
