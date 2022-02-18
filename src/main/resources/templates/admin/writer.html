@@ -12,19 +12,20 @@
     <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
     <link rel="stylesheet" th:href="@{/cherry-markdown/cherry-markdown.min.css}">
     <style>
-        .header {display: flex;align-items: center;height: 64px;padding: 16px 32px;color: #fff;font-size: 18px;font-weight: bold;background-color: #24292f;}
-        .main {position: absolute;top: 64px;left: 0;right: 0;bottom: 0;display: flex;justify-content: center;padding: 24px;background-color: #f2f2f2;}
-        .main .left-side{flex-shrink: 0;width:300px;background-color:#fff;border:1px solid #e5e5e5;border-right: 0;}
-        .main .right-side{position: relative;display: flex;flex-direction: column;width: 1060px;background-color: #fff;border:1px solid #e5e5e5;}
-        .main .right-side .info {display: flex;align-items: center;height: 64px;padding: 16px 32px;font-size: 15px;font-weight: bold;border-bottom: 1px solid #e5e5e5;}
+        .header {display: flex;justify-content: space-between;align-items: center;height: 50px;padding: 0 20px;font-size: 18px;font-weight: bold;}
+        .main {position: absolute;top: 50px;left: 0;right: 0;bottom: 0;display: flex;justify-content: center;padding: 10px;background-color: #f2f2f2;}
+        .main .left-side{flex-shrink: 0;width:240px;margin-right: 10px;background-color:#f8fafb;}
+        .main .right-side{position: relative;display: flex;flex-direction: column;width: 960px;background-color: #fff;border-top: 1px solid #e5e5e5;}
+        .main .right-side .info {display: flex;align-items: center;height: 64px;padding: 16px 32px;font-size: 15px;font-weight: bold;}
         .main .right-side .editor {position: absolute;top: 64px;left: 0;right: 0;bottom: 0;}
         .cherry{box-shadow: none;}
         .cherry-toolbar{box-shadow: none;}
         .cherry-dropdown{box-shadow: 0 0 10px rgba(128, 145, 165, .2);}
+        .cherry-previewer{border-width: 1px;}
     </style>
 </head>
 <body>
-<div class="header">Maozihao</div>
+<div class="header">Admin<a>登录</a></div>
 <div class="main">
     <div class="left-side"></div>
     <div class="right-side">
