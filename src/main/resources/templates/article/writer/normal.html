@@ -445,7 +445,7 @@
                         $form.find('[name="' + parent + '.' + i + '"]').val(value);
                     } else {
                         var ele = $form.find('[name="' + i + '"]');
-                        if (ele.prop('type') === 'checkbox') {
+                        if (ele.prop('type') === 'checkbox') {var pattern = new RegExp("^(#/)([0-9]+)$"),
                             if (value === 1) {
                                 ele.prop('checked', true);
                             } else {

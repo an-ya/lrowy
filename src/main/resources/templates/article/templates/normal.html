@@ -14,6 +14,17 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=ZCOOL+XiaoWei&display=swap&subset=chinese-simplified">
     <script th:src="@{/js/highlight.pack.js}"></script>
     <script src="//at.alicdn.com/t/font_1286797_bzbcblwzlg.js"></script>
+    <style>
+        body {background-color: #f8fafb;}
+        .header {position: absolute;background-color: #f8fafb;}
+        /*.header-menu {border: 0;}*/
+        /*.header-menu:after {content: '';position: absolute;left: 0;right: 0;bottom: 0;height: 1px;background: linear-gradient(to right, #eeeeeecf, #eee, #eeeeeecf);}*/
+        .main {background-color: #fff;padding: 12px 0;margin: 12px auto;}
+        .btn-item {margin: 10px 0;}
+        .article-wrapper {font-size: 15px;}
+        .article-wrapper a {color: #2979ff;text-decoration: underline;}
+        .footer {height: 60px;background-color: #f8fafb;}
+    </style>
 </head>
 <body>
 <div class="header"><span class="logo custom-font1">Anya</span><ul class="header-menu"></ul></div>
@@ -85,7 +96,7 @@
             </div>
         </div>
         <div class="article-wrapper">
-            <div class="article" id="article" th:utext="${article.content}" th:attr="data-article-id=${article.articleId}"></div>
+            <div class="article" id="article" th:utext="${article.html}" th:attr="data-article-id=${article.articleId}"></div>
         </div>
         <div class="comment-container">
             <div class="comment-title">评论</div>
@@ -168,10 +179,10 @@
                 <span>菜单</span>
             </a>
         </div>
-        <div class="about">
-            <div class="name">黯伢</div>
-            <div class="desc">程序员</div>
-        </div>
+<!--        <div class="about">-->
+<!--            <div class="name">黯伢</div>-->
+<!--            <div class="desc">程序员</div>-->
+<!--        </div>-->
         <div class="sticky">
             <div class="directory"></div>
             <a class="to-top" href="javascript:void(0);" title="回到顶部" onclick="pageTo('#')">
@@ -192,8 +203,7 @@
 </div>
 <div class="footer">
     <div class="footer-container">
-        <p><a href="http://beian.miit.gov.cn">蜀ICP备18023259号-1</a></p>
-        <p>Copyright © 2019 www.lrowy.com All Rights Reserved</p>
+        <p>www.zihao24.com</p>
     </div>
 </div>
 <div class="oauth-container" id="oauth" style="display:none;">
@@ -314,13 +324,13 @@
 
         if (scrollTop === 0) window.location.hash = '';
 
-        if (scrollTop > $('.footer').offset().top - $(window).height() || scrollTop > $('.comment-container').offset().top - 60) {
-            $('.header').addClass('hide');
-            $('.sidebar').addClass('full');
-        } else {
-            $('.header').removeClass('hide');
-            $('.sidebar').removeClass('full');
-        }
+        // if (scrollTop > $('.footer').offset().top - $(window).height() || scrollTop > $('.comment-container').offset().top - 60) {
+        //     $('.header').addClass('hide');
+        //     $('.sidebar').addClass('full');
+        // } else {
+        //     $('.header').removeClass('hide');
+        //     $('.sidebar').removeClass('full');
+        // }
 
         var $header = $('.article :header'), bottom = $('#article').offset().top + $('#article').outerHeight(), index =  -1;
         for (var i = 0;i < $header.length;i++) {

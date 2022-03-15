@@ -8,7 +8,8 @@ public class Article {
     private int creatorId;
     private int articleCategoryId;
     private String title;
-    private String content;
+    private String html;
+    private String markdown;
     private String description;
     private String template;
     private int visits;
@@ -20,7 +21,8 @@ public class Article {
 
     public Article() {
         this.title = "";
-        this.content = "";
+        this.html = "";
+        this.markdown = "";
         this.description = "";
         this.template = "";
     }
@@ -57,12 +59,20 @@ public class Article {
         this.title = title;
     }
 
-    public String getContent() {
-        return content;
+    public String getHtml() {
+        return html;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public String getMarkdown() {
+        return markdown;
+    }
+
+    public void setMarkdown(String markdown) {
+        this.markdown = markdown;
     }
 
     public String getDescription() {

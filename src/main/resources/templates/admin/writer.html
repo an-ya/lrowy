@@ -12,27 +12,50 @@
     <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
     <link rel="stylesheet" th:href="@{/cherry-markdown/cherry-markdown.min.css}">
     <style>
-        .header {display: flex;justify-content: space-between;align-items: center;height: 50px;padding: 0 20px;font-size: 18px;font-weight: bold;}
-        .main {position: absolute;top: 50px;left: 0;right: 0;bottom: 0;display: flex;justify-content: center;padding: 10px;background-color: #f2f2f2;}
-        .main .left-side{flex-shrink: 0;width:240px;margin-right: 10px;background-color:#f8fafb;}
-        .main .right-side{position: relative;display: flex;flex-direction: column;width: 960px;background-color: #fff;border-top: 1px solid #e5e5e5;}
-        .main .right-side .info {display: flex;align-items: center;height: 64px;padding: 16px 32px;font-size: 15px;font-weight: bold;}
-        .main .right-side .editor {position: absolute;top: 64px;left: 0;right: 0;bottom: 0;}
-        .cherry{box-shadow: none;}
-        .cherry-toolbar{box-shadow: none;}
-        .cherry-dropdown{box-shadow: 0 0 10px rgba(128, 145, 165, .2);}
-        .cherry-previewer{border-width: 1px;}
+        * {-webkit-tap-highlight-color: transparent;box-sizing: border-box;}
+        html {height: 100%;}
+        body {height: 100%;padding: 0;margin: 0;background-color: #fff;}
+        .header {position: fixed;top: 0;left: 0;right: 0;height: 50px;padding: 0 20px;display: flex;line-height:50px;background-color: #f8fafb;}
+        .header-logo {}
+        .header-user {min-width: 100px;margin-right: 20px;}
+        .header-user .avatar {width: 30px;height: 30px;margin-right: 10px;border-radius: 50%;vertical-align: middle;}
+        .header-navs {}
+        .header-navs .item {position: relative;display:inline-block;width:64px;height:100%;text-align: center;}
+        .header-navs .item.active:after {content: "";position: absolute;display: block;left: 0;bottom: 0;width: 100%;height: 1px;background-color: rgba(0, 0, 0, .9);}
+        .main {position: absolute;top: 50px;left: 0;right: 0;bottom: 0;display: flex;justify-content: center;min-width: 1200px;}
+        .main .left-side {flex-shrink: 0;width:300px;border-right: 1px solid #ebedee;}
+        .main .right-side {flex-grow: 1;position: relative;}
+        .main .right-side .editor {position: absolute;top: 0;left: 0;right: 0;bottom: 0;}
+
+        /** cherry-markdown **/
+        .cherry {box-shadow: none;}
+        .cherry-toolbar {box-shadow: none;}
+        .cherry-dropdown {box-shadow: 0 0 10px rgba(128, 145, 165, .2);}
+        .cherry-previewer {border-width: 1px;}
+        .cherry-toolbar {background-color: #fff;border-bottom: 1px solid #ebedee;}
+        .cherry-editor {padding-top: 0;padding-right: 0;background-color: #fff;}
+        .cherry-editor .CodeMirror, .cherry-previewer {background-color: #fff;}
+        .cherry *::-webkit-scrollbar-thumb {-webkit-border-radius: 0;}
     </style>
 </head>
 <body>
-<div class="header">Admin<a>登录</a></div>
+<div class="header">
+    <div class="header-user">
+        <a th:if="${user == null}" id="login" title="登录" href="javascript:void(0);">登录</a>
+        <img th:if="${user != null}" class="avatar" th:src="${user.avatar}" alt=""/>
+        <span th:if="${user != null}" th:text="${user.name}"></span>
+    </div>
+    <div class="header-navs">
+        <div class="item active">文章</div>
+        <div class="item">书签</div>
+    </div>
+</div>
 <div class="main">
-    <div class="left-side"></div>
+    <div class="left-side">
+        <a id="save" title="保存" href="javascript:void(0);">保存</a>
+    </div>
     <div class="right-side">
-        <div class="info">CentOS Mysql安装教程</div>
-        <div class="editor">
-            <div  id="markdown"></div>
-        </div>
+        <div class="editor" id="markdown"></div>
     </div>
 </div>
 <script src="https://cdn.bootcss.com/jquery/3.4.0/jquery.min.js"></script>
@@ -40,110 +63,91 @@
 <script th:src="@{/js/nvi-notice.js}"></script>
 <script th:src="@{/js/ivu-message.js}"></script>
 <script th:src="@{/cherry-markdown/cherry-markdown.min.js}"></script>
+<script th:src="@{/cherry-markdown/cherry-markdown-config.js}"></script>
 <script>
-    var CustomHookA = Cherry.createSyntaxHook('codeBlock', Cherry.constants.HOOKS_TYPE_LIST.PAR, {
-        makeHtml(str) {
-            console.warn('custom hook', 'hello');
-            return str;
-        },
-        rule(str) {
-            const regex = {
-                begin: '',
-                content: '',
-                end: '',
-            };
-            regex.reg = new RegExp(regex.begin + regex.content + regex.end, 'g');
-            return regex;
-        },
+    var mode = 0;
+
+    (function init() {
+        var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash;
+        if (pattern.test(hash)) {
+            getArticle(parseInt(hash.replace(pattern, '$2')));
+        }
+    })();
+
+    $('#login').click(function () {
+        window.location.href = '/login?url=' + encodeURIComponent(window.location.href);
     });
 
-    var basicConfig = {
-        id: 'markdown',
-        externals: {
-            echarts: window.echarts,
-            katex: window.katex,
-            MathJax: window.MathJax,
-        },
-        isPreviewOnly: false,
-        engine: {
-            global: {
-                urlProcessor(url, srcType) {
-                    console.log(`url-processor`, url, srcType);
-                    return url;
-                },
+    $('#save').click(function () {
+        var loading = message.loading({ loadingText: '保存中 . . .' });
+        var html = cherry.getHtml();
+        var markdown = cherry.getMarkdown();
+        $.ajax({
+            url: mode === 1 ? '/admin/article/update/content' : '/admin/article/add',
+            type: 'post',
+            data: {
+                html: html,
+                markdown: markdown
             },
-            syntax: {
-                table: {
-                    enableChart: false,
-                    // chartEngine: Engine Class
-                },
-                fontEmphasis: {
-                    allowWhitespace: true, // 是否允许首尾空格
-                },
-                mathBlock: {
-                    engine: 'MathJax', // katex或MathJax
-                    src: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js', // 如果使用MathJax plugins，则需要使用该url通过script标签引入
-                },
-                inlineMath: {
-                    engine: 'MathJax', // katex或MathJax
-                },
-                emoji: {
-                    useUnicode: false,
-                    customResourceURL: 'https://github.githubassets.com/images/icons/emoji/unicode/${code}.png?v8',
-                    upperCase: true,
-                },
-                // toc: {
-                //     tocStyle: 'nested'
-                // }
-                // 'header': {
-                //   strict: false
-                // }
+            success: function (data) {
+                if (data.code === '000') {
+                    notice.success({ title: '成功新增文章' });
+                } else {
+                    notice.fail({ title: '发生错误', desc: data.msg });
+                }
             },
-            customSyntax: {
-                // SyntaxHookClass
-                CustomHook: {
-                    syntaxClass: CustomHookA,
-                    force: false,
-                    after: 'br',
-                },
-            },
-        },
-        toolbars: {
-            theme: 'light',
-            toolbar: [
-                'bold',
-                'italic',
-                'strikethrough',
-                '|',
-                'color',
-                'header',
-                '|',
-                'list',
-                {
-                    insert: ['image', 'audio', 'video', 'link', 'hr', 'br', 'code', 'formula', 'toc', 'table', 'pdf', 'word'],
-                },
-                'graph',
-                'togglePreview',
-                'settings',
-                'switchModel',
-                'codeTheme',
-                'export',
-            ],
-            sidebar: ['mobilePreview', 'copy'],
-        },
-        editor: {
-            defaultModel: 'edit&preview',
-        },
-        previewer: {
-            // 自定义markdown预览区域class
-            // className: 'markdown'
-        },
-        keydown: [],
-        //extensions: [],
-    };
+            complete: function () {
+                message.close(loading);
+            }
+        });
+    });
 
-    var config = Object.assign({}, basicConfig, { value: '' });
-    window.cherry = new Cherry(config);
+    function getArticle(id) {
+        var loading = message.loading({ loadingText: '加载中 . . .' });
+        $.ajax({
+            url: '/admin/article/init',
+            type: 'post',
+            data: {
+                articleId: id
+            },
+            success: function (data) {
+                if (data.code === '000') {
+                    mode = 1;
+                    window.location.hash = '#/' + id;
+                    cherry.setMarkdown(data.result.markdown);
+                } else {
+                    notice.fail({ title: '发生错误', desc: data.msg });
+                }
+            },
+            complete: function () {
+                message.close(loading);
+            }
+        });
+    }
+
+    function updateArticle(params) {
+        var loading = message.loading({ loadingText: '保存中 . . .' });
+        $.ajax({
+            url: params.content ? '/article/update/content' : '/article/update/info',
+            type: 'post',
+            data: params,
+            success: function (data) {
+                message.close(loading);
+                if (data.code === '000') {
+                    if (params.content) {
+                        $('.article-form').find('[name="updateDate"]').val(data.result.updateDate);
+                    } else {
+                        setArticleByTags(pageNo);
+                        setForm($('.article-form'), data.result, '');
+                    }
+                    form.render();
+                    notice.success({title: '成功更改文章'});
+                } else {
+                    notice.fail({title: '发生错误', desc: data.msg});
+                }
+            }
+        });
+    }
 </script>
 </body>
 </html>
