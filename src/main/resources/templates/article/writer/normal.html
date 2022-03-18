@@ -442,7 +442,7 @@
                     setTag(value, i);
                 } else {
                     if (parent.length > 0) {
-                        $form.find('[name="' + parent + '.' + i + '"]').val(value);
+                        $form.find('[name="' + parent + '.' + i + '"]').val(val ue);
                     } else {
                         var ele = $form.find('[name="' + i + '"]');
                         if (ele.prop('type') === 'checkbox') {var pattern = new RegExp("^(#/)([0-9]+)$"),

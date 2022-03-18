@@ -32,6 +32,7 @@
         .cherry-toolbar {box-shadow: none;}
         .cherry-dropdown {box-shadow: 0 0 10px rgba(128, 145, 165, .2);}
         .cherry-previewer {border-width: 1px;}
+        .cherry-previewer img {max-width: 100%;}
         .cherry-toolbar {background-color: #fff;border-bottom: 1px solid #ebedee;}
         .cherry-editor {padding-top: 0;padding-right: 0;background-color: #fff;}
         .cherry-editor .CodeMirror, .cherry-previewer {background-color: #fff;}
@@ -65,12 +66,13 @@
 <script th:src="@{/cherry-markdown/cherry-markdown.min.js}"></script>
 <script th:src="@{/cherry-markdown/cherry-markdown-config.js}"></script>
 <script>
-    var mode = 0;
+    var mode = 0, articleId = 0;
 
     (function init() {
         var pattern = new RegExp("^(#/)([0-9]+)$"), hash = window.location.hash;
         if (pattern.test(hash)) {
-            getArticle(parseInt(hash.replace(pattern, '$2')));
+            articleId = parseInt(hash.replace(pattern, '$2'))
+            getArticle(articleId);
         }
     })();
 
@@ -80,18 +82,24 @@
 
     $('#save').click(function () {
         var loading = message.loading({ loadingText: '保存中 . . .' });
-        var html = cherry.getHtml();
-        var markdown = cherry.getMarkdown();
         $.ajax({
             url: mode === 1 ? '/admin/article/update/content' : '/admin/article/add',
             type: 'post',
             data: {
-                html: html,
-                markdown: markdown
+                articleId: articleId,
+                html: cherry.getHtml(),
+                markdown: cherry.getMarkdown()
             },
             success: function (data) {
                 if (data.code === '000') {
-                    notice.success({ title: '成功新增文章' });
+                    if (mode === 1) {
+                        notice.success({ title: '成功保存文章' });
+                    } else {
+                        notice.success({ title: '成功新增文章' });
+                        mode = 1;
+                        articleId = data.result.articleId;
+                        window.location.hash = '#/' + articleId;
+                    }
                 } else {
                     notice.fail({ title: '发生错误', desc: data.msg });
                 }
@@ -101,6 +109,11 @@
             }
         });
     });
+
+    function dealHtml(html) {
+        console.log($(html).find('img'))
+        $(html).find('img').parent().css('padding', '0').html();
+    }
 
     function getArticle(id) {
         var loading = message.loading({ loadingText: '加载中 . . .' });

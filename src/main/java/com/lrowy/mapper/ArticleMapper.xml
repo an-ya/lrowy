@@ -94,7 +94,7 @@
     </update>
 
     <update id="updateArticleContent" parameterType="com.lrowy.pojo.article.Article">
-        UPDATE article SET content=#{content}<if test="updateDate != null">,updateDate=#{updateDate}</if> WHERE articleId=#{articleId};
+        UPDATE article SET html=#{html},markdown=#{markdown}<if test="updateDate != null">,updateDate=#{updateDate}</if> WHERE articleId=#{articleId};
     </update>
 
     <delete id="deleteArticle" parameterType="java.lang.Integer">

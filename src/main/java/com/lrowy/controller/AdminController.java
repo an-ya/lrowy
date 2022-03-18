@@ -50,4 +50,13 @@ public class AdminController extends BaseController {
         }
         return br;
     }
+
+    @RequestMapping("/admin/article/update/content")
+    @ResponseBody
+    public BaseResponse<Article> articleUpdateContent(@ModelAttribute Article article) {
+        articleDao.updateArticleContent(article);
+        BaseResponse<Article> br = new BaseResponse<>();
+        br.setResult(articleDao.findArticle(article.getArticleId()));
+        return br;
+    }
 }

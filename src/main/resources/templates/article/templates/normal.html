@@ -15,15 +15,17 @@
     <script th:src="@{/js/highlight.pack.js}"></script>
     <script src="//at.alicdn.com/t/font_1286797_bzbcblwzlg.js"></script>
     <style>
-        body {background-color: #f8fafb;}
         .header {position: absolute;background-color: #f8fafb;}
+        .header-menu {border-bottom: 0;}
         /*.header-menu {border: 0;}*/
         /*.header-menu:after {content: '';position: absolute;left: 0;right: 0;bottom: 0;height: 1px;background: linear-gradient(to right, #eeeeeecf, #eee, #eeeeeecf);}*/
-        .main {background-color: #fff;padding: 12px 0;margin: 12px auto;}
+        .main {background-color: #fff;padding: 12px 0;margin: 12px auto;border: 1px solid #eee;}
         .btn-item {margin: 10px 0;}
         .article-wrapper {font-size: 15px;}
         .article-wrapper a {color: #2979ff;text-decoration: underline;}
+        .article-wrapper img {max-width: 100%;}
         .footer {height: 60px;background-color: #f8fafb;}
+        .footer-container {border-top: 0;}
     </style>
 </head>
 <body>
@@ -537,6 +539,7 @@
         setDirectory(bash);
         pageTo(bash);
         initClassicEditor();
+        // $(".article-wrapper img").parent().css({'padding': '0', 'font-size': '0'});
     });
 </script>
 </body>
