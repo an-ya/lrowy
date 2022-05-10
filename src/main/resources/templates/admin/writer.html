@@ -7,6 +7,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="../layui-v2.5.4/css/layui.css">
     <link rel="stylesheet" th:href="@{/css/common2.css}">
     <link rel="stylesheet" th:href="@{/css/nvi-notice.css}">
     <link rel="stylesheet" th:href="@{/css/ivu-message.css}">
@@ -26,6 +27,13 @@
         .main .left-side {flex-shrink: 0;width:300px;border-right: 1px solid #ebedee;}
         .main .right-side {flex-grow: 1;position: relative;}
         .main .right-side .editor {position: absolute;top: 0;left: 0;right: 0;bottom: 0;}
+
+        .h1 {padding: 0 10px;font-weight: bold;line-height: 48px;}
+        .article-form {padding: 0 10px;}
+        .article-form-item {display: flex;align-items: center;margin-bottom: 10px;}
+        .article-form-item:last-child {margin-bottom: 0;}
+        .article-form-item-label {flex-shrink: 0;width: 100px;padding-left: 10px;line-height: 38px;border: 1px solid #ebedee;border-right: 0;background-color: #f8fafb;}
+        .article-form-item-input {flex-grow: 1;height: 40px;padding-left: 10px;border: 1px solid #ebedee;}
 
         /** cherry-markdown **/
         .cherry {box-shadow: none;}
@@ -53,7 +61,68 @@
 </div>
 <div class="main">
     <div class="left-side">
-        <a id="save" title="保存" href="javascript:void(0);">保存</a>
+        <div class="h1">文章信息</div>
+        <form class="article-form" action="">
+            <div class="article-form-item">
+                <label class="article-form-item-label" for="articleId">编号:</label>
+                <input class="article-form-item-input" id="articleId" name="articleId" type="text" value="0" readonly/>
+            </div>
+            <div class="article-form-item">
+                <label class="article-form-item-label" for="creatorId">创建者编号:</label>
+                <input class="article-form-item-input" id="creatorId" name="creatorId" type="text" value="0" readonly/>
+            </div>
+<!--            <div class="article-form-item">-->
+<!--                <label class="article-form-item-label" for="articleCategoryId">分类:</label>-->
+<!--                <select id="articleCategoryId" name="articleCategoryId">-->
+<!--                    <option value="0">未设置</option>-->
+<!--                </select>-->
+<!--            </div>-->
+            <div class="article-form-item">
+                <label class="article-form-item-label" for="title">标题:</label>
+                <input class="article-form-item-input" id="title" name="title" type="text" value=""/>
+            </div>
+            <div class="article-form-item">
+                <label class="article-form-item-label" for="description">描述:</label>
+                <input class="article-form-item-input" id="description" name="description" type="text" value=""/>
+            </div>
+            <div class="article-form-item">
+                <label class="article-form-item-label" for="visits">访问数:</label>
+                <input class="article-form-item-input" id="visits" name="visits" type="text" value="0" readonly/>
+            </div>
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">是否</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="checkbox" name="delFlag" title="删除" lay-skin="primary" value="1"/>-->
+<!--                    <input type="checkbox" name="hiddenFlag" title="隐藏" lay-skin="primary" value="1"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">标签<i class="iconfont plus" onclick="addTagEvent()">&#xe726;</i></label>-->
+<!--                <div class="layui-input-block" name="tags"></div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">创建日期</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="text" id="createDate" name="createDate" value="" class="layui-input"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">更新日期</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="text" id="updateDate" name="updateDate" value="" class="layui-input"/>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <div class="layui-input-block">-->
+<!--                    自动修改更新日期：<input type="checkbox" name="autoUpdateDate" lay-skin="switch" lay-filter="autoUpdateDate" lay-text="ON|OFF">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="layui-form-item">-->
+<!--                <button class="layui-btn" id="article-form-btn" lay-submit lay-filter="form"></button>-->
+<!--                <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+<!--            </div>-->
+        </form>
+<!--        <a id="save" title="保存" href="javascript:void(0);">保存</a>-->
     </div>
     <div class="right-side">
         <div class="editor" id="markdown"></div>

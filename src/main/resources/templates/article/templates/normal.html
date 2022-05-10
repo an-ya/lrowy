@@ -15,16 +15,19 @@
     <script th:src="@{/js/highlight.pack.js}"></script>
     <script src="//at.alicdn.com/t/font_1286797_bzbcblwzlg.js"></script>
     <style>
-        .header {position: absolute;background-color: #f8fafb;}
+        body {background-color: #f8fafb;}
+        .header {position: absolute;border-bottom: 1px solid #eee;}
         .header-menu {border-bottom: 0;}
         /*.header-menu {border: 0;}*/
         /*.header-menu:after {content: '';position: absolute;left: 0;right: 0;bottom: 0;height: 1px;background: linear-gradient(to right, #eeeeeecf, #eee, #eeeeeecf);}*/
-        .main {background-color: #fff;padding: 12px 0;margin: 12px auto;border: 1px solid #eee;}
+        .main {width: 1010px;align-items: flex-start;margin: 10px auto;}
+        .main .left-side{width: 740px;padding: 10px 0;background-color: #fff;}
+        .main .right-side{margin-left: 10px;background-color: #fff;}
         .btn-item {margin: 10px 0;}
         .article-wrapper {font-size: 15px;}
         .article-wrapper a {color: #2979ff;text-decoration: underline;}
         .article-wrapper img {max-width: 100%;}
-        .footer {height: 60px;background-color: #f8fafb;}
+        .footer {height: 60px;background-color: #f8fafb;border-top: 1px solid #eee;}
         .footer-container {border-top: 0;}
     </style>
 </head>
