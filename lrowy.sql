@@ -27,7 +27,8 @@ CREATE TABLE article (
   delFlag tinyint(1) NOT NULL,
   hiddenFlag tinyint(1) NOT NULL,
   createDate datetime NOT NULL,
-  updateDate datetime NOT NULL
+  updateDate datetime NOT NULL,
+  status int(2)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 CREATE TABLE article_category (
   articleCategoryId int(10) NOT NULL PRIMARY KEY AUTO_INCREMENT,

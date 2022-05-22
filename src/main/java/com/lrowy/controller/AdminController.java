@@ -2,6 +2,7 @@ package com.lrowy.controller;
 
 import com.lrowy.dao.ArticleDao;
 import com.lrowy.pojo.article.Article;
+import com.lrowy.pojo.article.ArticleCategory;
 import com.lrowy.pojo.common.enums.SystemConstant;
 import com.lrowy.pojo.common.response.BaseResponse;
 import com.lrowy.pojo.user.User;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 public class AdminController extends BaseController {
@@ -22,6 +24,8 @@ public class AdminController extends BaseController {
     public String writer(Model model) {
         User user = isLogin() ? getUser() : null;
         model.addAttribute("user", user);
+        List<ArticleCategory> articleCategoryList = articleDao.findAllArticleCategory();
+        model.addAttribute("articleCategoryList", articleCategoryList);
         return "/admin/writer";
     }
 

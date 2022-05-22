@@ -29,11 +29,13 @@
         .main .right-side .editor {position: absolute;top: 0;left: 0;right: 0;bottom: 0;}
 
         .h1 {padding: 0 10px;font-weight: bold;line-height: 48px;}
-        .article-form {padding: 0 10px;}
-        .article-form-item {display: flex;align-items: center;margin-bottom: 10px;}
-        .article-form-item:last-child {margin-bottom: 0;}
-        .article-form-item-label {flex-shrink: 0;width: 100px;padding-left: 10px;line-height: 38px;border: 1px solid #ebedee;border-right: 0;background-color: #f8fafb;}
-        .article-form-item-input {flex-grow: 1;height: 40px;padding-left: 10px;border: 1px solid #ebedee;}
+        .form {padding: 0 10px;}
+        .form-item {display: flex;align-items: center;margin-bottom: 10px;}
+        .form-item.hidden {position: absolute;visibility: hidden;}
+        .form-item:last-child {margin-bottom: 0;}
+        .form-label {flex-shrink: 0;display: flex;justify-content: space-between;align-items: center;width: 100px;height: 40px;padding: 0 10px;border: 1px solid #ebedee;border-right: 0;background-color: #f8fafb;}
+        .form-input, .form-select {flex-grow: 1;height: 40px;width: 120px;padding: 0 10px;border: 1px solid #ebedee;box-sizing: border-box;}
+        .form-select {padding: 0 6px;}
 
         /** cherry-markdown **/
         .cherry {box-shadow: none;}
@@ -62,32 +64,54 @@
 <div class="main">
     <div class="left-side">
         <div class="h1">文章信息</div>
-        <form class="article-form" action="">
-            <div class="article-form-item">
-                <label class="article-form-item-label" for="articleId">编号:</label>
-                <input class="article-form-item-input" id="articleId" name="articleId" type="text" value="0" readonly/>
+        <form class="form" action="">
+            <div class="form-item hidden">
+                <label class="form-label" for="articleId">编号:</label>
+                <input class="form-input" id="articleId" name="articleId" type="text" value="0" readonly/>
             </div>
-            <div class="article-form-item">
-                <label class="article-form-item-label" for="creatorId">创建者编号:</label>
-                <input class="article-form-item-input" id="creatorId" name="creatorId" type="text" value="0" readonly/>
+            <div class="form-item hidden">
+                <label class="form-label" for="creatorId">创建者编号:</label>
+                <input class="form-input" id="creatorId" name="creatorId" type="text" value="0" readonly/>
             </div>
-<!--            <div class="article-form-item">-->
-<!--                <label class="article-form-item-label" for="articleCategoryId">分类:</label>-->
-<!--                <select id="articleCategoryId" name="articleCategoryId">-->
-<!--                    <option value="0">未设置</option>-->
-<!--                </select>-->
-<!--            </div>-->
-            <div class="article-form-item">
-                <label class="article-form-item-label" for="title">标题:</label>
-                <input class="article-form-item-input" id="title" name="title" type="text" value=""/>
+            <div class="form-item">
+                <label class="form-label" for="title">标题:</label>
+                <input class="form-input" id="title" name="title" type="text" value=""/>
             </div>
-            <div class="article-form-item">
-                <label class="article-form-item-label" for="description">描述:</label>
-                <input class="article-form-item-input" id="description" name="description" type="text" value=""/>
+            <div class="form-item">
+                <label class="form-label" for="description">描述:</label>
+                <input class="form-input" id="description" name="description" type="text" value=""/>
             </div>
-            <div class="article-form-item">
-                <label class="article-form-item-label" for="visits">访问数:</label>
-                <input class="article-form-item-input" id="visits" name="visits" type="text" value="0" readonly/>
+            <div class="form-item">
+                <label class="form-label" for="articleCategoryId">分类:</label>
+                <select class="form-select" id="articleCategoryId" name="articleCategoryId">
+                    <option value="0">未设置</option>
+                    <option th:each="a : ${articleCategoryList}" th:value="${a.articleCategoryId}" th:text="${a.name}"></option>
+                </select>
+            </div>
+            <div class="form-item hidden">
+                <label class="form-label" for="visits">访问数:</label>
+                <input class="form-input" id="visits" name="visits" type="text" value="0" readonly/>
+            </div>
+            <div class="form-item">
+                <label class="form-label" for="createDate">创建日期:</label>
+                <input class="form-input" id="createDate" name="createDate" type="text" value=""/>
+            </div>
+            <div class="form-item">
+                <label class="form-label" for="updateDate">更新日期:</label>
+                <input class="form-input" id="updateDate" name="updateDate" type="text" value=""/>
+            </div>
+            <div class="form-item">
+                <label class="form-label">是否删除:</label>
+                <div class="form-input">
+
+                </div>
+            </div>
+            <div class="form-item">
+                <label class="form-label">是否隐藏:</label>
+                <div class="form-input">
+                    <input type="checkbox" name="delFlag" title="删除" lay-skin="primary" value="1"/>
+                    <input type="checkbox" name="hiddenFlag" title="隐藏" lay-skin="primary" value="1"/>隐藏
+                </div>
             </div>
 <!--            <div class="layui-form-item">-->
 <!--                <label class="layui-form-label">是否</label>-->
@@ -99,18 +123,6 @@
 <!--            <div class="layui-form-item">-->
 <!--                <label class="layui-form-label">标签<i class="iconfont plus" onclick="addTagEvent()">&#xe726;</i></label>-->
 <!--                <div class="layui-input-block" name="tags"></div>-->
-<!--            </div>-->
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">创建日期</label>-->
-<!--                <div class="layui-input-block">-->
-<!--                    <input type="text" id="createDate" name="createDate" value="" class="layui-input"/>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label">更新日期</label>-->
-<!--                <div class="layui-input-block">-->
-<!--                    <input type="text" id="updateDate" name="updateDate" value="" class="layui-input"/>-->
-<!--                </div>-->
 <!--            </div>-->
 <!--            <div class="layui-form-item">-->
 <!--                <div class="layui-input-block">-->
@@ -134,6 +146,7 @@
 <script th:src="@{/js/ivu-message.js}"></script>
 <script th:src="@{/cherry-markdown/cherry-markdown.min.js}"></script>
 <script th:src="@{/cherry-markdown/cherry-markdown-config.js}"></script>
+<script src="http://resource.oupaigroup.com/web/resources/laydate/laydate.js"></script>
 <script>
     var mode = 0, articleId = 0;
 
@@ -143,6 +156,16 @@
             articleId = parseInt(hash.replace(pattern, '$2'))
             getArticle(articleId);
         }
+
+        var config = {
+            type: 'datetime'
+        }
+        laydate.render(Object.assign({
+            elem: '#createDate',
+        }, config));
+        laydate.render(Object.assign({
+            elem: '#updateDate',
+        }, config));
     })();
 
     $('#login').click(function () {
@@ -217,10 +240,10 @@
                 message.close(loading);
                 if (data.code === '000') {
                     if (params.content) {
-                        $('.article-form').find('[name="updateDate"]').val(data.result.updateDate);
+                        $('.form').find('[name="updateDate"]').val(data.result.updateDate);
                     } else {
                         setArticleByTags(pageNo);
-                        setForm($('.article-form'), data.result, '');
+                        setForm($('.form'), data.result, '');
                     }
                     form.render();
                     notice.success({title: '成功更改文章'});
