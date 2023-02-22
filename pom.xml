@@ -25,7 +25,7 @@
         <jhlabs-filter.version>2.0.235-1</jhlabs-filter.version>
         <!-- commons-io版本号 -->
         <commons-io.version>2.7</commons-io.version>
-        <commons-fileupload.version>1.4</commons-fileupload.version>
+        <commons-fileupload.version>1.5</commons-fileupload.version>
         <!-- 压缩图片插件thumbnailator版本号 -->
         <thumbnailator.version>0.4.8</thumbnailator.version>
         <!-- jjwt token认证版本号 -->
